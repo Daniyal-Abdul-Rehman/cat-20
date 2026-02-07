@@ -22,9 +22,9 @@ import Home from "./pages/Home";
 
 const AssessmentIntroPage = () => {
   return (
-    <div className="bg-white">
-      <div className="max-w-3xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-        <div className="space-y-8">
+    <div className="py-12">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="space-y-12 rounded-2xl border border-gray-200 bg-white/40 backdrop-blur-sm p-6 sm:p-10">
           <header className="space-y-3">
             <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
               CAT-20 Cognitive Assessment
@@ -113,7 +113,7 @@ const AssessmentIntroPage = () => {
               to="/assessment"
               className="inline-flex items-center justify-center rounded-md bg-primary-600 px-6 py-3 text-base font-semibold text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             >
-              Begin the CAT-20 Assessment
+              Take the CAT-20 Assessment
             </Link>
             <p className="mt-2 text-sm text-gray-500">Free • No account required</p>
           </div>
@@ -128,9 +128,9 @@ const AssessmentPage = () => {
   const canEmbed = typeof assessmentUrl === "string" && assessmentUrl.length > 0;
 
   return (
-    <div className="bg-white">
-      <div className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-        <div className="space-y-8">
+    <div className="py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="space-y-12 rounded-2xl border border-gray-200 bg-white/40 backdrop-blur-sm p-6 sm:p-10">
           <header className="space-y-3">
             <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
               CAT-20 Cognitive Archetype Assessment
