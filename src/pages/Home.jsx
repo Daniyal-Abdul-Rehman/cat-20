@@ -18,7 +18,7 @@ const Home = () => {
           <div className="relative max-w-5xl mx-auto py-16 px-4 sm:py-20 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
               <h1 className="text-4xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-5xl">
-                Discover How Your Mind Actually Works
+                A Clearer Map of How Your Mind Works
               </h1>
               <p className="mt-4 text-lg text-primary-100 font-medium">
                 CAT-20 maps how you think, seek meaning, build, care, explore, and create — across 20 cognitive archetypes.
@@ -26,10 +26,13 @@ const Home = () => {
               <p className="mt-4 text-sm text-primary-100">
                 Built from real-world testing • Pattern-based, not personality stereotypes
               </p>
+              <p className="mt-3 text-sm text-primary-100 italic">
+                CAT-20 is a Black-founded cognitive framework built from real-world testing.
+              </p>
 
               <div className="mt-8">
                 <Link
-                  to="/assessment-intro"
+                  to="/choose-interface"
                   className="inline-flex items-center justify-center rounded-md bg-white px-6 py-3 text-base font-semibold text-primary-800 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-white/60 focus:ring-offset-2 focus:ring-offset-primary-800"
                 >
                   Take the CAT-20 Assessment
@@ -215,7 +218,7 @@ const Home = () => {
 
               <div className="pt-2">
                 <Link
-                  to="/assessment-intro"
+                  to="/choose-interface"
                   className="inline-flex items-center justify-center rounded-md bg-primary-600 px-6 py-3 text-base font-semibold text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                 >
                   Take the CAT-20 Assessment
