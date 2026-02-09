@@ -124,7 +124,7 @@ const PublicLayout = () => {
                 Home
               </NavLink>
               <NavLink
-                to="/assessment-intro"
+                to="/choose-interface"
                 className={({ isActive }) =>
                   `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     isActive
@@ -136,7 +136,7 @@ const PublicLayout = () => {
                 Assessment
               </NavLink>
               <Link
-                to="/assessment-intro"
+                to="/choose-interface"
                 className="px-4 py-2 rounded-md text-sm font-medium bg-primary-600 text-white hover:bg-primary-700"
               >
                 Take the Assessment

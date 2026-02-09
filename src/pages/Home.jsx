@@ -27,7 +27,7 @@ const Home = () => {
                 Built from real-world testing • Pattern-based, not personality stereotypes
               </p>
               <p className="mt-3 text-sm text-primary-100 italic">
-                CAT-20 is a Black-founded cognitive framework built from real-world testing.
+                CAT-20 is a Black-founded system for understanding how different minds stabilize and interpret the world.
               </p>
 
               <div className="mt-8">
