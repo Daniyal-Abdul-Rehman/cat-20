@@ -33,7 +33,7 @@ const ChooseInterfacePage = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
           <Link
             to="/assessment-intro?focus=self-discovery"
             className="group block rounded-xl border border-gray-200 bg-white/60 backdrop-blur-sm p-6 hover:bg-white/80 hover:shadow-lg transition-all duration-200"

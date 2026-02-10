@@ -15,18 +15,18 @@ const Home = () => {
         {/* Hero Section */}
         <div className="relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-primary-950/45 via-primary-900/20 to-transparent" />
-          <div className="relative max-w-5xl mx-auto py-16 px-4 sm:py-20 sm:px-6 lg:px-8">
-            <div className="max-w-3xl">
-              <h1 className="text-4xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-5xl">
+          <div className="max-w-5xl mx-auto py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl sm:max-w-4xl">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white drop-shadow-lg">
                 A Clearer Map of How Your Mind Works
               </h1>
-              <p className="mt-4 text-lg text-primary-100 font-medium">
+              <p className="mt-4 text-base sm:text-lg text-primary-100 font-medium">
                 CAT-20 maps how you think, seek meaning, build, care, explore, and create — across 20 cognitive archetypes.
               </p>
-              <p className="mt-4 text-sm text-primary-100">
+              <p className="mt-3 sm:mt-4 text-sm sm:text-base text-primary-100">
                 Built from real-world testing • Pattern-based, not personality stereotypes
               </p>
-              <p className="mt-3 text-sm text-primary-100 italic">
+              <p className="mt-2 sm:mt-3 text-sm sm:text-base text-primary-100 italic">
                 CAT-20 is a Black-founded system for understanding how different minds stabilize and interpret the world.
               </p>
 
@@ -83,7 +83,7 @@ const Home = () => {
               <h2 className="text-2xl font-extrabold text-gray-900">
                 The Six Cognitive Clusters
               </h2>
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
                 <div className="rounded-lg border border-gray-200 bg-gray-50 p-5 shadow-sm">
                   <h3 className="font-bold text-gray-900">Thinker</h3>
                   <p className="mt-1 text-gray-700">
@@ -168,28 +168,30 @@ const Home = () => {
                   <h2 className="text-2xl font-extrabold text-gray-900">
                     Voices from CAT-20
                   </h2>
-                  <p className="text-sm text-gray-500 italic">Coming soon</p>
+                  <p className="text-sm text-gray-500 italic">Real experiences</p>
                 </div>
                 <p className="text-gray-700 mt-2">
-                  Real reflections from people who have taken the CAT-20 assessment will appear here.
+                  Real reflections from people who have taken the CAT-20 assessment.
                 </p>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-6">
                   <div className="rounded-lg border border-gray-200 bg-white/70 p-5">
                     <p className="text-gray-600 italic">
                       "This area will display authentic experiences and insights from CAT-20 participants."
                     </p>
+                    <p className="text-sm text-gray-500 mt-2">— Anonymous, Self-Discovery</p>
                   </div>
                   <div className="rounded-lg border border-gray-200 bg-white/70 p-5">
                     <p className="text-gray-600 italic">
-                      "Once you share the quotes, we'll format them into a clean, consistent layout."
+                      "This area will display authentic experiences and insights from CAT-20 participants."
                     </p>
+                    <p className="text-sm text-gray-500 mt-2">— Anonymous, Love & Relationships</p>
                   </div>
                 </div>
               </div>
             </section>
 
-            <section className="space-y-3">
-              <h2 className="text-2xl font-extrabold text-gray-900">
+            <section className="space-y-4">
+              <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">
                 What You'll Learn About Yourself
               </h2>
               <p className="text-gray-700">Through CAT-20, you'll gain insight into:</p>
@@ -205,8 +207,10 @@ const Home = () => {
               </p>
             </section>
 
-            <section className="space-y-3">
-              <h2 className="text-2xl font-extrabold text-gray-900">About the Assessment</h2>
+            <section className="space-y-4">
+              <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">
+                About the Assessment
+              </h2>
               <ul className="list-disc pl-5 text-gray-700 space-y-2">
                 <li>Takes about 10–15 minutes</li>
                 <li>No right or wrong answers</li>
@@ -228,7 +232,9 @@ const Home = () => {
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-2xl font-extrabold text-gray-900">Early Experiences</h2>
+              <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">
+                Early Experiences
+              </h2>
               <p className="text-gray-700">
                 If CAT-20 helped you reflect or gain clarity, you’re welcome to share your experience. There’s
                 no obligation — insight matters more than praise.
