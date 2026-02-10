@@ -4,6 +4,62 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
   const [reflectionSubmitted, setReflectionSubmitted] = useState(false);
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
+  const testimonials = [
+    {
+      quote: "This is scarily accurate — down to things I didn't even think were possible to predict.",
+      author: "Dhruv Singh"
+    },
+    {
+      quote: "I've taken many personality tests, and this one feels most consistent to my core.",
+      author: "Brooke Nitzsche"
+    },
+    {
+      quote: "100% accurate. I can only handle social situations for a short period of time and need time alone to recharge.",
+      author: "Mystic Sullivan (Nurse)"
+    },
+    {
+      quote: "CAT-20 is like a mirror. It shows archetype of your conscious core and orbiting personality fragments. Very interesting.",
+      author: "Ini Udom"
+    },
+    {
+      quote: "This is definitely on point. I will be introducing this to my staff at office.",
+      author: "Carol Brown, CFO"
+    },
+    {
+      quote: "Your results were clear, precise, and surprisingly consistent. The analysis felt genuinely accurate.",
+      author: "Alice Coyle"
+    },
+    {
+      quote: "At first I thought some of weaknesses didn't apply to me. After reflecting, I realized they actually did. It was very insightful.",
+      author: "Grace Tovar"
+    },
+    {
+      quote: "This gave me a lot of food for thought. Even being familiar with Jung and MBTI, this felt uniquely valuable.",
+      author: "JK"
+    },
+    {
+      quote: "Usually I struggle to answer personality tests. With this one, answers felt clear and natural. This is definitely me.",
+      author: "Jennifer Hilger"
+    },
+    {
+      quote: "This puts words to my intuitions and blindspots at work and in relationships. I'm printing this out to carry with me.",
+      author: "Joyce Fadeley"
+    }
+  ];
+
+  const nextTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const prevTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
+
+  const goToTestimonial = (index) => {
+    setCurrentTestimonial(index);
+  };
 
   const onSubmitReflection = (e) => {
     e.preventDefault();
@@ -171,20 +227,66 @@ const Home = () => {
                   <p className="text-sm text-gray-500 italic">Real experiences</p>
                 </div>
                 <p className="text-gray-700 mt-2">
-                  Real reflections from people who have taken the CAT-20 assessment.
+                  Real reflections from people who have taken CAT-20 assessment.
                 </p>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-6">
-                  <div className="rounded-lg border border-gray-200 bg-white/70 p-5">
-                    <p className="text-gray-600 italic">
-                      "This area will display authentic experiences and insights from CAT-20 participants."
-                    </p>
-                    <p className="text-sm text-gray-500 mt-2">— Anonymous, Self-Discovery</p>
+                
+                {/* Carousel Container */}
+                <div className="relative mt-6">
+                  <div className="overflow-hidden rounded-lg">
+                    <div 
+                      className="flex transition-transform duration-500 ease-in-out"
+                      style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}
+                    >
+                      {testimonials.map((testimonial, index) => (
+                        <div key={index} className="w-full flex-shrink-0 px-4">
+                          <div className="rounded-lg border border-gray-200 bg-white/70 p-5">
+                            <p className="text-gray-600 italic text-lg leading-relaxed">
+                              "{testimonial.quote}"
+                            </p>
+                            <p className="text-sm text-gray-500 mt-4 font-medium">— {testimonial.author}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="rounded-lg border border-gray-200 bg-white/70 p-5">
-                    <p className="text-gray-600 italic">
-                      "This area will display authentic experiences and insights from CAT-20 participants."
-                    </p>
-                    <p className="text-sm text-gray-500 mt-2">— Anonymous, Love & Relationships</p>
+
+                  {/* Navigation Controls */}
+                  <div className="flex items-center justify-between mt-6">
+                    <button
+                      onClick={prevTestimonial}
+                      className="p-2 rounded-full bg-white/80 backdrop-blur-sm border border-gray-200 hover:bg-white/90 transition-colors"
+                      aria-label="Previous testimonial"
+                    >
+                      <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7 7" />
+                      </svg>
+                    </button>
+
+                    {/* Dot Indicators */}
+                    <div className="flex gap-2">
+                      {testimonials.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => goToTestimonial(index)}
+                          className={`w-2 h-2 rounded-full transition-colors ${
+                            index === currentTestimonial 
+                              ? 'bg-primary-600' 
+                              : 'bg-gray-300 hover:bg-gray-400'
+                          }`}
+                          aria-label={`Go to testimonial ${index + 1}`}
+                        />
+                      ))}
+                    </div>
+
+                    <button
+                      onClick={nextTestimonial}
+                      className="p-2 rounded-full bg-white/80 backdrop-blur-sm border border-gray-200 hover:bg-white/90 transition-colors"
+                      aria-label="Next testimonial"
+                    >
+                      <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
               </div>

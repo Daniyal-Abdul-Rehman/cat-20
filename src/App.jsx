@@ -20,6 +20,73 @@ import Profile from "./pages/dashboard/Profile";
 // Public Pages
 import Home from "./pages/Home";
 
+const AssessmentInfoPage = () => {
+  return (
+    <div className="py-12">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="space-y-12 rounded-2xl border border-gray-200 bg-white/40 backdrop-blur-sm p-6 sm:p-10">
+          <header className="space-y-3">
+            <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+              CAT-20 Assessment
+            </h1>
+            <p className="text-lg text-gray-600">
+              A clear, structured approach to understanding how your mind works
+            </p>
+          </header>
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-bold text-gray-900">What is CAT-20?</h2>
+            <p className="text-gray-700">
+              CAT-20 maps how you think, seek meaning, build, care, explore, and create — across 20 cognitive archetypes. 
+              It's built from real-world testing and focuses on patterns rather than personality stereotypes.
+            </p>
+            <p className="text-gray-700">
+              CAT-20 is a Black-founded system for understanding how different minds stabilize and interpret the world.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-bold text-gray-900">How it works</h2>
+            <ul className="list-disc pl-5 text-gray-700 space-y-2">
+              <li>Answer questions based on what feels most natural to you</li>
+              <li>Questions are spaced and formatted for clarity and focus</li>
+              <li>No right or wrong answers — this is about awareness, not performance</li>
+              <li>Results show percentages, not labels</li>
+            </ul>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-bold text-gray-900">Time required</h2>
+            <p className="text-gray-700">
+              The assessment takes about 10–15 minutes to complete. Take your time, pause if needed, and stay comfortable.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-xl font-bold text-gray-900">What you'll receive</h2>
+            <ul className="list-disc pl-5 text-gray-700 space-y-2">
+              <li>Your primary and secondary cognitive archetypes</li>
+              <li>A breakdown of all six cognitive clusters</li>
+              <li>Key strengths and blind spots</li>
+              <li>Insight into how you approach decisions, stress, and growth</li>
+            </ul>
+          </section>
+
+          <div className="pt-2">
+            <Link
+              to="/choose-interface"
+              className="inline-flex items-center justify-center rounded-md bg-primary-600 px-6 py-3 text-base font-semibold text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            >
+              Choose How CAT-20 Speaks To You
+            </Link>
+            <p className="mt-2 text-sm text-gray-500">Free • No account required</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ChooseInterfacePage = () => {
   return (
     <div className="py-16">
@@ -343,9 +410,10 @@ function App() {
             {/* Public Routes */}
             <Route element={<PublicLayout />}>
               <Route path="/" element={<Home />} />
+              <Route path="/assessment" element={<AssessmentInfoPage />} />
               <Route path="/choose-interface" element={<ChooseInterfacePage />} />
               <Route path="/assessment-intro" element={<AssessmentIntroPage />} />
-              <Route path="/assessment" element={<AssessmentPage />} />
+              <Route path="/assessment-test" element={<AssessmentPage />} />
             </Route>
 
             {/* Auth Routes */}

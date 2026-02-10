@@ -110,15 +110,16 @@ const PublicLayout = () => {
               CAT-20
             </Link>
 
-            <div className="hidden md:flex gap-3 items-center">
+            <div className="hidden md:flex gap-3 items-center
+            ">
               <NavLink to="/" end className="nav-link">
                 Home
               </NavLink>
-              <NavLink to="/choose-interface" className="nav-link">
+              <NavLink to="/assessment" className="nav-link">
                 Assessment
               </NavLink>
               <Link
-                to="/choose-interface"
+                to="/assessment"
                 className="px-4 py-2 bg-primary-600 text-white rounded-md"
               >
                 Take Assessment
@@ -158,13 +159,13 @@ const PublicLayout = () => {
               Home
             </NavLink>
             <NavLink
-              to="/choose-interface"
+              to="/assessment"
               onClick={() => setMobileMenuOpen(false)}
             >
               Assessment
             </NavLink>
             <Link
-              to="/choose-interface"
+              to="/assessment"
               onClick={() => setMobileMenuOpen(false)}
               className="block px-4 py-2 bg-primary-600 text-white rounded-md"
             >
