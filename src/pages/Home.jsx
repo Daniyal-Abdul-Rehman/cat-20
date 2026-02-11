@@ -70,7 +70,7 @@ const Home = () => {
     <div className="relative">
         {/* Hero Section */}
         <div className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-primary-950/45 via-primary-900/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b -z-[1] from-primary-950/45 via-primary-900/20 to-transparent" />
           <div className="max-w-5xl mx-auto py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl sm:max-w-4xl">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white drop-shadow-lg">
@@ -89,7 +89,7 @@ const Home = () => {
               <div className="mt-8">
                 <Link
                   to="/choose-interface"
-                  className="inline-flex items-center justify-center rounded-md bg-white px-6 py-3 text-base font-semibold text-primary-800 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-white/60 focus:ring-offset-2 focus:ring-offset-primary-800"
+                  className="inline-flex items-center justify-center rounded-md z-[9999] bg-white px-6 py-3 text-base font-semibold text-primary-800 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-white/60 focus:ring-offset-2 focus:ring-offset-primary-800"
                 >
                   Take the CAT-20 Assessment
                 </Link>
