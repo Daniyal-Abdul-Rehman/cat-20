@@ -118,7 +118,7 @@ const ChooseInterfacePage = () => {
           </Link>
 
           <Link
-            to="/assessment-intro?focus=love-relationships"
+            to="https://cat20core.typeform.com/to/hSPAKc71?focus=love-relationships"
             className="group block rounded-xl border border-gray-200 bg-white/60 backdrop-blur-sm p-6 hover:bg-white/80 hover:shadow-lg transition-all duration-200"
           >
             <div className="space-y-4">
@@ -137,7 +137,7 @@ const ChooseInterfacePage = () => {
           </Link>
 
           <Link
-            to="/assessment-intro?focus=gaming-performance"
+            to="https://cat20core.typeform.com/to/hSPAKc71?focus=gaming-performance"
             className="group block rounded-xl border border-gray-200 bg-white/60 backdrop-blur-sm p-6 hover:bg-white/80 hover:shadow-lg transition-all duration-200"
           >
             <div className="space-y-4">
@@ -156,7 +156,7 @@ const ChooseInterfacePage = () => {
           </Link>
 
           <Link
-            to="/assessment-intro?focus=career-direction"
+            to="https://cat20core.typeform.com/to/hSPAKc71?focus=career-direction"
             className="group block rounded-xl border border-gray-200 bg-white/60 backdrop-blur-sm p-6 hover:bg-white/80 hover:shadow-lg transition-all duration-200"
           >
             <div className="space-y-4">
@@ -175,7 +175,7 @@ const ChooseInterfacePage = () => {
           </Link>
 
           <Link
-            to="/assessment-intro?focus=social-dynamics"
+            to="https://cat20core.typeform.com/to/hSPAKc71?focus=social-dynamics"
             className="group block rounded-xl border border-gray-200 bg-white/60 backdrop-blur-sm p-6 hover:bg-white/80 hover:shadow-lg transition-all duration-200"
           >
             <div className="space-y-4">
