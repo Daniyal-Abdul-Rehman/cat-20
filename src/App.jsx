@@ -99,7 +99,9 @@ const ChooseInterfacePage = () => {
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
           <Link
-            to="/assessment-intro?focus=self-discovery"
+            to="https://cat20core.typeform.com/to/hSPAKc71?focus=self-discovery"
+            target="_blank"
+            rel="noopener noreferrer"
             className="group block rounded-xl border border-gray-200 bg-white/60 backdrop-blur-sm p-6 hover:bg-white/80 hover:shadow-lg transition-all duration-200"
           >
             <div className="space-y-4">
@@ -119,6 +121,8 @@ const ChooseInterfacePage = () => {
 
           <Link
             to="https://cat20core.typeform.com/to/hSPAKc71?focus=love-relationships"
+            target="_blank"
+            rel="noopener noreferrer"
             className="group block rounded-xl border border-gray-200 bg-white/60 backdrop-blur-sm p-6 hover:bg-white/80 hover:shadow-lg transition-all duration-200"
           >
             <div className="space-y-4">
@@ -138,6 +142,8 @@ const ChooseInterfacePage = () => {
 
           <Link
             to="https://cat20core.typeform.com/to/hSPAKc71?focus=gaming-performance"
+            target="_blank"
+            rel="noopener noreferrer"
             className="group block rounded-xl border border-gray-200 bg-white/60 backdrop-blur-sm p-6 hover:bg-white/80 hover:shadow-lg transition-all duration-200"
           >
             <div className="space-y-4">
@@ -157,6 +163,8 @@ const ChooseInterfacePage = () => {
 
           <Link
             to="https://cat20core.typeform.com/to/hSPAKc71?focus=career-direction"
+            target="_blank"
+            rel="noopener noreferrer"
             className="group block rounded-xl border border-gray-200 bg-white/60 backdrop-blur-sm p-6 hover:bg-white/80 hover:shadow-lg transition-all duration-200"
           >
             <div className="space-y-4">
@@ -176,6 +184,8 @@ const ChooseInterfacePage = () => {
 
           <Link
             to="https://cat20core.typeform.com/to/hSPAKc71?focus=social-dynamics"
+            target="_blank"
+            rel="noopener noreferrer"
             className="group block rounded-xl border border-gray-200 bg-white/60 backdrop-blur-sm p-6 hover:bg-white/80 hover:shadow-lg transition-all duration-200"
           >
             <div className="space-y-4">
