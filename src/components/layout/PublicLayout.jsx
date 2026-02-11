@@ -119,10 +119,10 @@ const PublicLayout = () => {
                 Assessment
               </NavLink>
               <Link
-                to="/assessment"
+                to="/choose-interface"
                 className="px-4 py-2 bg-primary-600 text-white rounded-md"
               >
-                Take Assessment
+                Take the CAT-20 Assessment
               </Link>
             </div>
 
@@ -165,11 +165,11 @@ const PublicLayout = () => {
               Assessment
             </NavLink>
             <Link
-              to="/assessment"
+              to="/choose-interface"
               onClick={() => setMobileMenuOpen(false)}
               className="block px-4 py-2 bg-primary-600 text-white rounded-md"
             >
-              Take Assessment
+              Take: CAT-20 Assessment
             </Link>
           </nav>
         </div>

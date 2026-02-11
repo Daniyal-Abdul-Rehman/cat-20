@@ -40,9 +40,6 @@ const AssessmentInfoPage = () => {
               CAT-20 maps how you think, seek meaning, build, care, explore, and create — across 20 cognitive archetypes. 
               It's built from real-world testing and focuses on patterns rather than personality stereotypes.
             </p>
-            <p className="text-gray-700">
-              CAT-20 is a Black-founded system for understanding how different minds stabilize and interpret the world.
-            </p>
           </section>
 
           <section className="space-y-3">
