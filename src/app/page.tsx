@@ -99,14 +99,52 @@ export default function Home() {
 
       <main>
         {/* Hero Section */}
-     <section className="bg-[#FAF6EF]">
-  <div className="max-w-9xl mx-auto w-full">
-    <div className="grid lg:grid-cols-2 gap-4 items-start">
+     <section className="bg-[#FAF6EF] relative overflow-hidden">
+      {/* Background flowing image */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <img 
+          src="/hero_image.png" 
+          alt="" 
+          className="absolute right-0 top-0 w-[70%] h-full object-cover"
+        />
+        {/* Fade overlay for text blending - stronger fade on left */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `
+              linear-gradient(
+                to right,
+                #FAF6EF 25%,
+                rgba(250,246,239,0.95) 35%,
+                rgba(250,246,239,0.6) 50%,
+                transparent 70%
+              ),
+              linear-gradient(
+                to bottom,
+                #FAF6EF 5%,
+                rgba(250,246,239,0.8) 15%,
+                rgba(250,246,239,0.4) 30%,
+                transparent 50%
+              ),
+              linear-gradient(
+                to top,
+                #FAF6EF 5%,
+                rgba(250,246,239,0.8) 15%,
+                rgba(250,246,239,0.4) 30%,
+                transparent 50%
+              )
+            `,
+          }}
+        />
+      </div>
+      
+  <div className="max-w-9xl mx-auto w-full relative z-10">
+    <div className="grid lg:grid-cols-7 gap-4 items-start">
       
       {/* Left Content */}
       <div
         ref={heroContentRef}
-        className="flex flex-col justify-center lg:pl-8 pl-6 pt-16"
+        className="flex flex-col justify-center col-span-4 lg:pl-8 pl-6 pt-16"
       >
         {/* Label */}
         <div className="flex items-center gap-2 mb-12">
@@ -185,48 +223,6 @@ export default function Home() {
             How It Works
           </Link>
         </div>
-      </div>
-
-      {/* Right Image */}
-      <div
-        ref={heroImageRef}
-        className="relative w-full flex justify-center items-center overflow-hidden bg-[#FAF6EF]"
-      >
-        <img
-          src="/hero_image.png"
-          alt="Person standing on mountain peak"
-          className="w-full max-w-2xl h-auto object-contain"
-        />
-
-        {/* Smooth left, top, and bottom fade */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: `
-              linear-gradient(
-                to right,
-                #FAF6EF 15%,
-                rgba(250,246,239,0.9) 25%,
-                rgba(250,246,239,0.5) 40%,
-                transparent 60%
-              ),
-              linear-gradient(
-                to bottom,
-                #FAF6EF 5%,
-                rgba(250,246,239,0.8) 15%,
-                rgba(250,246,239,0.4) 30%,
-                transparent 50%
-              ),
-              linear-gradient(
-                to top,
-                #FAF6EF 5%,
-                rgba(250,246,239,0.8) 15%,
-                rgba(250,246,239,0.4) 30%,
-                transparent 50%
-              )
-            `,
-          }}
-        />
       </div>
     </div>
   </div>

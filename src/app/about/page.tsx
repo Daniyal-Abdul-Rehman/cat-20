@@ -85,25 +85,51 @@ export default function About() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <div className="relative overflow-hidden max-w-9xl mx-auto" >
-          {/* Subtle network background graphic */}
-          <div className="absolute inset-0 opacity-20">
-            <svg className="w-full h-full" viewBox="0 0 1200 600" preserveAspectRatio="none">
-              <defs>
-                <pattern id="dots" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-                  <circle cx="50" cy="50" r="2" fill="#C4A747" opacity="0.3" />
-                </pattern>
-              </defs>
-              <rect width="1200" height="600" fill="url(#dots)" />
-            </svg>
+        <div className="relative overflow-hidden max-w-9xl mx-auto bg-[#FAF6EF]">
+          {/* Background flowing image */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <img 
+              src="/dots.png" 
+              alt="" 
+              className="absolute right-0 top-0 w-[70%] h-full object-cover"
+            />
+            {/* Fade overlay for text blending - stronger fade on left */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: `
+                  linear-gradient(
+                    to right,
+                    #FAF6EF 25%,
+                    rgba(250,246,239,0.95) 35%,
+                    rgba(250,246,239,0.6) 50%,
+                    transparent 70%
+                  ),
+                  linear-gradient(
+                    to bottom,
+                    #FAF6EF 5%,
+                    rgba(250,246,239,0.8) 15%,
+                    rgba(250,246,239,0.4) 30%,
+                    transparent 50%
+                  ),
+                  linear-gradient(
+                    to top,
+                    #FAF6EF 5%,
+                    rgba(250,246,239,0.8) 15%,
+                    rgba(250,246,239,0.4) 30%,
+                    transparent 50%
+                  )
+                `,
+              }}
+            />
           </div>
 
-          <div ref={heroContentRef} className=" mx-auto pl-6 lg:pl-8 py-20 lg:py-8 relative z-10 grid lg:grid-cols-9 gap-4">
-            <div className="max-w-3xl col-span-6">
+          <div ref={heroContentRef} className=" mx-auto pl-6 lg:pl-8 py-20 lg:py-8 relative z-10">
+            <div className="max-w-3xl">
               <span className="inline-block text-sm font-semibold uppercase tracking-widest mb-8" style={{ color: '#C4A747' }}>
                 About CAT-20
               </span>
-              <h1 className="text-5xl lg:text-4xl font-bold leading-tight mb-8" style={{ color: '#1a1a1a' }}>
+              <h1 className="text-5xl lg:text-4xl font-bold leading-tight mb-8" style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
                 Everyone has <span style={{ color: '#4B3B8C' }}>patterns.</span>
                 <br />
                 Few people ever have them explained.
@@ -129,11 +155,6 @@ export default function About() {
                 </Link>
               </div>
             </div>
-            <img
-              src="/dots.png"
-              alt="Person standing on mountain peak"
-              className="w-full max-w-sm col-span-3"
-            />
           </div>
         </div>
 
@@ -145,7 +166,7 @@ export default function About() {
                 <span className="border-b border-[] text-sm font-semibold uppercase tracking-widest" style={{ color: '#C4A747' }}>
                   01
                 </span>
-                <h2 className="text-4xl lg:text-4xl font-bold mt-4 mb-6" style={{ color: '#1a1a1a' }}>
+                <h2 className="text-4xl lg:text-4xl font-bold mt-4 mb-6" style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
                   What is CAT-20?
                 </h2>
                 <p className="text-lg mb-6" style={{ color: '#4B3B8C', fontWeight: '600' }}>
@@ -183,7 +204,7 @@ export default function About() {
                 <span className="border-b border-[] text-sm font-semibold uppercase tracking-widest" style={{ color: '#C4A747' }}>
                   02
                 </span>
-                <h2 className="text-4xl lg:text-5xl font-bold mt-4 mb-6" style={{ color: '#1a1a1a' }}>
+                <h2 className="text-4xl lg:text-5xl font-bold mt-4 mb-6" style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
                   Why was it created?
                 </h2>
                 <p className="text-lg mb-4" style={{ color: '#444444', lineHeight: '1.8' }}>
@@ -252,7 +273,7 @@ export default function About() {
                   <Users className="w-12 h-12" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-4" style={{ color: '#1a1a1a' }}>
+                  <h3 className="text-xl font-semibold mb-4" style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
                     Same behavior.<br />Different reasons.
                   </h3>
                   <div className="w-8 h-0.5 mb-4 rounded-full" style={{ backgroundColor: '#C4A747' }}></div>
@@ -275,7 +296,7 @@ export default function About() {
                   <Globe className="w-12 h-12" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-4" style={{ color: '#1a1a1a' }}>
+                  <h3 className="text-xl font-semibold mb-4" style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
                     Built from<br />the real world.
                   </h3>
                   <div className="w-8 h-0.5 mb-4 rounded-full" style={{ backgroundColor: '#C4A747' }}></div>
@@ -298,7 +319,7 @@ export default function About() {
                   <Map className="w-12 h-12" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-4" style={{ color: '#1a1a1a' }}>
+                  <h3 className="text-xl font-semibold mb-4" style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
                     A map,<br />not a label.
                   </h3>
                   <div className="w-8 h-0.5 mb-4 rounded-full" style={{ backgroundColor: '#C4A747' }}></div>
@@ -326,7 +347,7 @@ export default function About() {
 
     <h2
       className="text-4xl lg:text-4xl font-bold mb-6"
-      style={{ color: '#1a1a1a' }}
+      style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}
     >
       A deeper understanding changes{' '}
       <span style={{ color: '#4B3B8C' }}>everything.</span>
