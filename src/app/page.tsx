@@ -245,7 +245,7 @@ export default function Home() {
             {/* Steps Grid */}
             <div ref={stepsRef} className="grid md:grid-cols-4 gap-12">
               {steps.map((step, idx) => (
-                <div key={step.title} className="relative">
+                <div key={step.number} className="relative">
                   {/* Dotted connection line */}
                   {idx < steps.length - 1 && (
                     <div className="hidden md:block absolute top-7 left-[55%] right-[-50%] h-px border-t-2 border-dashed" style={{ borderColor: "#B8943D" }} />
