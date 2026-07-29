@@ -99,103 +99,138 @@ export default function Home() {
 
       <main>
         {/* Hero Section */}
-        <section className="bg-[#FAF6EF]">
-          <div className="max-w-9xl mx-auto  w-full">
-            <div className="grid lg:grid-cols-2 gap-4 items-start">
-              {/* Left Content */}
-              <div ref={heroContentRef} className="flex flex-col justify-center lg:pl-8 pl-6 pt-16">
-                {/* Label */}
-                <div className="flex items-center gap-2 mb-12">
-                  <Sparkles className="w-5 h-5" style={{ color: "#C4A747" }} />
-                  <p className="text-xs uppercase tracking-widest font-semibold" style={{ color: "#C4A747" }}>
-                    DISCOVER YOUR PATTERN
-                  </p>
-                </div>
+     <section className="bg-[#FAF6EF]">
+  <div className="max-w-9xl mx-auto w-full">
+    <div className="grid lg:grid-cols-2 gap-4 items-start">
+      
+      {/* Left Content */}
+      <div
+        ref={heroContentRef}
+        className="flex flex-col justify-center lg:pl-8 pl-6 pt-16"
+      >
+        {/* Label */}
+        <div className="flex items-center gap-2 mb-12">
+          <Sparkles
+            className="w-5 h-5"
+            style={{ color: "#C4A747" }}
+          />
+          <p
+            className="text-xs uppercase tracking-widest font-semibold"
+            style={{ color: "#C4A747" }}
+          >
+            DISCOVER YOUR PATTERN
+          </p>
+        </div>
 
-                {/* Secondary Headline */}
-                <p className="text-xl leading-relaxed mb-8" style={{ color: "#444444", fontFamily: "'Playfair Display', 'Georgia', serif" }}>
-                  You've probably spent your whole life saying...
-                </p>
+        <p
+          className="text-xl leading-relaxed mb-8"
+          style={{
+            color: "#444444",
+            fontFamily: "'Playfair Display', 'Georgia', serif",
+          }}
+        >
+          You've probably spent your whole life saying...
+        </p>
 
-                {/* Primary Quote - Main Focus */}
-                <h1 className="text-5xl italic font-handwriting lg:text-6xl font-bold mb-10 leading-tight" style={{ fontFamily: "'Playfair Display', 'Georgia', serif" }}>
-                  "I've always been like that."
-                </h1>
+        <h1
+          className="text-5xl italic font-handwriting lg:text-6xl font-bold mb-10 leading-tight"
+          style={{
+            fontFamily: "'Playfair Display', 'Georgia', serif",
+          }}
+        >
+          "I've always been like that."
+        </h1>
 
-                {/* Divider */}
-                <div className="w-24 h-1 mb-4" style={{ backgroundColor: "#C4A747" }} />
+        <div
+          className="w-24 h-1 mb-4"
+          style={{ backgroundColor: "#C4A747" }}
+        />
 
-                {/* Third Focus */}
-                <p className="text-xl lg:text-2xl font-semibold mb-8" style={{ color: "#C4A747" }}>
-                  CAT-20 helps you understand why.
-                </p>
+        <p
+          className="text-xl lg:text-2xl font-semibold mb-8"
+          style={{ color: "#C4A747" }}
+        >
+          CAT-20 helps you understand why.
+        </p>
 
-                {/* Fourth Focus - Supporting */}
-                <p className="text-md max-w-lg leading-8 mb-8" style={{ color: "#444444" }}>
-                  Every person experiences the world a little differently. CAT-20 helps you discover the patterns that make your perspective uniquely yours.
-                </p>
+        <p
+          className="text-md max-w-lg leading-8 mb-8"
+          style={{ color: "#444444" }}
+        >
+          Every person experiences the world a little differently. CAT-20
+          helps you discover the patterns that make your perspective uniquely
+          yours.
+        </p>
 
-                {/* CTA Buttons */}
-                <div className="flex gap-4 flex-wrap">
-                  <Link
-                    href="/assessment"
-                    className="rounded-lg px-12 py-4 font-semibold hover:scale-105 transition-transform duration-300 flex items-center gap-2 text-white shadow-lg"
-                    style={{ backgroundColor: "#4B3B8C" }}
-                  >
-                    Discover Your Pattern
-                    <span className="text-lg">→</span>
-                  </Link>
-                  <Link
-                    href="#how-it-works"
-                    className="rounded-lg border-2 px-10 py-4 font-medium hover:shadow-lg hover:bg-gray-50 transition-all duration-300 flex items-center gap-2"
-                    style={{ borderColor: "#D0D0D0", color: "#1a1a1a", backgroundColor: "transparent" }}
-                  >
-                    <span className="text-sm">▶</span>
-                    How It Works
-                  </Link>
-                </div>
-              </div>
+        <div className="flex gap-4 flex-wrap">
+          <Link
+            href="/assessment"
+            className="rounded-lg px-12 py-4 font-semibold hover:scale-105 transition-transform duration-300 flex items-center gap-2 text-white shadow-lg"
+            style={{ backgroundColor: "#4B3B8C" }}
+          >
+            Discover Your Pattern
+            <span className="text-lg">→</span>
+          </Link>
 
-              <div ref={heroImageRef} className="relative flex justify-center items-center overflow-hidden bg-[#FAF6EF]">
-                <img
-                  src="/hero_image.png"
-                  alt="Person standing on mountain peak"
-                  className="w-full max-w-xl"
-                />
+          <Link
+            href="#how-it-works"
+            className="rounded-lg border-2 px-10 py-4 font-medium hover:shadow-lg hover:bg-gray-50 transition-all duration-300 flex items-center gap-2"
+            style={{
+              borderColor: "#D0D0D0",
+              color: "#1a1a1a",
+              backgroundColor: "transparent",
+            }}
+          >
+            <span className="text-sm">▶</span>
+            How It Works
+          </Link>
+        </div>
+      </div>
 
-                {/* Smooth left, top, and bottom fade */}
-                <div
-                  className="absolute inset-0 pointer-events-none w-full h-full"
-                  style={{
-                    background: `
-        linear-gradient(
-          to right,
-           #FAF6EF 5%,
-          rgba(245,243,243,0.8) 15%,
-          rgba(245,243,243,0.4) 30%,
-          transparent 50%
-        ),
-        linear-gradient(
-          to bottom,
-          #FAF6EF 5%,
-          rgba(245,243,243,0.8) 15%,
-          rgba(245,243,243,0.4) 30%,
-          transparent 50%
-        ),
-        linear-gradient(
-          to top,
-          #FAF6EF 5%,
-          rgba(245,243,243,0.8) 15%,
-          rgba(245,243,243,0.4) 30%,
-          transparent 50%
-        )
-      `,
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </section>
+      {/* Right Image */}
+      <div
+        ref={heroImageRef}
+        className="relative w-full flex justify-end items-start overflow-hidden bg-[#FAF6EF]"
+      >
+        <img
+          src="/hero_image.png"
+          alt="Person standing on mountain peak"
+          className="w-full max-w-xl h-auto object-contain ml-auto"
+        />
+
+        {/* Smooth left, top, and bottom fade */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `
+              linear-gradient(
+                to right,
+                #FAF6EF 5%,
+                rgba(245,243,243,0.8) 15%,
+                rgba(245,243,243,0.4) 30%,
+                transparent 50%
+              ),
+              linear-gradient(
+                to bottom,
+                #FAF6EF 5%,
+                rgba(245,243,243,0.8) 15%,
+                rgba(245,243,243,0.4) 30%,
+                transparent 50%
+              ),
+              linear-gradient(
+                to top,
+                #FAF6EF 5%,
+                rgba(245,243,243,0.8) 15%,
+                rgba(245,243,243,0.4) 30%,
+                transparent 50%
+              )
+            `,
+          }}
+        />
+      </div>
+    </div>
+  </div>
+</section>
 
         {/* How It Works Section */}
         <section ref={howItWorksRef} id="how-it-works" className="mt-4" >
