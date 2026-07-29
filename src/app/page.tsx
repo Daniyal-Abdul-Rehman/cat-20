@@ -11,7 +11,7 @@ const steps = [
   {
     number: 1,
     title: <>
-      Answer <span className="text-[28px]">20</span> Questions
+      Answer <span className="text-[28px] font-light">20</span> Questions
     </>,
     description: "Simple questions designed to reveal your patterns."
   },
@@ -238,7 +238,7 @@ export default function Home() {
               <p className="text-sm font-bold uppercase tracking-widest mb-3" style={{ color: "#C4A747" }}>
                 SIMPLE. PRIVATE. POWERFUL.
               </p>
-              <h2 className="text-xl lg:text-4xl font-bold mb-4" style={{ color: "#1a1a1a" }}>How CAT-<span className="text-[50px]">20</span> Works</h2>
+              <h2 className="text-xl lg:text-4xl font-bold mb-4" style={{ color: "#1a1a1a" }}>How CAT-<span className="text-[50px] font-light">20</span> Works</h2>
               <div className="w-24 h-0.5 rounded-full mx-auto" style={{ backgroundColor: "#C4A747" }} />
             </div>
 
@@ -292,7 +292,7 @@ export default function Home() {
               />
 
               {/* Content */}
-              <div className="relative p-6 lg:p-6 flex flex-col lg:flex-row items-center justify-between gap-16">
+              <div className="relative p-6 lg:p-12 flex flex-col lg:flex-row items-center justify-between gap-16">
                 <div className="max-w-sm">
                   <h2
                     className="text-xl lg:text-3xl font-bold"

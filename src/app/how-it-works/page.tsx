@@ -134,7 +134,7 @@ export default function HowItWorks() {
                   <span className="italic" style={{ color: '#4B3B8C' }}>shouldn't feel complicated.</span>
                 </h1>
                 <p className="text-lg max-w-md" style={{ color: '#555555', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
-                  CAT-<span className='text-[24px]'>20</span> is simple to take and deeply meaningful.
+                  CAT-<span className='text-[24px] font-light'>20</span> is simple to take and deeply meaningful.
                   <br />
                   Here's what the experience looks like.
                 </p>
@@ -167,7 +167,7 @@ export default function HowItWorks() {
                 {
                   title: (
                     <>
-                      <span className="text-[18px]">8–10</span> minutes
+                      <span className="text-[18px] font-light">8–10</span> minutes
                     </>
                   ),
                   desc: 'Most people finish in under 10 minutes.'
@@ -175,7 +175,7 @@ export default function HowItWorks() {
                 {
                   title: (
                     <>
-                      <span className="text-[20px]">20</span> Questions
+                      <span className="text-[20px] font-light">20</span> Questions
                     </>
                   ),
                   desc: 'Short, everyday situations with no trick questions.'
