@@ -100,11 +100,11 @@ export default function HowItWorks() {
                   className="text-4xl sm:text-5xl lg:text-5xl font-bold leading-tight"
                   style={{ fontFamily: "'Playfair Display', 'Georgia', serif" }}
                 >
-                  Understanding yourself
+                  <span className="italic">Understanding yourself</span>
                   <br />
                   <span className="italic" style={{ color: '#4B3B8C' }}>shouldn't feel complicated.</span>
                 </h1>
-                <p className="text-lg max-w-md" style={{ color: '#555555' }}>
+                <p className="text-lg max-w-md" style={{ color: '#555555', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
                   CAT-20 is simple to take and deeply meaningful.
                   <br />
                   Here's what the experience looks like.

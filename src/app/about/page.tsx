@@ -130,12 +130,12 @@ export default function About() {
                 About CAT-20
               </span>
               <h1 className="text-5xl lg:text-4xl font-bold leading-tight mb-8" style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
-                Everyone has <span style={{ color: '#4B3B8C' }}>patterns.</span>
+                Everyone has <span className="italic" style={{ color: '#4B3B8C' }}>patterns.</span>
                 <br />
-                Few people ever have them explained.
+                <span className="italic">Few people ever have them explained.</span>
               </h1>
               <div className="w-20 h-1 mb-10" style={{ backgroundColor: '#C4A747' }}></div>
-              <p className="text-md lg:text-lg mb-10" style={{ color: '#444444', lineHeight: '1.8' }}>
+              <p className="text-md lg:text-lg mb-10" style={{ color: '#444444', lineHeight: '1.8', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
                 CAT-20 was created to help you finally understand the recurring ways your mind naturally thinks, notices, questions, connects, and experiences the world.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
