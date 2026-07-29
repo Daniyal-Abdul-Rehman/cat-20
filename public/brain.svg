@@ -1,0 +1,79 @@
+
+  <svg
+    viewBox="0 0 600 600"
+    className="relative w-full h-full"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <linearGradient id="brainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#c084fc" />
+        <stop offset="50%" stopColor="#8b5cf6" />
+        <stop offset="100%" stopColor="#6366f1" />
+      </linearGradient>
+
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="6" result="coloredBlur" />
+        <feMerge>
+          <feMergeNode in="coloredBlur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+    </defs>
+
+    {/* Outer Brain */}
+    <path
+      d="
+      M220 120
+      C160 120 120 180 120 240
+      C120 300 150 340 180 360
+      C160 430 210 490 290 490
+      C340 490 380 470 400 430
+      C440 470 490 470 520 430
+      C560 380 540 330 510 300
+      C560 240 520 150 430 130
+      C390 90 330 80 280 110
+      C260 100 240 100 220 120
+      "
+      stroke="url(#brainGradient)"
+      strokeWidth="4"
+      filter="url(#glow)"
+    />
+
+    {/* Left Network */}
+
+    <circle cx="180" cy="180" r="6" fill="#c084fc"/>
+    <circle cx="220" cy="220" r="6" fill="#8b5cf6"/>
+    <circle cx="170" cy="270" r="6" fill="#a855f7"/>
+    <circle cx="240" cy="300" r="6" fill="#8b5cf6"/>
+    <circle cx="200" cy="360" r="6" fill="#c084fc"/>
+
+    <line x1="180" y1="180" x2="220" y2="220" stroke="#8b5cf6"/>
+    <line x1="220" y1="220" x2="170" y2="270" stroke="#8b5cf6"/>
+    <line x1="170" y1="270" x2="240" y2="300" stroke="#8b5cf6"/>
+    <line x1="240" y1="300" x2="200" y2="360" stroke="#8b5cf6"/>
+
+    {/* Right Network */}
+
+    <circle cx="420" cy="180" r="6" fill="#c084fc"/>
+    <circle cx="390" cy="230" r="6" fill="#8b5cf6"/>
+    <circle cx="450" cy="270" r="6" fill="#a855f7"/>
+    <circle cx="360" cy="320" r="6" fill="#8b5cf6"/>
+    <circle cx="430" cy="360" r="6" fill="#c084fc"/>
+
+    <line x1="420" y1="180" x2="390" y2="230" stroke="#8b5cf6"/>
+    <line x1="390" y1="230" x2="450" y2="270" stroke="#8b5cf6"/>
+    <line x1="450" y1="270" x2="360" y2="320" stroke="#8b5cf6"/>
+    <line x1="360" y1="320" x2="430" y2="360" stroke="#8b5cf6"/>
+
+    {/* Center */}
+
+    <circle cx="300" cy="250" r="8" fill="#ffffff"/>
+    <circle cx="300" cy="320" r="8" fill="#ffffff"/>
+
+    <line x1="220" y1="220" x2="300" y2="250" stroke="#8b5cf6"/>
+    <line x1="390" y1="230" x2="300" y2="250" stroke="#8b5cf6"/>
+    <line x1="240" y1="300" x2="300" y2="320" stroke="#8b5cf6"/>
+    <line x1="360" y1="320" x2="300" y2="320" stroke="#8b5cf6"/>
+
+  </svg>

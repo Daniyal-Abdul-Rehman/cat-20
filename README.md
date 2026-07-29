@@ -1,116 +1,36 @@
-# React Boilerplate
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## 🚀 Overview
+## Getting Started
 
-This is a **React Boilerplate** built with **Vite**, **React 19**, **Tailwind CSS v4**, and **Redux Toolkit**. It provides a scalable structure for building modern web applications with best practices in mind.
-
-## 📂 Project Structure
-
-```bash
-react-boilerplate/
-├── public/                # Static assets
-├── src/
-│   ├── assets/            # Images, fonts, etc.
-│   ├── components/        # UI components
-│   │   ├── common/        # Reusable UI components (e.g., Button, Input)
-│   │   ├── layout/        # Layout components (e.g., AuthLayout, DashboardLayout)
-│   ├── features/
-│   │   ├── auth/          # Authentication module (Redux slice, API service)
-│   │   ├── dashboard/     # Dashboard module (Redux slice, UI components)
-│   ├── hooks/             # Custom React hooks
-│   ├── pages/             # Page components
-│   ├── services/          # API services (e.g., authService, api.js)
-│   ├── store/             # Redux store configuration
-│   ├── utils/             # Utility functions and constants
-│   ├── App.jsx            # Root component
-│   ├── main.jsx           # Entry point
-│   ├── index.css          # Global styles
-├── .gitignore             # Ignored files in Git
-├── vite.config.js         # Vite configuration
-└── package.json           # Project metadata and dependencies
-```
-
-## 🛠️ Installation & Setup
-
-### 1️⃣ Clone the Repository
-
-```bash
-git clone https://github.com/AnwarHossainSR/react-boilerplate.git
-cd react-boilerplate
-```
-
-### 2️⃣ Install Dependencies
-
-```bash
-npm install
-```
-
-### 3️⃣ Start Development Server
+First, run the development server:
 
 ```bash
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-The application will be available at `http://localhost:3000/`
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### 4️⃣ Build for Production
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-```bash
-npm run build
-```
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## 🚀 Features
+## Learn More
 
-✅ **Vite** – Fast development and hot module replacement  
-✅ **React 19** – Latest React features and optimizations  
-✅ **Tailwind CSS v4** – Modern CSS-first styling  
-✅ **Redux Toolkit** – State management with best practices  
-✅ **Custom Hooks** – Reusable logic abstraction  
-✅ **Modular Architecture** – Scalable and maintainable folder structure  
-✅ **API Services** – Centralized API handling with `services/api.js`
+To learn more about Next.js, take a look at the following resources:
 
-## 📦 Dependencies
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-| Package          | Version |
-| ---------------- | ------- |
-| React            | ^19.x   |
-| Redux Toolkit    | ^2.x    |
-| React Router DOM | ^7.x    |
-| Tailwind CSS     | ^4.x    |
-| Vite             | ^6.x    |
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## 🔥 Folder Details
+## Deploy on Vercel
 
-### 📌 Components
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-- `common/` – Reusable UI components (e.g., `Button.jsx`, `Input.jsx`)
-- `layout/` – Layout components (e.g., `DashboardLayout.jsx`, `PublicLayout.jsx`)
-
-### 📌 Features
-
-- `auth/` – Handles authentication logic (Redux slice, API service)
-- `dashboard/` – Dashboard-related state and components
-
-### 📌 Hooks
-
-- `useAuth.js` – Authentication hook
-- `useFetch.js` – Fetch data with `useEffect`
-
-### 📌 Pages
-
-- `auth/` – Login & Register pages
-- `dashboard/` – Dashboard & Profile pages
-- `Home.jsx` – Main landing page
-
-### 📌 Services
-
-- `api.js` – Centralized API handling
-- `authService.js` – Handles authentication API requests
-
-## 📜 License
-
-This project is licensed under the **MIT License**.
-
----
-
-💡 **Need help?** Feel free to contribute or open an issue on [GitHub](https://github.com/yourusername/react-boilerplate). 🚀
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
