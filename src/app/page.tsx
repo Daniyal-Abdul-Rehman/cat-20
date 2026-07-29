@@ -190,12 +190,12 @@ export default function Home() {
       {/* Right Image */}
       <div
         ref={heroImageRef}
-        className="relative w-full flex justify-end items-start overflow-hidden bg-[#FAF6EF]"
+        className="relative w-full flex justify-center items-center overflow-hidden bg-[#FAF6EF]"
       >
         <img
           src="/hero_image.png"
           alt="Person standing on mountain peak"
-          className="w-full max-w-xl h-auto object-contain ml-auto"
+          className="w-full max-w-2xl h-auto object-contain"
         />
 
         {/* Smooth left, top, and bottom fade */}
@@ -205,23 +205,23 @@ export default function Home() {
             background: `
               linear-gradient(
                 to right,
-                #FAF6EF 5%,
-                rgba(245,243,243,0.8) 15%,
-                rgba(245,243,243,0.4) 30%,
-                transparent 50%
+                #FAF6EF 15%,
+                rgba(250,246,239,0.9) 25%,
+                rgba(250,246,239,0.5) 40%,
+                transparent 60%
               ),
               linear-gradient(
                 to bottom,
                 #FAF6EF 5%,
-                rgba(245,243,243,0.8) 15%,
-                rgba(245,243,243,0.4) 30%,
+                rgba(250,246,239,0.8) 15%,
+                rgba(250,246,239,0.4) 30%,
                 transparent 50%
               ),
               linear-gradient(
                 to top,
                 #FAF6EF 5%,
-                rgba(245,243,243,0.8) 15%,
-                rgba(245,243,243,0.4) 30%,
+                rgba(250,246,239,0.8) 15%,
+                rgba(250,246,239,0.4) 30%,
                 transparent 50%
               )
             `,

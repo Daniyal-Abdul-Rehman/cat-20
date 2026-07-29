@@ -21,7 +21,7 @@ export default function Navigation() {
           <div className="flex items-center flex-shrink-0">
             <Link href="/" className="flex flex-col">
               <span className="text-4xl font-bold" style={{ color: '#1a1a1a' }}>CAT-<span className="text-5xl font-bold" style={{ color: '#4B3B8C' }}>20</span></span>
-              <span className="text-xs" style={{ color: '#666666', letterSpacing: '0.05em' }}>COGNITIVE ARCHETYPE TEST</span>
+              <span className="text-xs" style={{ color: '#666666', letterSpacing: '0.05em' }}>COGNITIVE ARCHETYPE TAXONOMY</span>
             </Link>
           </div>
           
