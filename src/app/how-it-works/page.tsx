@@ -175,7 +175,7 @@ export default function HowItWorks() {
                 {
                   title: (
                     <>
-                      <span className="text-[18px]">20</span> Questions
+                      <span className="text-[20px]">20</span> Questions
                     </>
                   ),
                   desc: 'Short, everyday situations with no trick questions.'
