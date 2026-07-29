@@ -94,13 +94,13 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F5F3F3] text-gray-900">
+    <div className="min-h-screen bg-[#FAF6EF] text-gray-900">
       <Navigation />
 
       <main>
         {/* Hero Section */}
-        <section className="bg-[#F5F3F3]">
-          <div className="max-w-7xl mx-auto  w-full">
+        <section className="bg-[#FAF6EF]">
+          <div className="max-w-9xl mx-auto  w-full">
             <div className="grid lg:grid-cols-2 gap-4 items-start">
               {/* Left Content */}
               <div ref={heroContentRef} className="flex flex-col justify-center lg:pl-8 pl-6 pt-16">
@@ -156,7 +156,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div ref={heroImageRef} className="relative flex justify-center items-center overflow-hidden bg-[#F5F3F3]">
+              <div ref={heroImageRef} className="relative flex justify-center items-center overflow-hidden bg-[#FAF6EF]">
                 <img
                   src="/hero_image.png"
                   alt="Person standing on mountain peak"
@@ -165,26 +165,26 @@ export default function Home() {
 
                 {/* Smooth left, top, and bottom fade */}
                 <div
-                  className="absolute inset-0 pointer-events-none"
+                  className="absolute inset-0 pointer-events-none w-full h-full"
                   style={{
                     background: `
         linear-gradient(
           to right,
-          #F5F3F3 5%,
+           #FAF6EF 5%,
           rgba(245,243,243,0.8) 15%,
           rgba(245,243,243,0.4) 30%,
           transparent 50%
         ),
         linear-gradient(
           to bottom,
-          #F5F3F3 5%,
+          #FAF6EF 5%,
           rgba(245,243,243,0.8) 15%,
           rgba(245,243,243,0.4) 30%,
           transparent 50%
         ),
         linear-gradient(
           to top,
-          #F5F3F3 5%,
+          #FAF6EF 5%,
           rgba(245,243,243,0.8) 15%,
           rgba(245,243,243,0.4) 30%,
           transparent 50%
@@ -198,7 +198,7 @@ export default function Home() {
         </section>
 
         {/* How It Works Section */}
-        <section ref={howItWorksRef} id="how-it-works" className="mt-5" >
+        <section ref={howItWorksRef} id="how-it-works" className="mt-4" >
           <div className="max-w-6xl mx-auto px-6 lg:px-12">
             {/* Section Header */}
             <div className="text-center mb-12">
@@ -215,7 +215,7 @@ export default function Home() {
                 <div key={step.title} className="relative">
                   {/* Dotted connection line */}
                   {idx < steps.length - 1 && (
-                    <div className="hidden md:block absolute top-7 left-[55%] right-[-50%] h-px border-t-2 border-dashed" style={{ borderColor: "#C4A747" }} />
+                    <div className="hidden md:block absolute top-7 left-[55%] right-[-50%] h-px border-t-2 border-dashed" style={{ borderColor: "#B8943D" }} />
                   )}
 
                   <div className="text-center relative z-10">
@@ -236,7 +236,7 @@ export default function Home() {
         </section>
 
         {/* CTA Banner Section */}
-        <section ref={ctaRef} className="py-32 lg:py-20">
+        <section ref={ctaRef} className="py-24 lg:py-16">
           <div className="max-w-6xl mx-auto px-4 lg:px-6">
             <div
               className="rounded-2xl overflow-hidden relative shadow-2xl"
@@ -254,7 +254,7 @@ export default function Home() {
                 className="absolute inset-y-0 right-0 w-1/2 right-0 pointer-events-none"
                 style={{
                   background:
-                    "linear-gradient(to right, #F5F3F3 0%, rgba(245,243,243,0.95) 20%, rgba(245,243,243,0.5) 45%, rgba(245,243,243,0) 70%)",
+                    "linear-gradient(to right, #FAF6EF 0%, rgba(250,246,239,0.95) 20%, rgba(250,246,239,0.5) 45%, rgba(250,246,239,0) 70%)",
                 }}
               />
 
@@ -265,7 +265,7 @@ export default function Home() {
                     className="text-xl lg:text-3xl font-bold"
                     style={{ color: "#1a1a1a" }}
                   >
-                    Maybe you've been searching for this.
+                    This is what you've been looking for.
                   </h2>
 
                   <div

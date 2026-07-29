@@ -14,13 +14,13 @@ export default function Navigation() {
   const isArchetypeActive = () => pathname.startsWith('/archetypes/') && pathname !== '/archetypes';
 
   return (
-    <nav className="bg-[#F5F3F3] relative z-50 sticky top-0">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <nav className="bg-[#FAF6EF] relative z-50 sticky top-0">
+      <div className="max-w-9xl mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo - Left */}
           <div className="flex items-center flex-shrink-0">
             <Link href="/" className="flex flex-col">
-              <span className="text-4xl font-bold" style={{ color: '#1a1a1a' }}>CAT<span className="font-bold" style={{ color: '#4B3B8C' }}>-20</span></span>
+              <span className="text-4xl font-bold" style={{ color: '#1a1a1a' }}>CAT-<span className="text-5xl font-bold" style={{ color: '#4B3B8C' }}>20</span></span>
               <span className="text-xs" style={{ color: '#666666', letterSpacing: '0.05em' }}>COGNITIVE ARCHETYPE TEST</span>
             </Link>
           </div>
@@ -118,36 +118,36 @@ export default function Navigation() {
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-200">
+        <div className="lg:hidden bg-[#FAF6EF] border-t border-gray-200">
           <div className="px-4 pt-2 pb-3 space-y-1">
-            <Link 
-              href="/" 
-              className={`block px-3 py-2 rounded-md font-medium text-sm transition-colors ${isActive('/') ? 'bg-gray-50' : ''}`}
-              style={{ color: '#1a1a1a' }}
+            <Link
+              href="/"
+              className={`block px-3 py-2 rounded-md font-medium text-sm transition-colors ${isActive('/') ? 'border-l-2' : ''}`}
+              style={{ color: isActive('/') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
             >
               Home
             </Link>
-            <Link 
-              href="/about" 
-              className={`block px-3 py-2 rounded-md font-medium text-sm transition-colors ${isActive('/about') ? 'bg-gray-50' : ''}`}
-              style={{ color: '#1a1a1a' }}
+            <Link
+              href="/about"
+              className={`block px-3 py-2 rounded-md font-medium text-sm transition-colors ${isActive('/about') ? 'border-l-2' : ''}`}
+              style={{ color: isActive('/about') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
             >
               About CAT-20
             </Link>
-            <Link 
-              href="/how-it-works" 
-              className={`block px-3 py-2 rounded-md font-medium text-sm transition-colors ${isActive('/how-it-works') ? 'bg-gray-50' : ''}`}
-              style={{ color: '#1a1a1a' }}
+            <Link
+              href="/how-it-works"
+              className={`block px-3 py-2 rounded-md font-medium text-sm transition-colors ${isActive('/how-it-works') ? 'border-l-2' : ''}`}
+              style={{ color: isActive('/how-it-works') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
             >
               How It Works
             </Link>
-            
+
             {/* Mobile Archetypes Dropdown */}
             <div>
-              <button 
+              <button
                 onClick={() => setIsArchetypesOpen(!isArchetypesOpen)}
-                className={`w-full text-left px-3 py-2 rounded-md font-medium text-sm transition-colors flex items-center justify-between ${isArchetypeActive() ? 'bg-gray-50' : ''}`}
-                style={{ color: '#1a1a1a' }}
+                className={`w-full text-left px-3 py-2 rounded-md font-medium text-sm transition-colors flex items-center justify-between ${isArchetypeActive() ? 'border-l-2' : ''}`}
+                style={{ color: isArchetypeActive() ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
               >
                 Archetypes
                 <ChevronDown className={`w-4 h-4 transition-transform ${isArchetypesOpen ? 'rotate-180' : ''}`} />
@@ -167,17 +167,17 @@ export default function Navigation() {
               )}
             </div>
 
-            <Link 
-              href="/insights" 
-              className={`block px-3 py-2 rounded-md font-medium text-sm transition-colors ${isActive('/insights') ? 'bg-gray-50' : ''}`}
-              style={{ color: '#1a1a1a' }}
+            <Link
+              href="/insights"
+              className={`block px-3 py-2 rounded-md font-medium text-sm transition-colors ${isActive('/insights') ? 'border-l-2' : ''}`}
+              style={{ color: isActive('/insights') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
             >
               Insights
             </Link>
-            <Link 
-              href="/faq" 
-              className={`block px-3 py-2 rounded-md font-medium text-sm transition-colors ${isActive('/faq') ? 'bg-gray-50' : ''}`}
-              style={{ color: '#1a1a1a' }}
+            <Link
+              href="/faq"
+              className={`block px-3 py-2 rounded-md font-medium text-sm transition-colors ${isActive('/faq') ? 'border-l-2' : ''}`}
+              style={{ color: isActive('/faq') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
             >
               FAQ
             </Link>

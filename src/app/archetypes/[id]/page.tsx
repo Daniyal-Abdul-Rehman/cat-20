@@ -107,7 +107,7 @@ export default async function ArchetypePage({ params }: { params: { id: string }
                 className="inline-block px-10 py-4 font-semibold rounded-lg hover:scale-105 transition-transform duration-300 text-white shadow-lg"
                 style={{ backgroundColor: '#4B3B8C' }}
               >
-                Discover Your Archetype
+                Discover Your Pattern
               </Link>
             </div>
           </div>

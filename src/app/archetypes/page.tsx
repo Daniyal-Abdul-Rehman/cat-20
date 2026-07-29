@@ -5,11 +5,11 @@ import { archetypes } from '@/data/archetypes';
 
 export default function Archetypes() {
   return (
-    <div className="min-h-screen bg-white flex flex-col" style={{ color: '#1a1a1a' }}>
+    <div className="min-h-screen bg-[#FAF6EF] flex flex-col" style={{ color: '#1a1a1a' }}>
       <Navigation />
       
       <main className="flex-1">
-        <div className="container mx-auto px-6 lg:px-12 py-24 lg:py-32">
+        <div className="container mx-auto px-6 lg:px-12 py-20 lg:py-24">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
               <span className="inline-block border px-4 py-2 text-sm font-semibold uppercase tracking-widest" style={{ borderColor: '#C4A747', color: '#C4A747' }}>
@@ -19,7 +19,7 @@ export default function Archetypes() {
                 CAT-20 Archetypes
               </h1>
               <p className="mt-4 text-lg" style={{ color: '#666666' }}>
-                Discover the different cognitive patterns and archetypes
+                Discover the Different Cognitive Patterns and Archetypes
               </p>
             </div>
 

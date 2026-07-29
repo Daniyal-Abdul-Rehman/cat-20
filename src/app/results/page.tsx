@@ -22,7 +22,7 @@ export default function Results() {
                 Your CAT-20 Results
               </h1>
               <p className="mt-4 text-lg text-gray-400">
-                Discover your cognitive patterns
+                Discover Your Cognitive Patterns
               </p>
             </div>
 

@@ -69,12 +69,12 @@ export default function HowItWorks() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#F5F3F3', color: '#1a1a1a', fontFamily: "'Inter', sans-serif" }}>
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#FAF6EF', color: '#1a1a1a' }}>
       <Navigation />
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section ref={heroRef} className="px-6 lg:px-12 pt-20 pb-12 lg:pt-28 lg:pb-20">
+        <section ref={heroRef} className="px-6 lg:px-8 py-20 lg:py-8">
           <div className="max-w-6xl mx-auto">
             <div className="mb-6">
               <span className="inline-block text-sm font-semibold uppercase tracking-[0.2em]" style={{ color: '#C4A747' }}>
@@ -83,7 +83,7 @@ export default function HowItWorks() {
               <div className="w-8 h-[2px] mt-2" style={{ backgroundColor: '#C4A747' }}></div>
             </div>
 
-            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-8">
+            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between space-x-8 mb-8">
               <h1
                 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight"
                 style={{ fontFamily: "'Playfair Display', 'Georgia', serif" }}
@@ -114,7 +114,7 @@ export default function HowItWorks() {
         </section>
 
         {/* Before You Begin Section */}
-        <section ref={beforeBeginRef} className="px-6 lg:px-12 py-12 lg:py-16">
+        <section ref={beforeBeginRef} className="px-6 lg:px-8 py-16 lg:py-6">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <span className="inline-block text-sm font-semibold uppercase tracking-[0.2em] mb-2" style={{ color: '#C4A747' }}>
@@ -130,7 +130,7 @@ export default function HowItWorks() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {[
                 { title: '8–10 Minutes', desc: 'Most people finish in under 10 minutes.' },
                 { title: '20 Questions', desc: 'Short, everyday situations with no trick questions.' },
@@ -139,11 +139,10 @@ export default function HowItWorks() {
               ].map((item, index) => (
                 <div
                   key={index}
-                  className={`text-center ${index < 3 ? 'lg:border-r' : ''}`}
-                  style={{ borderColor: '#E5E0D8' }}
+                  className="text-center"
                 >
-                  <h3 className="text-lg font-bold mb-2">{item.title}</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: '#666666' }}>{item.desc}</p>
+                  <h3 className="text-base font-semibold mb-3" style={{ color: '#1a1a1a' }}>{item.title}</h3>
+                  <p className="text-base leading-relaxed" style={{ color: '#666666' }}>{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -151,12 +150,12 @@ export default function HowItWorks() {
         </section>
 
         {/* Divider */}
-        <div className="max-w-6xl mx-auto px-6 lg:px-12">
+        <div className="max-w-6xl mx-auto px-6 lg:px-8">
           <hr className="border-0" style={{ borderTop: '1px solid #E5E0D8' }} />
         </div>
 
         {/* Why Only 20 Questions Section */}
-        <section ref={whyQuestionsRef} className="px-6 lg:px-12 py-16 lg:py-20">
+        <section ref={whyQuestionsRef} className="px-6 lg:px-8 py-16 lg:py-6">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-10">
               <span className="inline-block text-sm font-semibold uppercase tracking-[0.2em]" style={{ color: '#C4A747' }}>
@@ -188,7 +187,7 @@ export default function HowItWorks() {
                   desc: 'These repetitions—not isolated answers—shape your final cognitive profile.',
                 },
               ].map((item, index) => (
-                <div key={index} className="flex items-start gap-4">
+                <div key={index} className="flex items-start space-x-4">
                   <div className="mt-1 flex-shrink-0">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                       <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2L8 0Z" fill="#C4A747"/>
@@ -205,7 +204,7 @@ export default function HowItWorks() {
         </section>
 
         {/* Answer Naturally Section */}
-        <section ref={answerNaturallyRef} className="px-6 lg:px-12 py-12 lg:py-16">
+        <section ref={answerNaturallyRef} className="px-6 lg:px-8 py-16 lg:py-6">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-10">
               <span className="inline-block text-sm font-semibold uppercase tracking-[0.2em] mb-2" style={{ color: '#C4A747' }}>
@@ -218,34 +217,31 @@ export default function HowItWorks() {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 text-center">
-              <div className="flex-1 max-w-[200px]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center p-6 rounded-lg border" style={{ borderColor: '#E5E0D8', backgroundColor: '#FAF6EF' }}>
+                <div className="w-10 h-10 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: '#C4A747' }}>
+                  <span className="text-white font-bold text-lg">1</span>
+                </div>
                 <h3 className="text-sm font-bold mb-2">Go with your first instinct.</h3>
                 <p className="text-xs leading-relaxed" style={{ color: '#666666' }}>
                   It's usually the most accurate choice.
                 </p>
               </div>
 
-              <div className="hidden sm:flex flex-shrink-0">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M6 0L7.5 4.5L12 6L7.5 7.5L6 12L4.5 7.5L0 6L4.5 4.5L6 0Z" fill="#C4A747"/>
-                </svg>
-              </div>
-
-              <div className="flex-1 max-w-[200px]">
+              <div className="text-center p-6 rounded-lg border" style={{ borderColor: '#E5E0D8', backgroundColor: '#FAF6EF' }}>
+                <div className="w-10 h-10 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: '#C4A747' }}>
+                  <span className="text-white font-bold text-lg">2</span>
+                </div>
                 <h3 className="text-sm font-bold mb-2">There are no good or bad answers.</h3>
                 <p className="text-xs leading-relaxed" style={{ color: '#666666' }}>
                   CAT-20 isn't measuring success or failure.
                 </p>
               </div>
 
-              <div className="hidden sm:flex flex-shrink-0">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M6 0L7.5 4.5L12 6L7.5 7.5L6 12L4.5 7.5L0 6L4.5 4.5L6 0Z" fill="#C4A747"/>
-                </svg>
-              </div>
-
-              <div className="flex-1 max-w-[200px]">
+              <div className="text-center p-6 rounded-lg border" style={{ borderColor: '#E5E0D8', backgroundColor: '#FAF6EF' }}>
+                <div className="w-10 h-10 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: '#C4A747' }}>
+                  <span className="text-white font-bold text-lg">3</span>
+                </div>
                 <h3 className="text-sm font-bold mb-2">If two answers fit, choose the more natural one.</h3>
                 <p className="text-xs leading-relaxed" style={{ color: '#666666' }}>
                   Trust what feels most like you in the moment.
@@ -256,11 +252,11 @@ export default function HowItWorks() {
         </section>
 
         {/* Bottom CTA Section */}
-        <section ref={ctaRef} className="px-6 lg:px-12 pb-8 lg:pb-12">
+        <section ref={ctaRef} className="px-6 lg:px-8 pb-16 lg:pb-6">
           <div className="max-w-6xl mx-auto">
             <div
               className="relative rounded-xl border overflow-hidden"
-              style={{ borderColor: '#E5E0D8', backgroundColor: '#FAF9F7' }}
+              style={{ borderColor: '#E5E0D8', backgroundColor: '#FAF6EF' }}
             >
               <div className="px-8 py-12 lg:px-12 lg:py-16 lg:pr-[400px] relative">
                 <h2
@@ -311,7 +307,7 @@ export default function HowItWorks() {
         </section>
 
         {/* Footer tagline */}
-        <div className="text-center pb-12 px-6">
+        <div className="text-center pb-10 px-6">
           <p className="text-sm" style={{ color: '#666666' }}>
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="inline mr-1" style={{ verticalAlign: 'middle' }}>
               <path d="M6 0L7.5 4.5L12 6L7.5 7.5L6 12L4.5 7.5L0 6L4.5 4.5L6 0Z" fill="#C4A747"/>
@@ -320,8 +316,6 @@ export default function HowItWorks() {
           </p>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

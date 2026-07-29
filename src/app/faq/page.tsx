@@ -69,11 +69,11 @@ export default function FAQ() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col" style={{ color: '#1a1a1a' }}>
+    <div className="min-h-screen bg-[#FAF6EF] flex flex-col" style={{ color: '#1a1a1a' }}>
       <Navigation />
       
       <main className="flex-1">
-        <div className="container mx-auto px-6 lg:px-12 py-24 lg:py-32">
+        <div className="container mx-auto px-6 lg:px-12 py-20 lg:py-24">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-16">
               <span className="inline-block border px-4 py-2 text-sm font-semibold uppercase tracking-widest" style={{ borderColor: '#C4A747', color: '#C4A747' }}>

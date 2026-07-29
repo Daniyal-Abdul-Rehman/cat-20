@@ -80,12 +80,12 @@ export default function About() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F5F3F3]" style={{ color: '#1a1a1a' }}>
+    <div className="min-h-screen flex flex-col bg-[#FAF6EF]" style={{ color: '#1a1a1a' }}>
       <Navigation />
 
       <main className="flex-1">
         {/* Hero Section */}
-        <div className="relative overflow-hidden max-w-7xl mx-auto" >
+        <div className="relative overflow-hidden max-w-9xl mx-auto" >
           {/* Subtle network background graphic */}
           <div className="absolute inset-0 opacity-20">
             <svg className="w-full h-full" viewBox="0 0 1200 600" preserveAspectRatio="none">
@@ -98,7 +98,7 @@ export default function About() {
             </svg>
           </div>
 
-          <div ref={heroContentRef} className=" mx-auto pl-6 lg:pl-8 py-24 lg:py-10 relative z-10 grid lg:grid-cols-9 gap-4">
+          <div ref={heroContentRef} className=" mx-auto pl-6 lg:pl-8 py-20 lg:py-8 relative z-10 grid lg:grid-cols-9 gap-4">
             <div className="max-w-3xl col-span-6">
               <span className="inline-block text-sm font-semibold uppercase tracking-widest mb-8" style={{ color: '#C4A747' }}>
                 About CAT-20
@@ -138,7 +138,7 @@ export default function About() {
         </div>
 
         {/* Section 1: What is CAT-20? */}
-        <div ref={section1Ref} className="py-20 lg:py-8 max-w-7xl mx-auto">
+        <div ref={section1Ref} className="py-16 lg:py-6 max-w-9xl mx-auto">
           <div className=" mx-auto px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
               <div>
@@ -159,12 +159,12 @@ export default function About() {
                 </p>
               </div>
               <div className="flex justify-center">
-                <div className="relative w-full max-w-md">
+                <div className="relative w-full max-w-xs">
                   <Image
                     src="/brain_landscape.png"
                     alt="Brain illustration - cognitive patterns"
-                    width={400}
-                    height={400}
+                    width={320}
+                    height={320}
                     className="w-full h-auto"
                     priority
                   />
@@ -175,7 +175,7 @@ export default function About() {
         </div>
 
         {/* Section 2: Why was it created? */}
-        <div ref={section2Ref} className="py-20 lg:py-8 max-w-7xl mx-auto">
+        <div ref={section2Ref} className="py-16 lg:py-6 max-w-9xl mx-auto">
           <div className=" mx-auto px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
@@ -222,7 +222,7 @@ export default function About() {
         </div>
 
         {/* Section 3: What makes it different? */}
-        <div ref={section3Ref} className="py-20 lg:py-8 max-w-7xl mx-auto">
+        <div ref={section3Ref} className="py-16 lg:py-6 max-w-9xl mx-auto">
           <div className=" mx-auto px-6 lg:px-8">
             <div className=" mb-2">
               <span className="border-b border-[] text-sm font-semibold uppercase tracking-widest" style={{ color: '#C4A747' }}>
@@ -312,7 +312,7 @@ export default function About() {
         </div>
 
         {/* Final Section */}
-        <div ref={finalSectionRef} className="py-20 lg:py-8 max-w-7xl mx-auto">
+        <div ref={finalSectionRef} className="py-16 lg:py-6 max-w-9xl mx-auto">
           <div className=" mx-auto pl-6 lg:pl-8">
             <div className="grid grid-cols-1 lg:grid-cols-10 relative items-stretch">
   {/* Content */}
@@ -364,7 +364,7 @@ export default function About() {
       className="absolute inset-0 pointer-events-none"
       style={{
         background:
-          'linear-gradient(to right, #F5F3F3 0%, rgba(245,243,243,0.95) 10%, rgba(245,243,243,0.7) 25%, rgba(245,243,243,0.3) 45%, rgba(245,243,243,0) 70%)',
+          'linear-gradient(to right, #FAF6EF 0%, rgba(250,246,239,0.95) 10%, rgba(250,246,239,0.7) 25%, rgba(250,246,239,0.3) 45%, rgba(250,246,239,0) 70%)',
       }}
     />
   </div>
