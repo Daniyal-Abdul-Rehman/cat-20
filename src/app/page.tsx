@@ -113,7 +113,7 @@ export default function Home() {
                 </div>
 
                 {/* Secondary Headline */}
-                <p className="text-xl leading-relaxed mb-8" style={{ color: "#444444" }} style={{ fontFamily: "'Playfair Display', 'Georgia', serif" }}>
+                <p className="text-xl leading-relaxed mb-8" style={{ color: "#444444", fontFamily: "'Playfair Display', 'Georgia', serif" }}>
                   You've probably spent your whole life saying...
                 </p>
 
