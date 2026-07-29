@@ -167,7 +167,7 @@ export default function About() {
                   01
                 </span>
                 <h2 className="text-4xl lg:text-4xl font-bold mt-4 mb-6" style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
-                  What is CAT-<span className='text-[50px] font-light'>20</span>?
+                  What is CAT-<span className='text-[50px] font-medium'>20</span>?
                 </h2>
                 <p className="text-lg mb-6" style={{ color: '#4B3B8C', fontWeight: '600' }}>
                   CAT-20 is a cognitive framework designed to help you understand the recurring ways your mind naturally works.

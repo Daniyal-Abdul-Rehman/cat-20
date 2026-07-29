@@ -167,7 +167,7 @@ export default function HowItWorks() {
                 {
                   title: (
                     <>
-                      <span className="text-[18px] font-light">8–10</span> minutes
+                      <span className="text-[18px] font-medium">8–10</span> minutes
                     </>
                   ),
                   desc: 'Most people finish in under 10 minutes.'
@@ -175,7 +175,7 @@ export default function HowItWorks() {
                 {
                   title: (
                     <>
-                      <span className="text-[20px] font-light">20</span> Questions
+                      <span className="text-[20px] font-medium">20</span> Questions
                     </>
                   ),
                   desc: 'Short, everyday situations with no trick questions.'
