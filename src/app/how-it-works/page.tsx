@@ -77,13 +77,42 @@ export default function HowItWorks() {
         <section ref={heroRef} className="px-6 lg:px-8 py-16 lg:py-6 relative overflow-hidden">
           {/* Background flowing graphic */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <img 
-              src="/graphics.png" 
-              alt="" 
-              className="absolute -right-20 -top-20 w-[80%] h-[150%] object-cover "
+            <img
+              src="/graphics.png"
+              alt=""
+              className="absolute -right-20 -top-20 w-[80%] h-[150%] object-cover"
+            />
+            {/* Fade overlay for text blending - stronger fade on left */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: `
+                  linear-gradient(
+                    to right,
+                    #FAF6EF 25%,
+                    rgba(250,246,239,0.95) 35%,
+                    rgba(250,246,239,0.6) 50%,
+                    transparent 70%
+                  ),
+                  linear-gradient(
+                    to bottom,
+                    #FAF6EF 5%,
+                    rgba(250,246,239,0.8) 15%,
+                    rgba(250,246,239,0.4) 30%,
+                    transparent 50%
+                  ),
+                  linear-gradient(
+                    to top,
+                    #FAF6EF 5%,
+                    rgba(250,246,239,0.8) 15%,
+                    rgba(250,246,239,0.4) 30%,
+                    transparent 50%
+                  )
+                `,
+              }}
             />
           </div>
-          
+
           <div className="max-w-6xl mx-auto relative z-10">
 
 
@@ -105,7 +134,7 @@ export default function HowItWorks() {
                   <span className="italic" style={{ color: '#4B3B8C' }}>shouldn't feel complicated.</span>
                 </h1>
                 <p className="text-lg max-w-md" style={{ color: '#555555', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
-                  CAT-20 is simple to take and deeply meaningful.
+                  CAT-<span className='text-[24px]'>20</span> is simple to take and deeply meaningful.
                   <br />
                   Here's what the experience looks like.
                 </p>
@@ -135,10 +164,30 @@ export default function HowItWorks() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { title: '8–10 Minutes', desc: 'Most people finish in under 10 minutes.' },
-                { title: '20 Questions', desc: 'Short, everyday situations with no trick questions.' },
-                { title: 'Instant Results', desc: 'Your cognitive profile appears right away.' },
-                { title: 'Any Device', desc: 'Complete the assessment on your phone, tablet, or computer.' },
+                {
+                  title: (
+                    <>
+                      <span className="text-[18px]">8–10</span> minutes
+                    </>
+                  ),
+                  desc: 'Most people finish in under 10 minutes.'
+                },
+                {
+                  title: (
+                    <>
+                      <span className="text-[18px]">20</span> Questions
+                    </>
+                  ),
+                  desc: 'Short, everyday situations with no trick questions.'
+                },
+                {
+                  title: 'Instant Results',
+                  desc: 'Your cognitive profile appears right away.'
+                },
+                {
+                  title: 'Any Device',
+                  desc: 'Complete the assessment on your phone, tablet, or computer.'
+                },
               ].map((item, index) => (
                 <div
                   key={index}

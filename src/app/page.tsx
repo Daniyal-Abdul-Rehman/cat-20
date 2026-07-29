@@ -275,7 +275,7 @@ export default function Home() {
             >
               {/* Background Image */}
               <img
-                src="/hero_second.jpeg"
+                src="/hero_footer.png"
                 alt="Person reflecting in natural environment"
                 className="absolute inset-y-0 right-0 w-1/2 h-full object-cover"
               />

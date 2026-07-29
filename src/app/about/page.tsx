@@ -136,7 +136,7 @@ export default function About() {
               </h1>
               <div className="w-20 h-1 mb-10" style={{ backgroundColor: '#C4A747' }}></div>
               <p className="text-md lg:text-lg mb-10" style={{ color: '#444444', lineHeight: '1.8', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
-                CAT-20 was created to help you finally understand the recurring ways your mind naturally thinks, notices, questions, connects, and experiences the world.
+                CAT-<span className='text-[24px]'>20</span> was created to help you finally understand the recurring ways your mind naturally thinks, notices, questions, connects, and experiences the world.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
@@ -167,7 +167,7 @@ export default function About() {
                   01
                 </span>
                 <h2 className="text-4xl lg:text-4xl font-bold mt-4 mb-6" style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
-                  What is CAT-20?
+                  What is CAT-<span className='text-[50px]'>20</span>?
                 </h2>
                 <p className="text-lg mb-6" style={{ color: '#4B3B8C', fontWeight: '600' }}>
                   CAT-20 is a cognitive framework designed to help you understand the recurring ways your mind naturally works.
