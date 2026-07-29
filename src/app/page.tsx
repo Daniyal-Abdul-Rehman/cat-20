@@ -236,7 +236,7 @@ export default function Home() {
               <p className="text-sm font-bold uppercase tracking-widest mb-3" style={{ color: "#C4A747" }}>
                 SIMPLE. PRIVATE. POWERFUL.
               </p>
-              <h2 className="text-xl lg:text-4xl font-bold mb-4" style={{ color: "#1a1a1a" }}>How CAT-20 Works</h2>
+              <h2 className="text-xl lg:text-4xl font-bold mb-4" style={{ color: "#1a1a1a" }}>How CAT-<span className="text-[50px]">20</span> Works</h2>
               <div className="w-24 h-0.5 rounded-full mx-auto" style={{ backgroundColor: "#C4A747" }} />
             </div>
 
