@@ -11,6 +11,7 @@ import gsap from 'gsap';
 export default function About() {
   const heroRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
+  const heroImageRef = useRef<HTMLImageElement>(null);
   const section1Ref = useRef<HTMLDivElement>(null);
   const section2Ref = useRef<HTMLDivElement>(null);
   const section3Ref = useRef<HTMLDivElement>(null);
@@ -25,6 +26,34 @@ export default function About() {
         { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power2.out" }
       );
     }
+
+    // Parallax and fade effect for hero image
+    const handleScroll = () => {
+      if (heroImageRef.current && heroRef.current) {
+        const scrollY = window.scrollY;
+        const heroHeight = heroRef.current.offsetHeight;
+        
+        // Parallax effect - move image slower than scroll throughout entire page
+        gsap.to(heroImageRef.current, {
+          y: scrollY * 0.5,
+          duration: 0.1,
+          ease: "none"
+        });
+        
+        // Fade effect after hero section
+        if (scrollY > heroHeight * 0.5) {
+          const fadeProgress = Math.min((scrollY - heroHeight * 0.5) / (heroHeight * 0.5), 1);
+          gsap.to(heroImageRef.current, {
+            opacity: 1 - fadeProgress * 0.7,
+            duration: 0.1,
+            ease: "none"
+          });
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
 
     // Scroll-triggered animations
     const observerOptions = {
@@ -85,13 +114,14 @@ export default function About() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <div className="relative overflow-hidden max-w-9xl mx-auto bg-[#FAF6EF]">
+        <div ref={heroRef} className="relative overflow-hidden max-w-9xl mx-auto bg-[#FAF6EF]">
           {/* Background flowing image */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <img 
+              ref={heroImageRef}
               src="/dots.png" 
               alt="" 
-              className="absolute right-0 top-0 w-[70%] h-full object-cover"
+              className="absolute right-0 top-0 w-[80%] h-[120%] object-cover"
             />
             {/* Fade overlay for text blending - stronger fade on left */}
             <div
@@ -162,7 +192,20 @@ export default function About() {
         <div ref={section1Ref} className="py-16 lg:py-6 max-w-9xl mx-auto">
           <div className=" mx-auto px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-              <div>
+             
+              <div className="flex justify-center">
+                <div className="relative w-full max-w-xs">
+                  <Image
+                    src="/brain_landscape.png"
+                    alt="Brain illustration - cognitive patterns"
+                    width={320}
+                    height={320}
+                    className="w-full h-auto"
+                    priority
+                  />
+                </div>
+              </div>
+               <div>
                 <span className="border-b border-[] text-sm font-semibold uppercase tracking-widest" style={{ color: '#C4A747' }}>
                   01
                 </span>
@@ -178,18 +221,6 @@ export default function About() {
                 <p className="text-lg" style={{ color: '#444444', lineHeight: '1.8' }}>
                   It connects the dots between how you think, how you feel, how you react, and the choices you make — so you can finally see yourself more clearly.
                 </p>
-              </div>
-              <div className="flex justify-center">
-                <div className="relative w-full max-w-xs">
-                  <Image
-                    src="/brain_landscape.png"
-                    alt="Brain illustration - cognitive patterns"
-                    width={320}
-                    height={320}
-                    className="w-full h-auto"
-                    priority
-                  />
-                </div>
               </div>
             </div>
           </div>
@@ -249,7 +280,7 @@ export default function About() {
               <span className="border-b border-[] text-sm font-semibold uppercase tracking-widest" style={{ color: '#C4A747' }}>
                 03
               </span>
-              <div className='flex items-center space-x-5'>
+              <div className=''>
                 <h2 className="text-4xl lg:text-4xl font-bold mt-4 mb-4" style={{ color: '#1a1a1a' }}>
                   What makes it different?
                 </h2>
