@@ -99,11 +99,11 @@ export default function About() {
       });
     }, observerOptions);
 
-    if (section1Ref.current) observer.observe(section1Ref.current);
-    if (section2Ref.current) observer.observe(section2Ref.current);
-    if (section3Ref.current) observer.observe(section3Ref.current);
-    if (cardsRef.current) observer.observe(cardsRef.current);
-    if (finalSectionRef.current) observer.observe(finalSectionRef.current);
+    if (section1Ref.current) observer.observe(section1Ref.current!);
+    if (section2Ref.current) observer.observe(section2Ref.current!);
+    if (section3Ref.current) observer.observe(section3Ref.current!);
+    if (cardsRef.current) observer.observe(cardsRef.current!);
+    if (finalSectionRef.current) observer.observe(finalSectionRef.current!);
 
     return () => observer.disconnect();
   }, []);
