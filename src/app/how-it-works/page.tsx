@@ -41,8 +41,8 @@ export default function HowItWorks() {
           }
           if (entry.target === whyQuestionsRef.current) {
             gsap.fromTo(whyQuestionsRef.current.children,
-              { opacity: 0, x: 30, opacity: 0 },
-              { opacity: 1, x: 0, opacity: 1, duration: 0.8, ease: "power2.out" }
+              { opacity: 0, x: 30 },
+              { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" }
             );
           }
           if (entry.target === answerNaturallyRef.current) {
