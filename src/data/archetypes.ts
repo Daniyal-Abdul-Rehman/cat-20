@@ -12,85 +12,166 @@ export interface Archetype {
 
 export const archetypes: Archetype[] = [
   {
-    id: 'visionary',
-    name: 'The Visionary',
-    tagline: 'Seeing Possibilities in Every Challenge',
-    description: 'Visionaries naturally see the big picture and identify patterns others miss. You think in terms of future possibilities and are driven by ideas of what could be rather than what is. Your mind excels at connecting seemingly unrelated concepts to create innovative solutions.',
-    strengths: [
-      'Exceptional at seeing long-term implications and trends',
-      'Creative problem-solving through pattern recognition',
-      'Inspires others with compelling visions of the future',
-      'Adaptable and open to new perspectives',
-      'Thrives in ambiguous and rapidly changing environments'
-    ],
-    growthAreas: [
-      'May overlook practical details in pursuit of grand ideas',
-      'Can struggle with routine, repetitive tasks',
-      'Sometimes moves too quickly for others to follow',
-      'May need to ground ideas in actionable steps'
-    ],
-    bestEnvironments: [
-      'Strategic planning and innovation teams',
-      'Entrepreneurial ventures and startups',
-      'Research and development',
-      'Creative industries and design'
-    ],
-    decisionStyle: 'You make decisions based on future potential and pattern recognition, often trusting your intuition about where trends are heading.',
-    communicationStyle: 'You communicate through stories and visions, painting pictures of what could be to inspire and motivate others.'
-  },
-  {
-    id: 'analyst',
-    name: 'The Analyst',
-    tagline: 'Finding Truth Through Deep Inquiry',
-    description: 'Analysts approach the world with systematic precision and logical rigor. You naturally break down complex problems into their component parts, examining each piece before reconstructing the whole. Your mind excels at identifying inconsistencies and finding the most efficient path forward.',
+    id: 'thinker',
+    name: 'The Thinker',
+    tagline: 'Deep Understanding Through Reflection',
+    description: 'Thinkers approach the world with careful analysis and deep contemplation. You naturally examine ideas from multiple angles before forming conclusions, valuing precision and logical consistency. Your mind excels at uncovering underlying principles and creating systematic frameworks for understanding complex phenomena.',
     strengths: [
       'Exceptional at critical thinking and logical analysis',
-      'Thorough and detail-oriented in problem-solving',
-      'Identifies patterns in data and information',
+      'Thorough and methodical in problem-solving',
+      'Identifies patterns and underlying principles',
       'Reliable and consistent in decision-making',
-      'Excels at creating systems and processes'
+      'Excels at creating conceptual frameworks'
     ],
     growthAreas: [
       'May overanalyze and delay decisions',
-      'Can struggle with emotional or subjective factors',
-      'Sometimes misses the human element in solutions',
+      'Can struggle with rapid, intuitive responses',
+      'Sometimes misses emotional or social factors',
       'May need to embrace uncertainty and ambiguity'
     ],
     bestEnvironments: [
-      'Data analysis and research',
-      'Quality assurance and compliance',
-      'Financial planning and analysis',
-      'Technical and engineering roles'
+      'Research and academic settings',
+      'Strategic planning and analysis',
+      'Technical and engineering roles',
+      'Quality assurance and compliance'
     ],
-    decisionStyle: 'You make decisions based on careful analysis of available data, weighing pros and cons methodically before acting.',
-    communicationStyle: 'You communicate through facts, evidence, and logical arguments, preferring clear, precise language over emotional appeals.'
+    decisionStyle: 'You make decisions based on careful analysis and logical reasoning, weighing all available information before acting.',
+    communicationStyle: 'You communicate through precise language and logical arguments, preferring clarity and accuracy over emotional appeals.'
   },
   {
-    id: 'connector',
-    name: 'The Connector',
-    tagline: 'Building Bridges Between People and Ideas',
-    description: 'Connectors naturally understand and navigate social dynamics with ease. You sense the emotional undercurrents in any situation and excel at bringing people together around shared goals. Your mind thrives on relationships and the complex web of human interactions.',
+    id: 'seeker',
+    name: 'The Seeker',
+    tagline: 'Exploring New Horizons and Possibilities',
+    description: 'Seekers are driven by curiosity and the desire to discover what lies beyond the familiar. You naturally gravitate toward new experiences and ideas, constantly expanding your understanding of the world. Your mind thrives on exploration and the pursuit of knowledge, always asking "what if?" and "why not?"',
     strengths: [
-      'Exceptional at reading people and emotional intelligence',
-      'Builds strong, lasting relationships',
-      'Mediates conflicts and finds common ground',
-      'Inspires trust and cooperation in others',
-      'Excels at team collaboration and leadership'
+      'Exceptional curiosity and love of learning',
+      'Adaptable and open to new perspectives',
+      'Inspires others with enthusiasm for discovery',
+      'Excels at identifying emerging opportunities',
+      'Thrives in dynamic, changing environments'
     ],
     growthAreas: [
-      'May prioritize relationships over objective analysis',
-      'Can take others\' emotions too personally',
-      'Sometimes struggles with difficult conversations',
+      'May struggle with routine and repetition',
+      'Can lose focus by pursuing too many interests',
+      'Sometimes moves on before completing projects',
+      'May need to develop deeper expertise in specific areas'
+    ],
+    bestEnvironments: [
+      'Research and development',
+      'Innovation and creative industries',
+      'Entrepreneurial ventures',
+      'Education and training'
+    ],
+    decisionStyle: 'You make decisions based on exploration and discovery, often choosing paths that offer new learning opportunities.',
+    communicationStyle: 'You communicate through stories of discovery and possibility, inspiring others with your enthusiasm for the new and unknown.'
+  },
+  {
+    id: 'builder',
+    name: 'The Builder',
+    tagline: 'Creating Structure From Vision',
+    description: 'Builders have a natural talent for turning abstract ideas into concrete reality. You excel at organizing resources, creating systems, and executing plans with precision. Your mind thrives on bringing order to chaos and constructing lasting foundations that others can build upon.',
+    strengths: [
+      'Exceptional at planning and execution',
+      'Reliable and consistent in delivering results',
+      'Excels at creating efficient systems and processes',
+      'Strong organizational and project management skills',
+      'Turns vague concepts into actionable plans'
+    ],
+    growthAreas: [
+      'May be resistant to changing established methods',
+      'Can struggle with highly ambiguous situations',
+      'Sometimes focuses too much on process over creativity',
+      'May need to embrace more flexible approaches'
+    ],
+    bestEnvironments: [
+      'Project management and operations',
+      'Construction and engineering',
+      'Systems architecture and development',
+      'Manufacturing and production'
+    ],
+    decisionStyle: 'You make decisions based on practical considerations and proven methods, prioritizing feasibility and reliability.',
+    communicationStyle: 'You communicate through clear plans and concrete steps, focusing on what needs to be done and how to achieve it.'
+  },
+  {
+    id: 'nurturer',
+    name: 'The Nurturer',
+    tagline: 'Cultivating Growth in Others',
+    description: 'Nurturers have an innate ability to sense what others need and help them grow. You naturally create supportive environments where people feel valued and encouraged to develop. Your mind excels at understanding emotional dynamics and fostering the potential in those around you.',
+    strengths: [
+      'Exceptional empathy and emotional intelligence',
+      'Creates safe, supportive environments for growth',
+      'Excels at mentoring and developing others',
+      'Builds strong, trusting relationships',
+      'Patient and encouraging in helping others improve'
+    ],
+    growthAreas: [
+      'May prioritize others\' needs over their own',
+      'Can struggle with difficult conversations',
+      'Sometimes takes criticism too personally',
       'May need to set clearer boundaries'
     ],
     bestEnvironments: [
-      'Team leadership and management',
+      'Education and training',
       'Human resources and talent development',
-      'Sales and business development',
-      'Community building and social services'
+      'Healthcare and counseling',
+      'Team leadership and management'
     ],
-    decisionStyle: 'You make decisions considering the impact on people and relationships, often weighing how choices will affect team dynamics and morale.',
-    communicationStyle: 'You communicate through empathy and understanding, adapting your message to resonate with different audiences and building consensus.'
+    decisionStyle: 'You make decisions considering the impact on people and their growth, often choosing paths that support others\' development.',
+    communicationStyle: 'You communicate through empathy and encouragement, adapting your message to resonate with each individual\'s needs.'
+  },
+  {
+    id: 'spark',
+    name: 'The Spark',
+    tagline: 'Igniting Inspiration and Energy',
+    description: 'Sparks naturally bring enthusiasm and creative energy to any situation. You excel at generating ideas and inspiring others with your passion and vision. Your mind thrives on creative expression and the excitement of new possibilities, often serving as the catalyst for innovation and change.',
+    strengths: [
+      'Exceptional creativity and innovative thinking',
+      'Inspires others with enthusiasm and passion',
+      'Excels at generating new ideas and possibilities',
+      'Brings energy and excitement to projects',
+      'Adaptable and quick to embrace change'
+    ],
+    growthAreas: [
+      'May struggle with follow-through on ideas',
+      'Can be inconsistent in focus and attention',
+      'Sometimes overwhelms others with intensity',
+      'May need to develop more disciplined habits'
+    ],
+    bestEnvironments: [
+      'Creative industries and design',
+      'Marketing and advertising',
+      'Innovation and R&D',
+      'Entrepreneurial ventures'
+    ],
+    decisionStyle: 'You make decisions based on intuition and creative inspiration, often choosing paths that feel exciting and innovative.',
+    communicationStyle: 'You communicate through passion and creative expression, inspiring others with your energy and vision.'
+  },
+  {
+    id: 'wanderer',
+    name: 'The Wanderer',
+    tagline: 'Finding Wisdom Through Experience',
+    description: 'Wanderers approach life as a journey of discovery and experience. You naturally seek out diverse perspectives and draw wisdom from your encounters with the world. Your mind excels at synthesizing experiences into meaningful insights and finding connections across different domains of knowledge.',
+    strengths: [
+      'Exceptional adaptability and open-mindedness',
+      'Draws wisdom from diverse experiences',
+      'Excels at finding connections across domains',
+      'Comfortable with uncertainty and change',
+      'Brings unique perspectives to problems'
+    ],
+    growthAreas: [
+      'May struggle with long-term commitment',
+      'Can lack focus by constantly seeking new experiences',
+      'Sometimes misses depth by staying on the surface',
+      'May need to develop more consistent routines'
+    ],
+    bestEnvironments: [
+      'Travel and hospitality',
+      'International business and relations',
+      'Consulting and advisory roles',
+      'Creative and artistic fields'
+    ],
+    decisionStyle: 'You make decisions based on experiential learning and intuition, often choosing paths that offer new experiences and perspectives.',
+    communicationStyle: 'You communicate through stories and experiences, sharing wisdom gained from your journey through the world.'
   }
 ];
 

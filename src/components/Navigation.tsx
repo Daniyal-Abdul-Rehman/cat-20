@@ -3,15 +3,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
 
 export default function Navigation() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const [isArchetypesOpen, setIsArchetypesOpen] = useState(false);
 
   const isActive = (path: string) => pathname === path;
-  const isArchetypeActive = () => pathname.startsWith('/archetypes/') && pathname !== '/archetypes';
 
   return (
     <nav className="bg-[#FAF6EF] relative z-50 sticky top-0">
@@ -49,27 +46,13 @@ export default function Navigation() {
               How It Works
             </Link>
             
-            {/* Archetypes Dropdown */}
-            <div className="relative group">
-              <button 
-                className={`font-medium text-sm px-4 py-2 flex items-center gap-1 transition-colors ${isArchetypeActive() ? 'border-b-2' : ''}`}
-                style={{ color: isArchetypeActive() ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
-              >
-                Archetypes
-                <ChevronDown className="w-4 h-4" />
-              </button>
-              <div className="absolute left-0 mt-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-2">
-                <Link href="/archetypes/visionary" className={`block px-4 py-2 transition-colors ${isActive('/archetypes/visionary') ? 'bg-gray-50' : ''}`} style={{ color: '#1a1a1a' }}>
-                  The Visionary
-                </Link>
-                <Link href="/archetypes/analyst" className={`block px-4 py-2 transition-colors ${isActive('/archetypes/analyst') ? 'bg-gray-50' : ''}`} style={{ color: '#1a1a1a' }}>
-                  The Analyst
-                </Link>
-                <Link href="/archetypes/connector" className={`block px-4 py-2 transition-colors ${isActive('/archetypes/connector') ? 'bg-gray-50' : ''}`} style={{ color: '#1a1a1a' }}>
-                  The Connector
-                </Link>
-              </div>
-            </div>
+            <Link 
+              href="/archetypes" 
+              className={`font-medium text-sm px-4 py-2 transition-colors ${isActive('/archetypes') || pathname.startsWith('/archetypes/') ? 'border-b-2' : ''}`}
+              style={{ color: isActive('/archetypes') || pathname.startsWith('/archetypes/') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
+            >
+              Archetypes
+            </Link>
 
             <Link 
               href="/insights" 
@@ -142,30 +125,13 @@ export default function Navigation() {
               How It Works
             </Link>
 
-            {/* Mobile Archetypes Dropdown */}
-            <div>
-              <button
-                onClick={() => setIsArchetypesOpen(!isArchetypesOpen)}
-                className={`w-full text-left px-3 py-2 rounded-md font-medium text-sm transition-colors flex items-center justify-between ${isArchetypeActive() ? 'border-l-2' : ''}`}
-                style={{ color: isArchetypeActive() ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
-              >
-                Archetypes
-                <ChevronDown className={`w-4 h-4 transition-transform ${isArchetypesOpen ? 'rotate-180' : ''}`} />
-              </button>
-              {isArchetypesOpen && (
-                <div className="pl-4 space-y-1">
-                  <Link href="/archetypes/visionary" className={`block px-3 py-2 rounded-md text-sm transition-colors ${isActive('/archetypes/visionary') ? 'bg-gray-50' : ''}`} style={{ color: '#666666' }}>
-                    The Visionary
-                  </Link>
-                  <Link href="/archetypes/analyst" className={`block px-3 py-2 rounded-md text-sm transition-colors ${isActive('/archetypes/analyst') ? 'bg-gray-50' : ''}`} style={{ color: '#666666' }}>
-                    The Analyst
-                  </Link>
-                  <Link href="/archetypes/connector" className={`block px-3 py-2 rounded-md text-sm transition-colors ${isActive('/archetypes/connector') ? 'bg-gray-50' : ''}`} style={{ color: '#666666' }}>
-                    The Connector
-                  </Link>
-                </div>
-              )}
-            </div>
+            <Link
+              href="/archetypes"
+              className={`block px-3 py-2 rounded-md font-medium text-sm transition-colors ${isActive('/archetypes') || pathname.startsWith('/archetypes/') ? 'border-l-2' : ''}`}
+              style={{ color: isActive('/archetypes') || pathname.startsWith('/archetypes/') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
+            >
+              Archetypes
+            </Link>
 
             <Link
               href="/insights"

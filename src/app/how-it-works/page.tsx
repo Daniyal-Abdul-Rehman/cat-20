@@ -80,25 +80,12 @@ export default function HowItWorks() {
           {/* Background flowing graphic */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <img
-              src="/graphics.png"
+              src="/wave_final.jpeg"
               alt=""
-              className="absolute -right-20 -top-20 w-[80%] h-[150%] object-cover opacity-60"
+              className="absolute -right-20 -top-20 w-[80%] h-[150%] object-cover"
             />
             {/* Fade overlay for text blending */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: `
-                  linear-gradient(
-                    to right,
-                    #FAF6EF 25%,
-                    rgba(250,246,239,0.95) 35%,
-                    rgba(250,246,239,0.6) 50%,
-                    transparent 70%
-                  )
-                `,
-              }}
-            />
+            
           </div>
 
           <div className="max-w-7xl mx-auto relative z-10 text-center md:text-left">
@@ -109,7 +96,7 @@ export default function HowItWorks() {
               <div className="w-12 h-[1px] bg-[#C4A747] mb-8"></div>
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-serif italic mb-8 leading-tight">
+            <h1 className="text-5xl md:text-5xl font-serif italic mb-8 leading-tight">
               Understanding yourself <br />
               <span className="text-[#2D2A6E]">shouldn't feel complicated.</span>
             </h1>
@@ -117,7 +104,7 @@ export default function HowItWorks() {
             <div className="flex flex-col md:flex-row items-center gap-4 text-lg text-gray-600 font-serif italic">
               <div className="w-8 h-[1px] bg-[#C4A747] hidden md:block"></div>
               <p>
-                CAT-20 is simple to take and deeply meaningful. <br />
+                CAT-<span className="text-[24px] font-light">20</span> is simple to take and deeply meaningful. <br />
                 Here's what the experience looks like.
               </p>
             </div>
@@ -142,7 +129,7 @@ export default function HowItWorks() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {[
                 { icon: <Clock className="w-8 h-8 text-[#C4A747] stroke-[1.5]" />, title: '8–10 minutes', desc: 'Most people finish in under 10 minutes.' },
-                { icon: <MessageSquare className="w-8 h-8 text-[#C4A747] stroke-[1.5]" />, title: '20 Questions', desc: 'Short, everyday situations with no trick questions.' },
+                { icon: <MessageSquare className="w-8 h-8 text-[#C4A747] stroke-[1.5]" />, title: <span><span className="text-[22px] font-light">20</span> <span className="">Questions</span></span>, desc: 'Short, everyday situations with no trick questions.' },
                 { icon: <Zap className="w-8 h-8 text-[#C4A747] stroke-[1.5]" />, title: 'Instant Results', desc: 'Your cognitive profile appears right away.' },
                 { icon: <Smartphone className="w-8 h-8 text-[#C4A747] stroke-[1.5]" />, title: 'Any Device', desc: 'Complete the assessment on your phone, tablet, or computer.' }
               ].map((item, i) => (
@@ -162,24 +149,11 @@ export default function HowItWorks() {
           {/* Background image for left side */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <img 
-              src="/graphics.png" 
+              src="/wave.jpeg" 
               alt="" 
-              className="absolute left-0 top-0 w-1/2 h-full object-cover opacity-30"
+              className="absolute left-0 top-0 w-1/2 h-full object-cover"
             />
-            {/* Fade overlay for blending */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: `
-                  linear-gradient(
-                    to right,
-                    transparent 40%,
-                    rgba(250,246,239,0.8) 60%,
-                    #FAF6EF 80%
-                  )
-                `,
-              }}
-            />
+         
           </div>
           
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16 relative z-10">
@@ -187,18 +161,6 @@ export default function HowItWorks() {
             <div className="w-full md:w-1/2 relative flex justify-center">
               <div className="relative w-80 h-80 md:w-[450px] md:h-[450px]">
                 {/* Circular wave graphic placeholder */}
-                <div className="absolute inset-0 border border-[#D8C8F0] rounded-full opacity-30 animate-[spin_20s_linear_infinite]"></div>
-                <div className="absolute inset-4 border border-[#D8C8F0] rounded-full opacity-40 animate-[spin_25s_linear_infinite_reverse]"></div>
-                <div className="absolute inset-8 border border-[#D8C8F0] rounded-full opacity-50 animate-[spin_30s_linear_infinite]"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-12 h-12 bg-[#2D2A6E] rotate-45 flex items-center justify-center">
-                     <div className="w-4 h-4 bg-white rotate-45"></div>
-                  </div>
-                </div>
-                {/* Particle dots */}
-                <div className="absolute top-10 right-20 w-1.5 h-1.5 rounded-full bg-[#C4A747]"></div>
-                <div className="absolute bottom-20 left-10 w-1 h-1 rounded-full bg-[#2D2A6E]"></div>
-                <div className="absolute top-1/2 -left-4 w-2 h-2 rounded-full bg-[#D8C8F0]"></div>
               </div>
             </div>
 
