@@ -5,40 +5,40 @@ import { archetypes } from '@/data/archetypes';
 import { useState, useEffect } from 'react';
 
 const archetypeIcons: Record<string, string> = {
-  thinker: '🧠',
-  seeker: '🧭',
-  builder: '🔷',
-  nurturer: '❤️',
-  spark: '✨',
-  wanderer: '🌊',
+  thinkers: '🧠',
+  seekers: '🧭',
+  builders: '🔷',
+  nurturers: '❤️',
+  sparks: '✨',
+  wanderers: '🌊',
 };
 
 const archetypeColors: Record<string, string> = {
-  thinker: '#6B4C9A',
-  seeker: '#C4A747',
-  builder: '#4A7FB5',
-  nurturer: '#C46B6B',
-  spark: '#6B4C9A',
-  wanderer: '#C4A747',
+  thinkers: '#6B4C9A',
+  seekers: '#C4A747',
+  builders: '#4A7FB5',
+  nurturers: '#C46B6B',
+  sparks: '#6B4C9A',
+  wanderers: '#C4A747',
 };
 
 // Lighter background images for each card (using light/nature scenic backgrounds)
 const archetypeBgImages: Record<string, string> = {
-  thinker: '/thinker-bg.png',
-  seeker: '/seeker-bg.png',
-  builder: '/builder-bg.png',
-  nurturer: '/nurturer-bg.png',
-  spark: '/spark-bg.png',
-  wanderer: '/wanderer-bg.png',
+  thinkers: '/thinker-bg.png',
+  seekers: '/seeker-bg.png',
+  builders: '/builder-bg.png',
+  nurturers: '/nurturer-bg.png',
+  sparks: '/spark-bg.png',
+  wanderers: '/wanderer-bg.png',
 };
 
 const archetypeExploreColors: Record<string, string> = {
-  thinker: '#6B4C9A',
-  seeker: '#C4A747',
-  builder: '#4A7FB5',
-  nurturer: '#C46B6B',
-  spark: '#6B4C9A',
-  wanderer: '#C4A747',
+  thinkers: '#6B4C9A',
+  seekers: '#C4A747',
+  builders: '#4A7FB5',
+  nurturers: '#C46B6B',
+  sparks: '#6B4C9A',
+  wanderers: '#C4A747',
 };
 
 const cognitiveProfiles = [
@@ -129,7 +129,7 @@ export default function Archetypes() {
                 href={`/archetypes/${archetype.id}`}
                 className="relative group rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
                 style={{
-                  backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%), url('${archetypeBgImages[archetype.id] || archetypeBgImages.thinker}')`,
+                  backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%), url('${archetypeBgImages[archetype.id] || archetypeBgImages.thinkers}')`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   height: '280px',

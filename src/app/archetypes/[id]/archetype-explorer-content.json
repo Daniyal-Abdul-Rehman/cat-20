@@ -1,0 +1,187 @@
+{
+  "archetypes": [
+    {
+      "id": "thinkers",
+      "name": "The Thinkers",
+      "emoji": "🧠",
+      "tagline": "Understanding comes before action.",
+      "content": {
+        "intro": [
+          "Some people have always felt that the world makes more sense than it first appears.",
+          "Not because everything is obvious.",
+          "Because there's usually a reason things unfold the way they do.",
+          "They've learned that confusion rarely lasts forever.",
+          "Given enough time... enough thought... enough understanding...",
+          "Even the most complicated things begin to make sense.",
+          "There is a quiet satisfaction in finding what finally fits.",
+          "In discovering the missing piece.",
+          "In watching scattered ideas become something clear.",
+          "Some minds are content with an answer."
+        ],
+        "highlight": "Thinkers have always wanted to understand why it became the answer in the first place.",
+        "continuation": [
+          "Not to argue.",
+          "Not to prove a point.",
+          "Simply because understanding has always felt worth pursuing.",
+          "If you've always found yourself drawn toward understanding what holds everything together..."
+        ],
+        "closing": "You may have already met the Thinkers."
+      },
+      "accentColor": "#6B4C9A"
+    },
+    {
+      "id": "seekers",
+      "name": "The Seekers",
+      "emoji": "🔍",
+      "tagline": "Always searching for the missing piece.",
+      "content": {
+        "intro": [
+          "There are people who have always felt drawn toward something...",
+          "Even if they could never explain what it was.",
+          "Not because something was missing.",
+          "Because something was calling.",
+          "They've learned that not every path begins with certainty.",
+          "Sometimes the feeling comes first.",
+          "The destination has never been the only reason to begin.",
+          "Sometimes the pull itself is enough.",
+          "Some people eventually feel like they've arrived."
+        ],
+        "highlight": "Seekers have always sensed there was still another horizon.",
+        "continuation": [
+          "Not because where they are isn't enough.",
+          "Because the quiet pull to keep going has never really disappeared.",
+          "The journey was never about escaping.",
+          "It was about answering a feeling they could never quite put into words.",
+          "If that feeling has quietly followed you for as long as you can remember..."
+        ],
+        "closing": "You may have already met the Seekers."
+      },
+      "accentColor": "#C4A747"
+    },
+    {
+      "id": "builders",
+      "name": "The Builders",
+      "emoji": "🏗️",
+      "tagline": "Ideas become real through structure.",
+      "content": {
+        "intro": [
+          "Some people have never been comfortable leaving important things unfinished.",
+          "Not because anyone expected it.",
+          "Because something inside them has always felt responsible for seeing things through.",
+          "They've learned that good intentions only carry something so far.",
+          "At some point...",
+          "Someone has to follow through.",
+          "There is a quiet satisfaction in knowing something has been handled.",
+          "In seeing loose pieces become something people can depend on.",
+          "In knowing today's effort becomes tomorrow's foundation.",
+          "Some people are inspired by the beginning."
+        ],
+        "highlight": "Builders have always respected what happens after the excitement fades.",
+        "continuation": [
+          "The commitment.",
+          "The consistency.",
+          "The work that quietly turns intentions into reality.",
+          "Not for recognition.",
+          "Not for praise.",
+          "Because dependable things don't happen by accident.",
+          "If you've always felt drawn toward creating stability that others can rely on..."
+        ],
+        "closing": "You may have already met the Builders."
+      },
+      "accentColor": "#4A7FB5"
+    },
+    {
+      "id": "nurturers",
+      "name": "The Nurturers",
+      "emoji": "❤️",
+      "tagline": "People come before problems.",
+      "content": {
+        "intro": [
+          "Some people have always noticed what others quietly carry.",
+          "Not because anyone asked them to.",
+          "Because some things have simply never been easy to overlook.",
+          "They've learned that not every burden can be seen.",
+          "And not every battle is fought out loud.",
+          "There is a quiet pull to check in.",
+          "To listen a little longer.",
+          "To make sure no one feels like they have to face everything alone.",
+          "Some people remember what was said."
+        ],
+        "highlight": "Nurturers often remember how it felt.",
+        "continuation": [
+          "Not because they're searching for emotion.",
+          "Because people have always mattered more than moments.",
+          "There is a quiet satisfaction in knowing someone leaves a little lighter than they arrived.",
+          "Not because every problem was solved.",
+          "But because they no longer had to carry it by themselves.",
+          "Not for recognition.",
+          "Not because they expect anything in return.",
+          "Simply because no one was ever meant to carry the weight of life alone.",
+          "If you've always felt that quiet pull..."
+        ],
+        "closing": "You may have already met the Nurturers."
+      },
+      "accentColor": "#C46B6B"
+    },
+    {
+      "id": "sparks",
+      "name": "The Sparks",
+      "emoji": "⚡",
+      "tagline": "Energy changes the atmosphere.",
+      "content": {
+        "intro": [
+          "Some people have always felt drawn toward what brings life to a moment.",
+          "Not because they need attention.",
+          "Because something inside them naturally reaches toward energy, possibility, and movement.",
+          "They've learned that it doesn't always take much.",
+          "One idea.",
+          "One laugh.",
+          "One person willing to begin.",
+          "Sometimes that's all it takes to change everything.",
+          "There is a quiet satisfaction in watching possibility become momentum.",
+          "In seeing hesitation become excitement.",
+          "In watching people believe something is possible because someone chose to start.",
+          "Some people are comfortable watching life unfold."
+        ],
+        "highlight": "Sparks have always felt the pull to help it move.",
+        "continuation": [
+          "Not for recognition.",
+          "Not because they need to be the center of it all.",
+          "Simply because the world has always felt brighter when someone is willing to light the first spark.",
+          "If you've always felt that quiet pull..."
+        ],
+        "closing": "You may have already met the Sparks."
+      },
+      "accentColor": "#6B4C9A"
+    },
+    {
+      "id": "wanderers",
+      "name": "The Wanderers",
+      "emoji": "🌿",
+      "tagline": "Freedom creates possibility.",
+      "content": {
+        "intro": [
+          "Some people have always felt most like themselves when life leaves room to choose their own path.",
+          "Not because they reject commitment.",
+          "Because something inside them has always valued the freedom to decide for themselves.",
+          "They've learned that life doesn't always unfold the way you expect.",
+          "And that's never felt like something to fear.",
+          "Only something to navigate.",
+          "There is a quiet satisfaction in knowing your next step is still yours to choose.",
+          "In adapting when life changes.",
+          "In discovering that some of the most meaningful chapters are the ones you never saw coming.",
+          "Some people find comfort in knowing exactly what comes next."
+        ],
+        "highlight": "Wanderers have always appreciated knowing life still leaves room to grow, change, and become.",
+        "continuation": [
+          "Not because they're running from responsibility.",
+          "Not because they're afraid to stay.",
+          "Simply because living life on their own terms has always felt essential.",
+          "If you've always felt that quiet pull..."
+        ],
+        "closing": "You may have already met the Wanderers."
+      },
+      "accentColor": "#C4A747"
+    }
+  ]
+}

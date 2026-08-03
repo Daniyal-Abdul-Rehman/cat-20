@@ -12,7 +12,7 @@ export interface Archetype {
 
 export const archetypes: Archetype[] = [
   {
-    id: 'thinker',
+    id: 'thinkers',
     name: 'The Thinker',
     tagline: 'Deep Understanding Through Reflection',
     description: 'Thinkers approach the world with careful analysis and deep contemplation. You naturally examine ideas from multiple angles before forming conclusions, valuing precision and logical consistency. Your mind excels at uncovering underlying principles and creating systematic frameworks for understanding complex phenomena.',
@@ -39,7 +39,7 @@ export const archetypes: Archetype[] = [
     communicationStyle: 'You communicate through precise language and logical arguments, preferring clarity and accuracy over emotional appeals.'
   },
   {
-    id: 'seeker',
+    id: 'seekers',
     name: 'The Seeker',
     tagline: 'Exploring New Horizons and Possibilities',
     description: 'Seekers are driven by curiosity and the desire to discover what lies beyond the familiar. You naturally gravitate toward new experiences and ideas, constantly expanding your understanding of the world. Your mind thrives on exploration and the pursuit of knowledge, always asking "what if?" and "why not?"',
@@ -66,7 +66,7 @@ export const archetypes: Archetype[] = [
     communicationStyle: 'You communicate through stories of discovery and possibility, inspiring others with your enthusiasm for the new and unknown.'
   },
   {
-    id: 'builder',
+    id: 'builders',
     name: 'The Builder',
     tagline: 'Creating Structure From Vision',
     description: 'Builders have a natural talent for turning abstract ideas into concrete reality. You excel at organizing resources, creating systems, and executing plans with precision. Your mind thrives on bringing order to chaos and constructing lasting foundations that others can build upon.',
@@ -93,7 +93,7 @@ export const archetypes: Archetype[] = [
     communicationStyle: 'You communicate through clear plans and concrete steps, focusing on what needs to be done and how to achieve it.'
   },
   {
-    id: 'nurturer',
+    id: 'nurturers',
     name: 'The Nurturer',
     tagline: 'Cultivating Growth in Others',
     description: 'Nurturers have an innate ability to sense what others need and help them grow. You naturally create supportive environments where people feel valued and encouraged to develop. Your mind excels at understanding emotional dynamics and fostering the potential in those around you.',
@@ -120,7 +120,7 @@ export const archetypes: Archetype[] = [
     communicationStyle: 'You communicate through empathy and encouragement, adapting your message to resonate with each individual\'s needs.'
   },
   {
-    id: 'spark',
+    id: 'sparks',
     name: 'The Spark',
     tagline: 'Igniting Inspiration and Energy',
     description: 'Sparks naturally bring enthusiasm and creative energy to any situation. You excel at generating ideas and inspiring others with your passion and vision. Your mind thrives on creative expression and the excitement of new possibilities, often serving as the catalyst for innovation and change.',
@@ -147,7 +147,7 @@ export const archetypes: Archetype[] = [
     communicationStyle: 'You communicate through passion and creative expression, inspiring others with your energy and vision.'
   },
   {
-    id: 'wanderer',
+    id: 'wanderers',
     name: 'The Wanderer',
     tagline: 'Finding Wisdom Through Experience',
     description: 'Wanderers approach life as a journey of discovery and experience. You naturally seek out diverse perspectives and draw wisdom from your encounters with the world. Your mind excels at synthesizing experiences into meaningful insights and finding connections across different domains of knowledge.',
