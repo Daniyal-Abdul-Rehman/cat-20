@@ -3,14 +3,15 @@ import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import { archetypes } from '@/data/archetypes';
 import { useState, useEffect } from 'react';
+import { Brain, Compass, Hammer, Heart, Zap, Globe } from 'lucide-react';
 
-const archetypeIcons: Record<string, string> = {
-  thinkers: '🧠',
-  seekers: '🧭',
-  builders: '🔷',
-  nurturers: '❤️',
-  sparks: '✨',
-  wanderers: '🌊',
+const archetypeIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+  thinkers: Brain,
+  seekers: Compass,
+  builders: Hammer,
+  nurturers: Heart,
+  sparks: Zap,
+  wanderers: Globe,
 };
 
 const archetypeColors: Record<string, string> = {
@@ -141,9 +142,10 @@ export default function Archetypes() {
                     className="w-14 h-14 rounded-full flex items-center justify-center mb-4 border-2 border-white/30"
                     style={{ backgroundColor: archetypeColors[archetype.id] || '#6B4C9A' }}
                   >
-                    <span className="text-white text-2xl">
-                      {archetypeIcons[archetype.id] || '✦'}
-                    </span>
+                    {(() => {
+                      const Icon = archetypeIcons[archetype.id];
+                      return Icon ? <Icon className="w-7 h-7 text-white" /> : <span className="text-white text-2xl">✦</span>;
+                    })()}
                   </div>
 
                   {/* Title */}
@@ -157,7 +159,13 @@ export default function Archetypes() {
                   </p>
 
                   {/* Explore link */}
-                  <div className="flex items-center gap-2 text-sm font-medium" style={{ color: archetypeExploreColors[archetype.id] || '#C4A747' }}>
+                  <div
+                    className="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full"
+                    style={{
+                      color: archetypeExploreColors[archetype.id] || '#C4A747',
+                      backgroundColor: 'white'
+                    }}
+                  >
                     <span>Explore</span>
                     <svg
                       className="w-4 h-4"
