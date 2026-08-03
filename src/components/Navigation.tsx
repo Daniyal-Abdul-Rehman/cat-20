@@ -53,14 +53,6 @@ export default function Navigation() {
             >
               Archetypes
             </Link>
-
-            <Link 
-              href="/insights" 
-              className={`font-medium text-sm px-4 py-2 transition-colors ${isActive('/insights') ? 'border-b-2' : ''}`}
-              style={{ color: isActive('/insights') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
-            >
-              Insights
-            </Link>
             <Link 
               href="/faq" 
               className={`font-medium text-sm px-4 py-2 transition-colors ${isActive('/faq') ? 'border-b-2' : ''}`}
@@ -131,14 +123,6 @@ export default function Navigation() {
               style={{ color: isActive('/archetypes') || pathname.startsWith('/archetypes/') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
             >
               Archetypes
-            </Link>
-
-            <Link
-              href="/insights"
-              className={`block px-3 py-2 rounded-md font-medium text-sm transition-colors ${isActive('/insights') ? 'border-l-2' : ''}`}
-              style={{ color: isActive('/insights') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
-            >
-              Insights
             </Link>
             <Link
               href="/faq"
