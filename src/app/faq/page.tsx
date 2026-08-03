@@ -11,47 +11,42 @@ const faqs = [
   {
     id: 1,
     question: 'Is CAT-20 a personality test?',
-    answer: 'CAT-20 is not a traditional personality test. It is a cognitive archetype system that explores how you naturally process information, make decisions, and relate to the world. Rather than labeling you with a fixed type, CAT-20 describes the patterns behind your thinking and feeling.',
+    answer: 'Not exactly. CAT-20 isn\'t designed to define your entire personality. Instead, it looks for the recurring mental patterns your mind naturally tends to return to—patterns that can influence how you think, make decisions, solve problems, and experience the world.',
   },
   {
     id: 2,
-    question: 'Can my results change over time?',
-    answer: 'Your core cognitive patterns tend to be stable, but your expression of them can evolve. Life experiences, personal growth, and new perspectives may shift how certain archetypes show up in your results. Many people retake the assessment periodically to see how their patterns develop.',
+    question: 'How long does the assessment take?',
+    answer: 'Most people finish the assessment in around 5–10 minutes. There are no trick questions, and there are no right or wrong answers.',
   },
   {
     id: 3,
-    question: 'What if my results don\'t feel accurate?',
-    answer: 'If your results don\'t feel accurate, consider taking the assessment again in a calm, reflective state. Sometimes external stress or recent events can influence responses. You can also explore all six archetypes to see which resonates most deeply. The assessment is designed to reveal your natural tendencies, not a snapshot of your current mood.',
+    question: 'Can my results change over time?',
+    answer: 'Your life experiences, skills, and perspectives can all change over time. CAT-20 focuses on the patterns you naturally tend to return to, so while your results are often fairly consistent, the way you express those patterns can grow and develop throughout your life.',
   },
   {
     id: 4,
-    question: 'Why are some profiles still unavailable?',
-    answer: 'CAT-20 combines the six archetypes into 20 unique cognitive profiles. Some combinations are being refined and validated before release. We are continuously developing and testing these profiles to ensure accuracy and depth. Check back as new profiles become available.',
+    question: 'Is there a right or wrong answer?',
+    answer: 'No. The most accurate results come from answering honestly rather than choosing the answer you think sounds best. Try to answer based on what comes most naturally to you, not who you wish you were.',
   },
   {
     id: 5,
-    question: 'Is CAT-20 based on psychology?',
-    answer: 'CAT-20 draws from established psychological frameworks including Jungian typology, cognitive function theory, and contemporary personality research. However, it is an independent system designed to be accessible and practical. It is not affiliated with any specific clinical or academic institution.',
+    question: 'What if my results don\'t feel accurate?',
+    answer: 'No assessment is perfect. If something doesn\'t feel quite right, we encourage you to look through your full results before deciding. Sometimes people connect more with the descriptions than the archetype name itself. If you still feel something was off, we\'d love your feedback. CAT-20 is continually improving, and thoughtful feedback helps make the framework better for everyone.',
   },
   {
     id: 6,
-    question: 'Will CAT-20 continue to grow?',
-    answer: 'Yes. CAT-20 is an evolving system. We are continuously expanding the profiles, refining the assessment, and adding new resources and insights. Our goal is to create a comprehensive framework for understanding how different minds work together.',
+    question: 'Why are some profiles still unavailable?',
+    answer: 'CAT-20 is actively growing. Some profile combinations are still being developed and written. If your exact profile isn\'t available yet, you\'ll be notified, and it will be added as the framework continues to expand.',
   },
   {
     id: 7,
-    question: 'Can I relate to more than one archetype?',
-    answer: 'Absolutely. Everyone carries elements of multiple archetypes. CAT-20 identifies your primary and secondary patterns, but the system is designed to show how archetypes combine and interact. Most people find that two or three archetypes resonate strongly with them.',
+    question: 'Is CAT-20 based on psychology?',
+    answer: 'CAT-20 is an original cognitive framework. It draws inspiration from observing recurring human patterns, but it is not intended to diagnose, evaluate, or replace professional psychological assessment. Its purpose is to encourage self-reflection and help people better understand the ways their minds naturally approach the world.',
   },
   {
     id: 8,
-    question: 'How is CAT-20 different from other personality systems?',
-    answer: 'CAT-20 focuses specifically on cognitive patterns rather than behavioral traits or social roles. It does not aim to categorize or limit you. Instead, it describes the natural ways your mind processes the world and connects with others. The 20-profile system also captures more nuance than binary or four-type models.',
-  },
-  {
-    id: 9,
-    question: 'Is my information private?',
-    answer: 'Yes. Your responses and results are private. We do not sell or share personal data with third parties. Assessment data is used only to generate your results and improve the system. You can read more in our Privacy Policy.',
+    question: 'Will CAT-20 continue to grow?',
+    answer: 'Yes. CAT-20 is designed as an evolving framework. New profiles, features, and improvements will continue to be added as the project develops and more people contribute feedback.',
   },
 ];
 
