@@ -63,13 +63,13 @@ export default function FAQ() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="px-6 lg:px-8 py-8 relative overflow-hidden">
-          {/* Background image */}
+        <section className="px-6 lg:px-8 py-24 lg:py-32 relative overflow-hidden">
+          {/* Background image - more prominent */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <img
               src={FAQ_HERO_IMAGE}
               alt=""
-              className="absolute right-0 top-0 w-[70%] h-full object-cover"
+              className="absolute right-0 top-0 w-[85%] h-full object-cover"
             />
             {/* Fade overlay for text blending - stronger fade on left */}
             <div
@@ -78,166 +78,215 @@ export default function FAQ() {
                 background: `
                   linear-gradient(
                     to right,
-                    #FAF6EF 25%,
-                    rgba(250,246,239,0.95) 35%,
-                    rgba(250,246,239,0.6) 50%,
-                    transparent 70%
+                    #FAF6EF 35%,
+                    rgba(250,246,239,0.9) 45%,
+                    rgba(250,246,239,0.5) 60%,
+                    transparent 75%
                   ),
                   linear-gradient(
                     to bottom,
-                    #FAF6EF 5%,
-                    rgba(250,246,239,0.8) 15%,
-                    rgba(250,246,239,0.4) 30%,
-                    transparent 50%
+                    #FAF6EF 8%,
+                    rgba(250,246,239,0.85) 18%,
+                    rgba(250,246,239,0.5) 35%,
+                    transparent 55%
                   ),
                   linear-gradient(
                     to top,
-                    #FAF6EF 5%,
-                    rgba(250,246,239,0.8) 15%,
-                    rgba(250,246,239,0.4) 30%,
-                    transparent 50%
+                    #FAF6EF 8%,
+                    rgba(250,246,239,0.85) 18%,
+                    rgba(250,246,239,0.5) 35%,
+                    transparent 55%
                   )
                 `,
               }}
             />
           </div>
 
-          <div className="relative max-w-7xl mx-auto z-10">
-            <div className="mb-6 flex flex-col items-center md:items-start">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-[12px] font-bold uppercase tracking-[0.3em] text-[#C4A747]">Frequently Asked Questions</span>
+          <div className="relative max-w-9xl mx-auto z-10">
+            <div className="grid lg:grid-cols-7 gap-4 items-start">
+              {/* Left Content - pushed to left */}
+              <div className="col-span-4 lg:pl-0 pl-0">
+                <div className="mb-8 flex flex-col items-start">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-16 h-[1px] bg-[#C4A747]"></div>
+                    <span className="text-[14px] font-bold uppercase tracking-[0.35em] text-[#C4A747]">Frequently Asked Questions</span>
+                  </div>
+                </div>
+
+                <h1 className="text-6xl lg:text-7xl font-serif italic leading-tight mb-8" style={{ fontFamily: "'Playfair Display', 'Georgia', serif" }}>
+                  Questions come
+                  <br />
+                  <span style={{ color: '#4B3B8C' }}>naturally.</span>
+                </h1>
+
+                <div className="flex items-start gap-4 text-lg lg:text-xl text-gray-600 font-serif italic leading-relaxed" style={{ fontFamily: "'Playfair Display', 'Georgia', serif" }}>
+                  <div className="w-12 h-[1px] bg-[#C4A747] mt-3 hidden lg:block"></div>
+                  <p className="max-w-lg">
+                    Answers should too.
+                    <br />
+                    <br />
+                    If you're wondering about something, you're probably not the first. Here are the questions we hear most often.
+                  </p>
+                </div>
               </div>
-              <div className="w-12 h-[1px] bg-[#C4A747]"></div>
-            </div>
-
-            <h1 className="text-5xl md:text-5xl font-serif italic mb-8 leading-tight" style={{ fontFamily: "'Playfair Display', 'Georgia', serif" }}>
-              Questions come
-              <br />
-              <span style={{ color: '#4B3B8C' }}>naturally.</span>
-            </h1>
-
-            <div className="flex flex-col md:flex-row items-center gap-4 text-lg text-gray-600 font-serif italic" style={{ fontFamily: "'Playfair Display', 'Georgia', serif" }}>
-              <div className="w-8 h-[1px] bg-[#C4A747] hidden md:block"></div>
-              <p>
-                Answers should too.
-                <br />
-                If you're wondering about something, you're probably not the first.
-                <br />
-                Here are the questions we hear most often.
-              </p>
             </div>
           </div>
         </section>
 
         {/* FAQ Accordion Section */}
-        <section className="px-6 lg:px-8 py-16 lg:py-6">
-          <div className=" mx-auto">
-            <div className="">
-            <div className="space-y-3">
-              {faqs.map((faq) => (
+        <section className="px-6 lg:px-8 py-16 lg:py-12">
+          <div className="max-w-4xl mx-auto">
+            <div className="space-y-4">
+              {faqs.map((faq, index) => (
                 <div
                   key={faq.id}
-                  className="rounded-xl border overflow-hidden"
-                  style={{ borderColor: '#E8E4DD', backgroundColor: '#FFFFFF' }}
+                  className="relative"
                 >
+                  {/* Question */}
                   <button
                     onClick={() => toggleFaq(faq.id)}
-                    className="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-gray-50/50 transition-colors"
+                    className="w-full text-left group"
                   >
-                    <div className="flex items-center gap-4">
-                      {/* Question mark icon */}
-                      <div
-                        className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 border"
-                        style={{ borderColor: '#4B3B8C', color: '#4B3B8C' }}
+                    <div className="flex items-start gap-6">
+                      {/* Number */}
+                      <div className="flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center font-serif text-lg transition-colors"
+                        style={{
+                          borderColor: openId === faq.id ? '#4B3B8C' : '#C4A747',
+                          color: openId === faq.id ? '#4B3B8C' : '#C4A747',
+                          backgroundColor: openId === faq.id ? '#FAF6EF' : 'transparent'
+                        }}
                       >
-                        <span className="text-sm font-bold">?</span>
+                        {index + 1}
                       </div>
-                      <span className="text-base lg:text-lg font-semibold" style={{ color: '#1a1a1a' }}>
-                        {faq.question}
-                      </span>
+                      
+                      {/* Question text */}
+                      <div className="flex-1 pt-2">
+                        <h3 className="text-xl lg:text-2xl font-serif font-semibold leading-tight transition-colors"
+                          style={{ color: openId === faq.id ? '#4B3B8C' : '#1a1a1a' }}
+                        >
+                          {faq.question}
+                        </h3>
+                      </div>
+
+                      {/* Plus/Minus */}
+                      <div className="flex-shrink-0 pt-2">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                          style={{
+                            backgroundColor: openId === faq.id ? '#4B3B8C' : 'transparent',
+                            border: openId === faq.id ? 'none' : '1px solid #C4A747'
+                          }}
+                        >
+                          <span className="text-xl font-light transition-colors"
+                            style={{ color: openId === faq.id ? '#FAF6EF' : '#C4A747' }}
+                          >
+                            {openId === faq.id ? '−' : '+'}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    {/* Plus/Minus icon */}
-                    <span
-                      className="text-2xl font-light flex-shrink-0 ml-4"
-                      style={{ color: '#4B3B8C' }}
-                    >
-                      {openId === faq.id ? '−' : '+'}
-                    </span>
                   </button>
 
                   {/* Answer */}
                   {openId === faq.id && (
-                    <div className="px-6 pb-5 pl-16">
-                      <p className="text-base leading-relaxed" style={{ color: '#555555' }}>
-                        {faq.answer}
-                      </p>
+                    <div className="ml-16 mt-6 pr-12">
+                      <div className="border-l-2 pl-6 py-2"
+                        style={{ borderColor: '#C4A747' }}
+                      >
+                        <p className="text-lg leading-relaxed font-serif" style={{ color: '#555555' }}>
+                          {faq.answer}
+                        </p>
+                      </div>
                     </div>
+                  )}
+
+                  {/* Divider */}
+                  {index < faqs.length - 1 && (
+                    <div className="ml-16 mt-8 h-px"
+                      style={{ background: 'linear-gradient(to right, #E8E4DD, transparent)' }}
+                    />
                   )}
                 </div>
               ))}
             </div>
           </div>
-          </div>
         </section>
 
         {/* CTA Section - Didn't find your answer */}
-        <section className="px-6 lg:px-8 py-16 lg:py-6">
-          <div className="max-w-7xl mx-auto">
+        <section className="px-6 lg:px-8 py-20 lg:py-24">
+          <div className="max-w-9xl mx-auto">
             <div
-              className="rounded-2xl p-8 lg:p-12 relative overflow-hidden"
+              className="rounded-3xl p-12 lg:p-20 relative overflow-hidden"
               style={{
                 backgroundColor: '#F5F0E8',
                 borderColor: '#E8E4DD',
               }}
             >
-              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+              {/* Background decorative elements */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-5"
+                  style={{ backgroundColor: '#4B3B8C', transform: 'translate(30%, -30%)' }}
+                />
+                <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full opacity-5"
+                  style={{ backgroundColor: '#C4A747', transform: 'translate(-30%, 30%)' }}
+                />
+              </div>
+
+              <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-12">
                 {/* Left - Text */}
-                <div className="max-w-lg">
-                  {/* Decorative line */}
-                  <div className="h-1 w-12 mb-4" style={{ backgroundColor: '#C4A747' }} />
-                  <h3 className="text-2xl lg:text-3xl font-serif font-bold mb-3" style={{ color: '#1a1a1a' }}>
+                <div className="flex-1">
+                  {/* Decorative elements */}
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-16 h-[1px]" style={{ backgroundColor: '#C4A747' }} />
+                    <span className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: '#C4A747' }}>
+                      Still have questions?
+                    </span>
+                  </div>
+                  
+                  <h3 className="text-4xl lg:text-5xl font-serif font-bold mb-4 leading-tight" style={{ color: '#1a1a1a' }}>
                     Didn't find your answer?
                   </h3>
-                  <p className="text-base mb-6" style={{ color: '#555555' }}>
-                    We're always improving CAT-20 and we'd
+                  <p className="text-lg lg:text-xl mb-8 leading-relaxed font-serif" style={{ color: '#555555' }}>
+                    We're always improving CAT-20 and we'd love to hear from you.
                     <br />
-                    love to hear from you.
+                    Reach out and we'll get back to you as soon as we can.
                   </p>
+                  
                   <Link
                     href="/contact"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white text-sm font-semibold hover:opacity-90 transition-opacity"
+                    className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-white text-base font-semibold hover:opacity-90 transition-all hover:scale-105"
                     style={{ backgroundColor: '#4B3B8C' }}
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                     Contact Us
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
                   </Link>
                 </div>
 
-                {/* Right - Chat illustration placeholder */}
-                <div className="hidden lg:block opacity-60">
-                  <svg width="200" height="160" viewBox="0 0 200 160" fill="none">
+                {/* Right - Decorative illustration */}
+                <div className="hidden lg:block flex-shrink-0">
+                  <svg width="280" height="220" viewBox="0 0 280 220" fill="none" className="opacity-40">
                     {/* Chat bubble 1 */}
-                    <ellipse cx="70" cy="70" rx="50" ry="35" stroke="#4B3B8C" strokeWidth="1.5" fill="none" opacity="0.3" />
-                    <ellipse cx="130" cy="100" rx="40" ry="28" stroke="#4B3B8C" strokeWidth="1.5" fill="none" opacity="0.2" />
+                    <ellipse cx="100" cy="90" rx="70" ry="50" stroke="#4B3B8C" strokeWidth="2" fill="none" opacity="0.4" />
+                    <ellipse cx="180" cy="130" rx="55" ry="40" stroke="#4B3B8C" strokeWidth="2" fill="none" opacity="0.3" />
                     {/* Three dots in each bubble */}
-                    <circle cx="55" cy="70" r="4" fill="#4B3B8C" opacity="0.3" />
-                    <circle cx="70" cy="70" r="4" fill="#4B3B8C" opacity="0.3" />
-                    <circle cx="85" cy="70" r="4" fill="#4B3B8C" opacity="0.3" />
-                    <circle cx="115" cy="100" r="3" fill="#4B3B8C" opacity="0.3" />
-                    <circle cx="128" cy="100" r="3" fill="#4B3B8C" opacity="0.3" />
-                    <circle cx="141" cy="100" r="3" fill="#4B3B8C" opacity="0.3" />
+                    <circle cx="75" cy="90" r="5" fill="#4B3B8C" opacity="0.4" />
+                    <circle cx="100" cy="90" r="5" fill="#4B3B8C" opacity="0.4" />
+                    <circle cx="125" cy="90" r="5" fill="#4B3B8C" opacity="0.4" />
+                    <circle cx="160" cy="130" r="4" fill="#4B3B8C" opacity="0.3" />
+                    <circle cx="180" cy="130" r="4" fill="#4B3B8C" opacity="0.3" />
+                    <circle cx="200" cy="130" r="4" fill="#4B3B8C" opacity="0.3" />
                     {/* Flowing lines */}
-                    <path d="M10 140 Q50 120 100 135 T190 110" stroke="#4B3B8C" strokeWidth="1" fill="none" opacity="0.2" />
-                    <path d="M20 145 Q60 125 110 140 T185 115" stroke="#4B3B8C" strokeWidth="1" fill="none" opacity="0.15" />
-                    <path d="M30 150 Q70 130 120 145 T180 120" stroke="#4B3B8C" strokeWidth="1" fill="none" opacity="0.1" />
+                    <path d="M20 180 Q80 150 140 170 T260 140" stroke="#4B3B8C" strokeWidth="1.5" fill="none" opacity="0.25" />
+                    <path d="M30 190 Q90 160 150 180 T250 150" stroke="#4B3B8C" strokeWidth="1.5" fill="none" opacity="0.2" />
+                    <path d="M40 200 Q100 170 160 190 T240 160" stroke="#4B3B8C" strokeWidth="1.5" fill="none" opacity="0.15" />
                     {/* Small decorative dots */}
-                    <circle cx="170" cy="30" r="5" fill="#4B3B8C" opacity="0.15" />
-                    <circle cx="180" cy="50" r="3" fill="#C4A747" opacity="0.2" />
+                    <circle cx="240" cy="40" r="8" fill="#4B3B8C" opacity="0.2" />
+                    <circle cx="260" cy="70" r="5" fill="#C4A747" opacity="0.3" />
+                    <circle cx="50" cy="50" r="4" fill="#C4A747" opacity="0.25" />
                   </svg>
                 </div>
               </div>
@@ -246,7 +295,6 @@ export default function FAQ() {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 }
