@@ -104,10 +104,10 @@ export default function HowItWorks() {
       });
     }, observerOptions);
 
-    if (beforeBeginRef.current) observer.observe(beforeBeginRef.current);
-    if (whyQuestionsRef.current) observer.observe(whyQuestionsRef.current);
-    if (answerNaturallyRef.current) observer.observe(answerNaturallyRef.current);
-    if (ctaRef.current) observer.observe(ctaRef.current);
+    if (beforeBeginRef.current) observer.observe(beforeBeginRef.current!);
+    if (whyQuestionsRef.current) observer.observe(whyQuestionsRef.current!);
+    if (answerNaturallyRef.current) observer.observe(answerNaturallyRef.current!);
+    if (ctaRef.current) observer.observe(ctaRef.current!);
 
     return () => {
       observer.disconnect();

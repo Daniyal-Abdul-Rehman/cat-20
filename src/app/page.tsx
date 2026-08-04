@@ -106,9 +106,9 @@ export default function Home() {
       });
     }, observerOptions);
 
-    if (howItWorksRef.current) observer.observe(howItWorksRef.current);
-    if (stepsRef.current) observer.observe(stepsRef.current);
-    if (ctaRef.current) observer.observe(ctaRef.current);
+    if (howItWorksRef.current) observer.observe(howItWorksRef.current!);
+    if (stepsRef.current) observer.observe(stepsRef.current!);
+    if (ctaRef.current) observer.observe(ctaRef.current!);
 
     return () => observer.disconnect();
   }, []);
