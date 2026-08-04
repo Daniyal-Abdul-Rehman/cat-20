@@ -74,49 +74,75 @@ export default function Archetypes() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="px-6 lg:px-8 py-20 relative overflow-hidden">
+        <section className="px-6 lg:px-8 py-24 lg:py-32 relative overflow-hidden">
           {/* Background flowing graphic */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <img
               src="/hero-bg.png"
-              alt=""
-              className="absolute inset-0 w-full h-full object-cover opacity-20"
+              alt="Hero Background"
+              className="absolute right-0 top-0 w-[85%] h-full object-cover opacity-30"
             />
-            {/* Fade overlay for text blending */}
+            {/* Fade overlay for text blending - stronger fade on left */}
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
                 background: `
                   linear-gradient(
                     to right,
-                    #FAF6EF 25%,
-                    rgba(250,246,239,0.95) 35%,
-                    rgba(250,246,239,0.6) 50%,
-                    transparent 70%
+                    #FAF6EF 35%,
+                    rgba(250,246,239,0.9) 45%,
+                    rgba(250,246,239,0.5) 60%,
+                    transparent 75%
+                  ),
+                  linear-gradient(
+                    to bottom,
+                    #FAF6EF 8%,
+                    rgba(250,246,239,0.85) 18%,
+                    rgba(250,246,239,0.5) 35%,
+                    transparent 55%
+                  ),
+                  linear-gradient(
+                    to top,
+                    #FAF6EF 8%,
+                    rgba(250,246,239,0.85) 18%,
+                    rgba(250,246,239,0.5) 35%,
+                    transparent 55%
                   )
                 `,
               }}
             />
           </div>
 
-          <div className="max-w-7xl mx-auto relative z-10 text-center md:text-left">
-            <div className="mb-6 flex flex-col items-center md:items-start">
-              <span className="inline-block text-sm font-semibold uppercase tracking-widest mb-8" style={{ color: '#C4A747' }}>
-                The Six Cognitive Archetypes
-              </span>
+          <div className="relative max-w-9xl mx-auto z-10">
+            <div className="grid lg:grid-cols-7 gap-4 items-start">
+              {/* Left Content */}
+              <div className="col-span-4 lg:pl-0 pl-0">
+                <div className="mb-8 flex flex-col items-start">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-16 h-[1px] bg-[#C4A747]"></div>
+                    <span className="text-[14px] font-bold uppercase tracking-[0.35em] text-[#C4A747]">
+                      The Six Cognitive Archetypes
+                    </span>
+                  </div>
+                </div>
+
+                <h1 className="text-6xl lg:text-7xl font-serif leading-tight mb-8" style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
+                  Six ways the mind
+                  <br />
+                  <span className="italic" style={{ color: '#4B3B8C' }}>makes sense</span> of the world.
+                </h1>
+
+                <div className="flex items-start gap-4 text-lg lg:text-xl leading-relaxed" style={{ color: '#444444', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
+                  <div className="w-12 h-[1px] bg-[#C4A747] mt-3 hidden lg:block"></div>
+                  <p className="max-w-lg">
+                    We all think, feel, and act in our own way.
+                    <br />
+                    <br />
+                    These six archetypes describe the natural patterns behind how we see the world and respond to it.
+                  </p>
+                </div>
+              </div>
             </div>
-
-            <h1 className="text-5xl lg:text-4xl font-bold leading-tight mb-8" style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
-              Six ways the mind
-              <br />
-              <span className="italic" style={{ color: '#4B3B8C' }}>makes sense</span> of the world.
-            </h1>
-
-            <p className="text-md lg:text-lg mb-10" style={{ color: '#444444', lineHeight: '1.8', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
-              We all think, feel, and act in our own way.
-              <br />
-              These six archetypes describe the natural patterns behind how we see the world and respond to it.
-            </p>
           </div>
         </section>
 
@@ -150,7 +176,7 @@ export default function Archetypes() {
 
                   {/* Title */}
                   <h2 className="text-2xl font-semibold text-white mb-2 font-serif">
-                    The {archetype.name}
+                    {archetype.name}
                   </h2>
 
                   {/* Tagline */}
@@ -204,11 +230,11 @@ export default function Archetypes() {
                     className="text-xs font-bold uppercase tracking-widest"
                     style={{ color: '#4B3B8C' }}
                   >
-                    From Six Archetypes To
+                    From 6 Archetypes To
                   </span>
                 </div>
                 <h2 className="text-4xl lg:text-5xl font-serif mb-3" style={{ color: '#1a1a1a' }}>
-                  20 <span className="text-sm font-normal" style={{ color: '#555' }}>unique</span>
+                  Countless <span className="text-sm font-normal" style={{ color: '#555' }}>unique</span>
                   <br />
                   cognitive profiles.
                 </h2>
@@ -265,13 +291,6 @@ export default function Archetypes() {
                             <span className="mx-1" style={{ color: '#C4A747' }}>+</span>
                             <span style={{ color: profile.color }}>●</span>
                           </div>
-                          <Link
-                            href={`/profiles/${profile.initials.toLowerCase()}`}
-                            className="text-xs font-medium hover:underline"
-                            style={{ color: '#4B3B8C' }}
-                          >
-                            View Profile →
-                          </Link>
                         </div>
                       </div>
                     ))}
