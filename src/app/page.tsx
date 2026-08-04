@@ -35,7 +35,7 @@ const steps = [
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
-  const heroImageRef = useRef<HTMLDivElement>(null);
+  const heroImageRef = useRef<HTMLImageElement>(null);
   const howItWorksRef = useRef<HTMLDivElement>(null);
   const stepsRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
@@ -55,6 +55,24 @@ export default function Home() {
         { opacity: 1, x: 0, duration: 1, delay: 0.3, ease: "power2.out" }
       );
     }
+
+    // Subtle parallax effect on hero image
+    const handleScroll = () => {
+      if (heroImageRef.current && heroRef.current) {
+        const scrollY = window.scrollY;
+        const heroHeight = heroRef.current.offsetHeight;
+        
+        // Very subtle parallax - move image slower than scroll
+        gsap.to(heroImageRef.current, {
+          y: scrollY * 0.15,
+          duration: 0.5,
+          ease: "power1.out"
+        });
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
 
     // How It Works section animations
     const observerOptions = {
@@ -101,10 +119,11 @@ export default function Home() {
 
       <main>
         {/* Hero Section */}
-        <section className="bg-[#FAF6EF] relative overflow-hidden">
+        <section ref={heroRef} className="bg-[#FAF6EF] relative overflow-hidden">
           {/* Background flowing image */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <img
+              ref={heroImageRef}
               src="/hero_image.png"
               alt=""
               className="absolute right-0 top-0 w-[70%] h-full object-cover"
@@ -133,6 +152,11 @@ export default function Home() {
                 #FAF6EF 5%,
                 rgba(250,246,239,0.8) 15%,
                 rgba(250,246,239,0.4) 30%,
+                transparent 50%
+              ),
+              radial-gradient(
+                ellipse at 70% 30%,
+                rgba(75, 59, 140, 0.08) 0%,
                 transparent 50%
               )
             `,
@@ -165,7 +189,7 @@ export default function Home() {
                 <p
                   className="text-xl leading-relaxed mb-8"
                   style={{
-                    color: "#444444",
+                    color: "#5B4B9C",
                     fontFamily: "'Playfair Display', 'Georgia', serif",
                   }}
                 >
@@ -176,6 +200,7 @@ export default function Home() {
                   className="text-5xl italic font-handwriting lg:text-6xl font-bold mb-10 leading-tight"
                   style={{
                     fontFamily: "'Playfair Display', 'Georgia', serif",
+                    color: "#4B3B8C"
                   }}
                 >
                   "I've always been like that."
@@ -238,7 +263,7 @@ export default function Home() {
               <p className="text-sm font-bold uppercase tracking-widest mb-3" style={{ color: "#C4A747" }}>
                 SIMPLE. PRIVATE. POWERFUL.
               </p>
-              <h2 className="text-xl lg:text-4xl font-bold mb-4" style={{ color: "#1a1a1a" }}>How CAT-<span className="text-[50px] font-medium">20</span> Works</h2>
+              <h2 className="text-xl lg:text-4xl font-bold mb-4" style={{ color: "#1a1a1a" }}>How CAT-<span className="text-[50px] font-medium" style={{ color: "#4B3B8C" }}>20</span> Works</h2>
               <div className="w-24 h-0.5 rounded-full mx-auto" style={{ backgroundColor: "#C4A747" }} />
             </div>
 
@@ -248,18 +273,18 @@ export default function Home() {
                 <div key={step.number} className="relative">
                   {/* Dotted connection line */}
                   {idx < steps.length - 1 && (
-                    <div className="hidden md:block absolute top-7 left-[55%] right-[-50%] h-px border-t-2 border-dashed" style={{ borderColor: "#B8943D" }} />
+                    <div className="hidden md:block absolute top-7 left-[55%] right-[-50%] h-px border-t-2 border-dashed" style={{ borderColor: idx === 1 ? "#4B3B8C" : "#B8943D" }} />
                   )}
 
                   <div className="text-center relative z-10">
                     {/* Circle with number */}
-                    <div className="mx-auto w-14 h-14 rounded-full border-2 flex items-center justify-center mb-8 transition-all duration-300 hover:scale-110 hover:shadow-xl" style={{ borderColor: "#C4A747", backgroundColor: "#FFFFFF", boxShadow: '0 4px 16px rgba(0,0,0,0.06)' }}>
-                      <span className="text-3xl font-bold" style={{ color: "#C4A747" }}>
+                    <div className="mx-auto w-14 h-14 rounded-full border-2 flex items-center justify-center mb-8 transition-all duration-300 hover:scale-110 hover:shadow-xl" style={{ borderColor: step.number === 2 ? "#4B3B8C" : "#C4A747", backgroundColor: "#FFFFFF", boxShadow: '0 4px 16px rgba(0,0,0,0.06)' }}>
+                      <span className="text-3xl font-bold" style={{ color: step.number === 2 ? "#4B3B8C" : "#C4A747" }}>
                         {step.number}
                       </span>
                     </div>
 
-                    <h3 className="text-xl font-semibold mb-4" style={{ color: "#1a1a1a" }}>{step.title}</h3>
+                    <h3 className="text-xl font-semibold mb-4" style={{ color: step.number === 2 ? "#4B3B8C" : "#1a1a1a" }}>{step.title}</h3>
                     <p className="text-base leading-7" style={{ color: "#444444" }}>{step.description}</p>
                   </div>
                 </div>
@@ -298,7 +323,7 @@ export default function Home() {
                     className="text-xl lg:text-3xl font-bold"
                     style={{ color: "#1a1a1a" }}
                   >
-                    This is what you've been looking for.
+                    This is what you've been <span style={{ color: "#4B3B8C" }}>looking for.</span>
                   </h2>
 
                   <div

@@ -30,6 +30,8 @@ export default function HowItWorks() {
   const whyQuestionsRef = useRef<HTMLDivElement>(null);
   const answerNaturallyRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+  const heroWaveRef = useRef<HTMLImageElement>(null);
+  const whyWaveRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     // Hero animations
@@ -38,6 +40,30 @@ export default function HowItWorks() {
         { opacity: 0, y: 30 },
         { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power2.out" }
       );
+    }
+
+    // Subtle floating animations for wave images
+    if (heroWaveRef.current) {
+      gsap.to(heroWaveRef.current, {
+        y: 12,
+        x: 8,
+        duration: 7,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+    }
+
+    if (whyWaveRef.current) {
+      gsap.to(whyWaveRef.current, {
+        y: 10,
+        x: -6,
+        duration: 8,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 1
+      });
     }
 
     // Scroll-triggered animations
@@ -83,7 +109,11 @@ export default function HowItWorks() {
     if (answerNaturallyRef.current) observer.observe(answerNaturallyRef.current);
     if (ctaRef.current) observer.observe(ctaRef.current);
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      gsap.killTweensOf(heroWaveRef.current);
+      gsap.killTweensOf(whyWaveRef.current);
+    };
   }, []);
 
   return (
@@ -96,6 +126,7 @@ export default function HowItWorks() {
           {/* Background flowing graphic */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <img
+              ref={heroWaveRef}
               src="/wave_final.jpeg"
               alt=""
               className="absolute -right-20 -top-20 w-[80%] h-[150%] object-cover"
@@ -163,6 +194,7 @@ export default function HowItWorks() {
           {/* Background image for left side */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <img 
+              ref={whyWaveRef}
               src="/wave.jpeg" 
               alt="" 
               className="absolute left-0 top-0 w-1/2 h-full object-cover"

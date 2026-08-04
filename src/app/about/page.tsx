@@ -27,17 +27,17 @@ export default function About() {
       );
     }
 
-    // Parallax and fade effect for hero image
+    // Parallax and fade effect for hero image with subtle floating
     const handleScroll = () => {
       if (heroImageRef.current && heroRef.current) {
         const scrollY = window.scrollY;
         const heroHeight = heroRef.current.offsetHeight;
         
-        // Parallax effect - move image slower than scroll throughout entire page
+        // Very subtle parallax - move image slower than scroll
         gsap.to(heroImageRef.current, {
-          y: scrollY * 0.5,
-          duration: 0.1,
-          ease: "none"
+          y: scrollY * 0.2,
+          duration: 0.5,
+          ease: "power1.out"
         });
         
         // Fade effect after hero section
@@ -52,8 +52,22 @@ export default function About() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Subtle floating animation for dots
+    if (heroImageRef.current) {
+      gsap.to(heroImageRef.current, {
+        y: 10,
+        duration: 4,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      gsap.killTweensOf(heroImageRef.current);
+    };
 
     // Scroll-triggered animations
     const observerOptions = {

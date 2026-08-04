@@ -2,8 +2,9 @@
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import { archetypes } from '@/data/archetypes';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Brain, Compass, Hammer, Heart, Zap, Globe } from 'lucide-react';
+import gsap from 'gsap';
 
 const archetypeIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   thinkers: Brain,
@@ -54,6 +55,25 @@ export default function Archetypes() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const cardsPerView = 4;
   const maxIndex = Math.max(0, cognitiveProfiles.length - cardsPerView);
+  const heroBgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    // Subtle floating animation for hero background
+    if (heroBgRef.current) {
+      gsap.to(heroBgRef.current, {
+        y: 15,
+        x: 5,
+        duration: 6,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+    }
+
+    return () => {
+      gsap.killTweensOf(heroBgRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -78,6 +98,7 @@ export default function Archetypes() {
           {/* Background flowing graphic */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <img
+              ref={heroBgRef}
               src="/hero-bg.png"
               alt="Hero Background"
               className="absolute right-0 top-0 w-[85%] h-full object-cover opacity-30"
