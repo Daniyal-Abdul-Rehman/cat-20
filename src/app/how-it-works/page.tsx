@@ -264,14 +264,28 @@ export default function HowItWorks() {
                 { num: 2, title: 'There are no good or bad answers.', desc: "CAT-20 isn't measuring success or failure." },
                 { num: 3, title: 'If two answers fit, choose the more natural one.', desc: "Trust what feels most like you in the moment." }
               ].map((item, i) => (
-                <div key={i} className="step-card p-10 rounded-2xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.12)] text-center relative z-10 border border-[#E8E4DD] hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.18)] transition-shadow duration-300">
-                  <div className="w-12 h-12 bg-[#2D2A6E] text-white rounded-full flex items-center justify-center mx-auto mb-8 font-bold text-lg">
-                    {item.num}
+                <div key={i} className="step-card p-10 rounded-2xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.12)] text-center relative z-10 border border-[#E8E4DD] hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.18)] transition-shadow duration-300 overflow-hidden">
+                  {/* Background image */}
+                  <div className="absolute inset-0 ">
+                    <img
+                      src="/wave_final.jpeg"
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  {/* Small diamond above card title */}
-                  <div className="w-2 h-2 rotate-45 bg-[#C4A747] mx-auto mb-4"></div>
-                  <h3 className="text-lg font-bold mb-4 leading-snug text-[#2D2A6E]">{item.title}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
+                  {/* Overlay to ensure content readability */}
+                  <div className="absolute inset-0 bg-[#FAF6EF]/30"></div>
+                  
+                  {/* Content */}
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 bg-[#2D2A6E] text-white rounded-full flex items-center justify-center mx-auto mb-8 font-bold text-lg">
+                      {item.num}
+                    </div>
+                    {/* Small diamond above card title */}
+                    <div className="w-2 h-2 rotate-45 bg-[#C4A747] mx-auto mb-4"></div>
+                    <h3 className="text-lg font-bold mb-4 leading-snug text-[#2D2A6E]">{item.title}</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
+                  </div>
                   
                   {/* Decorative star on the connecting line */}
                   {i < 2 && (
