@@ -44,11 +44,18 @@ const archetypeExploreColors: Record<string, string> = {
 };
 
 const cognitiveProfiles = [
-  { initials: 'TS', name: 'The Insight Reader', combo: 'Thinker + Seeker', color: '#6B4C9A' },
-  { initials: 'TB', name: 'The System Architect', combo: 'Thinker + Builder', color: '#4A7FB5' },
-  { initials: 'SN', name: 'The Meaning Connector', combo: 'Spark + Nurturer', color: '#C46B6B' },
-  { initials: 'BW', name: 'The Path Builder', combo: 'Builder + Wanderer', color: '#C4A747' },
-  { initials: 'NS', name: 'The Empathic Guide', combo: 'Nurturer + Seeker', color: '#C46B6B' },
+  { initials: 'TS', name: 'The Interpreter', combo: 'Thinker + Seeker', color: '#6B4C9A' },
+  { initials: 'BT', name: 'The Strategist', combo: 'Builder + Thinker', color: '#4A7FB5' },
+  { initials: 'SN', name: 'The Gentle Explorer', combo: 'Spark + Nurturer', color: '#C46B6B' },
+  { initials: 'KN', name: 'The Encourager', combo: 'Seeker + Nurturer', color: '#C4A747' },
+  { initials: 'BW', name: 'The Steady Builder', combo: 'Builder + Wanderer', color: '#4A7FB5' },
+  { initials: 'NT', name: 'The Reflector', combo: 'Nurturer + Thinker', color: '#C46B6B' },
+  { initials: 'KS', name: 'The Inspirer', combo: 'Spark + Seeker', color: '#6B4C9A' },
+  { initials: 'TB', name: 'The Architect', combo: 'Thinker + Builder', color: '#4A7FB5' },
+  { initials: 'NW', name: 'The Haven', combo: 'Nurturer + Wanderer', color: '#C46B6B' },
+  { initials: 'KT', name: 'The Innovator', combo: 'Seeker + Thinker', color: '#C4A747' },
+  { initials: 'SB', name: 'The Pathfinder', combo: 'Spark + Builder', color: '#6B4C9A' },
+  { initials: 'TW', name: 'The Grounded', combo: 'Thinker + Wanderer', color: '#4A7FB5' },
 ];
 
 export default function Archetypes() {
@@ -101,7 +108,7 @@ export default function Archetypes() {
               ref={heroBgRef}
               src="/hero-bg.png"
               alt="Hero Background"
-              className="absolute right-0 top-0 w-[85%] h-full object-cover opacity-30"
+              className="absolute right-0 top-0 w-[85%] h-full object-cover "
             />
             {/* Fade overlay for text blending - stronger fade on left */}
             <div
@@ -141,13 +148,13 @@ export default function Archetypes() {
                 <div className="mb-8 flex flex-col items-start">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-16 h-[1px] bg-[#C4A747]"></div>
-                    <span className="text-[14px] font-bold uppercase tracking-[0.35em] text-[#C4A747]">
+                    <span className="text-[12px] font-bold uppercase tracking-[0.35em] text-[#C4A747]">
                       The Six Cognitive Archetypes
                     </span>
                   </div>
                 </div>
 
-                <h1 className="text-6xl lg:text-7xl font-serif leading-tight mb-8" style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
+                <h1 className="text-5xl lg:text-5xl font-serif leading-tight mb-8" style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
                   Six ways the mind
                   <br />
                   <span className="italic" style={{ color: '#4B3B8C' }}>makes sense</span> of the world.
@@ -205,17 +212,17 @@ export default function Archetypes() {
                     {archetype.tagline}
                   </p>
 
-                  {/* Explore link */}
+                  {/* Explore link - animated on hover */}
                   <div
-                    className="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full"
+                    className="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out relative z-20"
                     style={{
                       color: archetypeExploreColors[archetype.id] || '#C4A747',
-                      backgroundColor: 'white'
+                      backgroundColor: 'rgba(255, 255, 255, 0.95)'
                     }}
                   >
                     <span>Explore</span>
                     <svg
-                      className="w-4 h-4"
+                      className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -229,6 +236,9 @@ export default function Archetypes() {
                     </svg>
                   </div>
                 </div>
+
+                {/* Blur overlay on hover */}
+                <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
               </Link>
             ))}
           </div>

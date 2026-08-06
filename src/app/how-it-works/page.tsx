@@ -264,7 +264,7 @@ export default function HowItWorks() {
                 { num: 2, title: 'There are no good or bad answers.', desc: "CAT-20 isn't measuring success or failure." },
                 { num: 3, title: 'If two answers fit, choose the more natural one.', desc: "Trust what feels most like you in the moment." }
               ].map((item, i) => (
-                <div key={i} className="step-card bg-white p-10 rounded-2xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.1)] text-center relative z-10 border border-gray-100/50 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] transition-shadow duration-300">
+                <div key={i} className="step-card p-10 rounded-2xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.12)] text-center relative z-10 border border-[#E8E4DD] hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.18)] transition-shadow duration-300">
                   <div className="w-12 h-12 bg-[#2D2A6E] text-white rounded-full flex items-center justify-center mx-auto mb-8 font-bold text-lg">
                     {item.num}
                   </div>

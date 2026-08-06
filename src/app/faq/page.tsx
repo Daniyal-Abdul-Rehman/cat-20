@@ -4,14 +4,21 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import { ReactNode } from 'react';
 
-const FAQ_HERO_IMAGE = 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663287467113/uiaLBrsJkupjFPtN.png';
+const FAQ_HERO_IMAGE = '/edited_image.png';
 
-const faqs = [
+interface FAQItem {
+  id: number;
+  question: string | ReactNode;
+  answer: string | ReactNode;
+}
+
+const faqs: FAQItem[] = [
   {
     id: 1,
-    question: 'Is CAT-20 a personality test?',
-    answer: 'Not exactly. CAT-20 isn\'t designed to define your entire personality. Instead, it looks for the recurring mental patterns your mind naturally tends to return to—patterns that can influence how you think, make decisions, solve problems, and experience the world.',
+    question: <>Is CAT-<span className="text-[32px] font-medium">20</span> a personality test?</>,
+    answer: <>Not exactly. CAT-<span className="text-[24px] font-light">20</span> isn't designed to define your entire personality. Instead, it looks for the recurring mental patterns your mind naturally tends to return to—patterns that can influence how you think, make decisions, solve problems, and experience the world.</>,
   },
   {
     id: 2,
@@ -21,7 +28,7 @@ const faqs = [
   {
     id: 3,
     question: 'Can my results change over time?',
-    answer: 'Your life experiences, skills, and perspectives can all change over time. CAT-20 focuses on the patterns you naturally tend to return to, so while your results are often fairly consistent, the way you express those patterns can grow and develop throughout your life.',
+    answer: <>Your life experiences, skills, and perspectives can all change over time. CAT-<span className="text-[24px] font-light">20</span> focuses on the patterns you naturally tend to return to, so while your results are often fairly consistent, the way you express those patterns can grow and develop throughout your life.</>,
   },
   {
     id: 4,
@@ -31,22 +38,22 @@ const faqs = [
   {
     id: 5,
     question: 'What if my results don\'t feel accurate?',
-    answer: 'No assessment is perfect. If something doesn\'t feel quite right, we encourage you to look through your full results before deciding. Sometimes people connect more with the descriptions than the archetype name itself. If you still feel something was off, we\'d love your feedback. CAT-20 is continually improving, and thoughtful feedback helps make the framework better for everyone.',
+    answer: <>No assessment is perfect. If something doesn't feel quite right, we encourage you to look through your full results before deciding. Sometimes people connect more with the descriptions than the archetype name itself. If you still feel something was off, we'd love your feedback. CAT-<span className="text-[24px] font-light">20</span> is continually improving, and thoughtful feedback helps make the framework better for everyone.</>,
   },
   {
     id: 6,
     question: 'Why are some profiles still unavailable?',
-    answer: 'CAT-20 is actively growing. Some profile combinations are still being developed and written. If your exact profile isn\'t available yet, you\'ll be notified, and it will be added as the framework continues to expand.',
+    answer: <>CAT-<span className="text-[24px] font-light">20</span> is actively growing. Some profile combinations are still being developed and written. If your exact profile isn't available yet, you'll be notified, and it will be added as the framework continues to expand.</>,
   },
   {
     id: 7,
-    question: 'Is CAT-20 based on psychology?',
-    answer: 'CAT-20 is an original cognitive framework. It draws inspiration from observing recurring human patterns, but it is not intended to diagnose, evaluate, or replace professional psychological assessment. Its purpose is to encourage self-reflection and help people better understand the ways their minds naturally approach the world.',
+    question: <>Is CAT-<span className="text-[32px] font-light">20</span> based on psychology?</>,
+    answer: <>CAT-<span className="text-[24px] font-light">20</span> is an original cognitive framework. It draws inspiration from observing recurring human patterns, but it is not intended to diagnose, evaluate, or replace professional psychological assessment. Its purpose is to encourage self-reflection and help people better understand the ways their minds naturally approach the world.</>,
   },
   {
     id: 8,
-    question: 'Will CAT-20 continue to grow?',
-    answer: 'Yes. CAT-20 is designed as an evolving framework. New profiles, features, and improvements will continue to be added as the project develops and more people contribute feedback.',
+    question: <>Will CAT-<span className="text-[32px] font-light">20</span> continue to grow?</>,
+    answer: <>Yes. CAT-<span className="text-[24px] font-light">20</span> is designed as an evolving framework. New profiles, features, and improvements will continue to be added as the project develops and more people contribute feedback.</>,
   },
 ];
 
@@ -109,17 +116,17 @@ export default function FAQ() {
                 <div className="mb-8 flex flex-col items-start">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-16 h-[1px] bg-[#C4A747]"></div>
-                    <span className="text-[14px] font-bold uppercase tracking-[0.35em] text-[#C4A747]">Frequently Asked Questions</span>
+                    <span className="text-[12px] font-bold uppercase tracking-[0.35em] text-[#C4A747]">Frequently Asked Questions</span>
                   </div>
                 </div>
 
-                <h1 className="text-6xl lg:text-7xl font-serif italic leading-tight mb-8" style={{ fontFamily: "'Playfair Display', 'Georgia', serif" }}>
+                <h1 className="text-5xl lg:text-5xl font-serif leading-tight mb-8" style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
                   Questions come
                   <br />
-                  <span style={{ color: '#4B3B8C' }}>naturally.</span>
+                  <span className="italic" style={{ color: '#4B3B8C' }}>naturally.</span>
                 </h1>
 
-                <div className="flex items-start gap-4 text-lg lg:text-xl text-gray-600 font-serif italic leading-relaxed" style={{ fontFamily: "'Playfair Display', 'Georgia', serif" }}>
+                <div className="flex items-start gap-4 text-lg lg:text-xl leading-relaxed" style={{ color: '#444444', fontFamily: "'Playfair Display', 'Georgia', serif" }}>
                   <div className="w-12 h-[1px] bg-[#C4A747] mt-3 hidden lg:block"></div>
                   <p className="max-w-lg">
                     Answers should too.
@@ -187,17 +194,22 @@ export default function FAQ() {
                   </button>
 
                   {/* Answer */}
-                  {openId === faq.id && (
-                    <div className="ml-16 mt-6 pr-12">
-                      <div className="border-l-2 pl-6 py-2"
-                        style={{ borderColor: '#C4A747' }}
-                      >
-                        <p className="text-lg leading-relaxed font-serif" style={{ color: '#555555' }}>
-                          {faq.answer}
-                        </p>
+                  <div
+                    className="ml-16 pr-12 overflow-hidden transition-all duration-500 ease-out"
+                    style={{
+                      maxHeight: openId === faq.id ? '500px' : '0',
+                      opacity: openId === faq.id ? '1' : '0',
+                      marginTop: openId === faq.id ? '1.5rem' : '0'
+                    }}
+                  >
+                    <div className="border-l-2 pl-6 py-2"
+                      style={{ borderColor: '#C4A747' }}
+                    >
+                      <div className="text-lg leading-relaxed font-serif" style={{ color: '#555555' }}>
+                        {faq.answer}
                       </div>
                     </div>
-                  )}
+                  </div>
 
                   {/* Divider */}
                   {index < faqs.length - 1 && (
@@ -212,10 +224,10 @@ export default function FAQ() {
         </section>
 
         {/* CTA Section - Didn't find your answer */}
-        <section className="px-6 lg:px-8 py-20 lg:py-24">
+        <section className="px-6 lg:px-8 py-20 lg:py-12">
           <div className="max-w-9xl mx-auto">
             <div
-              className="rounded-3xl p-12 lg:p-20 relative overflow-hidden"
+              className="rounded-3xl p-12 lg:p-12 relative overflow-hidden"
               style={{
                 backgroundColor: '#F5F0E8',
                 borderColor: '#E8E4DD',
@@ -245,11 +257,13 @@ export default function FAQ() {
                   <h3 className="text-4xl lg:text-5xl font-serif font-bold mb-4 leading-tight" style={{ color: '#1a1a1a' }}>
                     Didn't find your answer?
                   </h3>
-                  <p className="text-lg lg:text-xl mb-8 leading-relaxed font-serif" style={{ color: '#555555' }}>
-                    We're always improving CAT-20 and we'd love to hear from you.
-                    <br />
-                    Reach out and we'll get back to you as soon as we can.
-                  </p>
+                  <div className="text-lg lg:text-xl mb-8 leading-relaxed font-serif" style={{ color: '#555555' }}>
+                    <>
+                      We're always improving CAT-<span className="text-[29px] font-light">20</span> and we'd love to hear from you.
+                      <br />
+                      Reach out and we'll get back to you as soon as we can.
+                    </>
+                  </div>
                   
                   <Link
                     href="/contact"
