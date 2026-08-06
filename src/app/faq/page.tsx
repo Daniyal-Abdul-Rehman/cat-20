@@ -259,7 +259,7 @@ export default function FAQ() {
                   </h3>
                   <div className="text-lg lg:text-xl mb-8 leading-relaxed font-serif" style={{ color: '#555555' }}>
                     <>
-                      We're always improving CAT-<span className="text-[29px] font-light">20</span> and we'd love to hear from you.
+                      We're always improving CAT-<span className="text-[28px] font-light">20</span> and we'd love to hear from you.
                       <br />
                       Reach out and we'll get back to you as soon as we can.
                     </>
