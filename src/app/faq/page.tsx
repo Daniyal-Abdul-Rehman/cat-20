@@ -225,7 +225,7 @@ export default function FAQ() {
                         >
                           <div className="flex items-start gap-6">
                             {/* Number */}
-                            <div className="flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center font-serif text-lg transition-colors"
+                            <div className="flex-shrink-0 w-10 mt-4 h-10 rounded-full border-2 flex items-center justify-center font-serif text-lg transition-colors"
                               style={{
                                 borderColor: openId === faq.id ? '#4B3B8C' : '#C4A747',
                                 color: openId === faq.id ? '#4B3B8C' : '#C4A747',
