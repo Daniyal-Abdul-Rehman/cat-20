@@ -332,13 +332,13 @@ export default function FAQ() {
                   </div>
                   
                   <h3 className="text-4xl lg:text-5xl font-serif font-bold mb-4 leading-tight" style={{ color: '#1a1a1a' }}>
-                    Didn\'t find <span className="italic" style={{ color: '#4B3B8C' }}>your answer?</span>
+                    Didn't find <span className="italic" style={{ color: '#4B3B8C' }}>your answer?</span>
                   </h3>
                   <div className="text-lg lg:text-xl mb-8 leading-relaxed font-serif" style={{ color: '#555555' }}>
                     <>
-                      We\'re always improving CAT-<span className="text-[28px] font-light">20</span> and we\'d love to hear from you.
+                      We're always improving CAT-<span className="text-[28px] font-light">20</span> and we'd love to hear from you.
                       <br />
-                      Reach out and we\'ll get back to you as soon as we can.
+                      Reach out and we'll get back to you as soon as we can.
                     </>
                   </div>
                   
@@ -385,8 +385,6 @@ export default function FAQ() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   );
 }
