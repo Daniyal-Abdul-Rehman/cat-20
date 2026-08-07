@@ -53,8 +53,8 @@ const cognitiveProfiles = [
   { initials: 'KS', name: 'The Inspirer', combo: 'Spark + Seeker', color: '#6B4C9A' },
   { initials: 'TB', name: 'The Architect', combo: 'Thinker + Builder', color: '#4A7FB5' },
   { initials: 'NW', name: 'The Haven', combo: 'Nurturer + Wanderer', color: '#C46B6B' },
-  { initials: 'KT', name: 'The Innovator', combo: 'Seeker + Thinker', color: '#C4A747' },
-  { initials: 'SB', name: 'The Pathfinder', combo: 'Spark + Builder', color: '#6B4C9A' },
+  { initials: 'KT', name: 'The Innovator', combo: 'Spark + Thinker', color: '#C4A747' },
+  { initials: 'SB', name: 'The Pathfinder', combo: 'Seeker + Builder', color: '#6B4C9A' },
   { initials: 'TW', name: 'The Grounded', combo: 'Thinker + Wanderer', color: '#4A7FB5' },
 ];
 
