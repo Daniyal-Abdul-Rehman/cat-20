@@ -21,7 +21,7 @@ const faqs: FAQItem[] = [
     id: 1,
     category: 'Assessment',
     question: <>Is CAT-<span className="text-[32px] font-medium">20</span> a personality test?</>,
-    answer: <>CAT-20 is more than a personality test. It\'s a cognitive archetype assessment designed to reveal the natural patterns that shape how you think, decide, and make sense of the world.</>,
+    answer: <>CAT-<span className="text-[24px] font-light">20</span> is more than a personality test. It\'s a cognitive archetype assessment designed to reveal the natural patterns that shape how you think, decide, and make sense of the world.</>,
   },
   {
     id: 2,
