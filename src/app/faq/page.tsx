@@ -169,7 +169,7 @@ export default function FAQ() {
                     Answers should too.
                     <br />
                     <br />
-                    Whether you\'re curious about the assessment, your results, how CAT-20 works, or what comes next, we\'ve gathered the questions people ask most often—all in one place.
+                    Whether you're curious about the assessment, your results, how CAT-20 works, or what comes next, we've gathered the questions people ask most often—all in one place.
                   </p>
                 </div>
               </div>
