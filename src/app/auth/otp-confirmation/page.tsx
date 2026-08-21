@@ -2,14 +2,18 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Lock, ArrowLeft, ArrowRight, Sparkles, ShieldCheck } from 'lucide-react';
+import { useOTPForm } from '@/hooks/useFormValidation';
+import { useAuthStore } from '@/store/authStore';
 
 export default function OTPConfirmation() {
+  const router = useRouter();
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const { register, handleSubmit, errors, isSubmitting, validation, confirmPasswordValidation } = useOTPForm();
+  const { resetPasswordWithOTP, error, isLoading, clearError } = useAuthStore();
 
   const handleOTPChange = (index: number, value: string) => {
     if (value.length > 1) value = value[0]; // Only allow single digit
@@ -33,13 +37,19 @@ export default function OTPConfirmation() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: { otp: string; newPassword: string; confirmPassword: string }) => {
     const otpCode = otp.join('');
-    console.log('OTP:', otpCode, 'New Password:', newPassword);
-    // Handle OTP verification and password reset logic here
-    // Redirect to sign in page
-    window.location.href = '/auth/signin';
+    if (otpCode.length !== 6) {
+      alert('Please enter the complete 6-digit code');
+      return;
+    }
+    try {
+      clearError();
+      await resetPasswordWithOTP(otpCode, data.newPassword);
+      router.push('/auth/signin');
+    } catch (error) {
+      console.error('OTP confirmation error:', error);
+    }
   };
 
   return (
@@ -125,7 +135,7 @@ export default function OTPConfirmation() {
                     </p>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="space-y-5">
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     {/* OTP Input */}
                     <div>
                       <label className="block text-sm font-medium mb-3" style={{ color: '#1a1a1a' }}>
@@ -142,14 +152,13 @@ export default function OTPConfirmation() {
                             value={digit}
                             onChange={(e) => handleOTPChange(index, e.target.value)}
                             onKeyDown={(e) => handleKeyDown(index, e)}
-                            className="w-10 h-12 text-center text-xl font-bold rounded-lg border border-gray-200 focus:outline-none focus:ring-2 transition-all"
-                            style={{ 
-                              focusRingColor: '#C4A747',
-                              focusBorderColor: '#C4A747'
-                            }}
+                            className="w-10 h-12 text-center text-xl font-bold rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#C4A747] focus:border-[#C4A747] transition-all"
                           />
                         ))}
                       </div>
+                      {otp.join('').length < 6 && (
+                        <p className="mt-1 text-sm text-red-500">Please enter the complete 6-digit code</p>
+                      )}
                     </div>
 
                     {/* New Password Field */}
@@ -161,17 +170,16 @@ export default function OTPConfirmation() {
                         <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                           type="password"
-                          value={newPassword}
-                          onChange={(e) => setNewPassword(e.target.value)}
-                          required
-                          className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 transition-all"
-                          style={{ 
-                            focusRingColor: '#C4A747',
-                            focusBorderColor: '#C4A747'
-                          }}
+                          {...register('newPassword', validation.password)}
+                          className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:outline-none focus:ring-2 transition-all ${
+                            errors.newPassword ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 focus:ring-[#C4A747]'
+                          }`}
                           placeholder="Create new password"
                         />
                       </div>
+                      {errors.newPassword && (
+                        <p className="mt-1 text-sm text-red-500">{errors.newPassword.message}</p>
+                      )}
                     </div>
 
                     {/* Confirm New Password Field */}
@@ -183,27 +191,34 @@ export default function OTPConfirmation() {
                         <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                           type="password"
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                          required
-                          className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 transition-all"
-                          style={{ 
-                            focusRingColor: '#C4A747',
-                            focusBorderColor: '#C4A747'
-                          }}
+                          {...register('confirmPassword', confirmPasswordValidation)}
+                          className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:outline-none focus:ring-2 transition-all ${
+                            errors.confirmPassword ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 focus:ring-[#C4A747]'
+                          }`}
                           placeholder="Confirm new password"
                         />
                       </div>
+                      {errors.confirmPassword && (
+                        <p className="mt-1 text-sm text-red-500">{errors.confirmPassword.message}</p>
+                      )}
                     </div>
+
+                    {/* Error Display */}
+                    {error && (
+                      <div className="p-3 rounded-lg bg-red-50 border border-red-200">
+                        <p className="text-sm text-red-600">{error}</p>
+                      </div>
+                    )}
 
                     {/* Submit Button */}
                     <button
                       type="submit"
-                      className="w-full py-4 rounded-lg font-semibold hover:scale-105 transition-transform duration-300 flex items-center justify-center gap-2 text-white shadow-lg"
+                      disabled={isLoading || isSubmitting}
+                      className="w-full py-4 rounded-lg font-semibold hover:scale-105 transition-transform duration-300 flex items-center justify-center gap-2 text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                       style={{ backgroundColor: '#4B3B8C' }}
                     >
-                      Reset Password
-                      <ArrowRight className="w-5 h-5" />
+                      {isLoading || isSubmitting ? 'Resetting...' : 'Reset Password'}
+                      {!isLoading && !isSubmitting && <ArrowRight className="w-5 h-5" />}
                     </button>
                   </form>
 

@@ -1,32 +1,26 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Mail, Lock, User, ArrowRight, Sparkles } from 'lucide-react';
+import { useSignUpForm } from '@/hooks/useFormValidation';
+import { useAuthStore } from '@/store/authStore';
 
 export default function SignUp() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
+  const router = useRouter();
+  const { register, handleSubmit, errors, isSubmitting, validation, confirmPasswordValidation } = useSignUpForm();
+  const { register: registerUser, error, isLoading, clearError } = useAuthStore();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle sign up logic here
-    console.log('Sign up:', formData);
-    // Redirect to verification page
-    window.location.href = '/auth/verify-email';
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const onSubmit = async (data: { name: string; email: string; password: string; confirmPassword: string }) => {
+    try {
+      clearError();
+      await registerUser(data.name, data.email, data.password);
+      router.push('/auth/verify-email');
+    } catch (error) {
+      console.error('Sign up error:', error);
+    }
   };
 
   return (
@@ -112,7 +106,7 @@ export default function SignUp() {
                     </p>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="space-y-5">
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     {/* Name Field */}
                     <div>
                       <label className="block text-sm font-medium mb-2" style={{ color: '#1a1a1a' }}>
@@ -122,18 +116,16 @@ export default function SignUp() {
                         <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                           type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          required
-                          className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 transition-all"
-                          style={{ 
-                            focusRingColor: '#C4A747',
-                            focusBorderColor: '#C4A747'
-                          }}
+                          {...register('name', validation.name)}
+                          className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:outline-none focus:ring-2 transition-all ${
+                            errors.name ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 focus:ring-[#C4A747]'
+                          }`}
                           placeholder="Enter your name"
                         />
                       </div>
+                      {errors.name && (
+                        <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
+                      )}
                     </div>
 
                     {/* Email Field */}
@@ -145,18 +137,16 @@ export default function SignUp() {
                         <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                           type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          required
-                          className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 transition-all"
-                          style={{ 
-                            focusRingColor: '#C4A747',
-                            focusBorderColor: '#C4A747'
-                          }}
+                          {...register('email', validation.email)}
+                          className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:outline-none focus:ring-2 transition-all ${
+                            errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 focus:ring-[#C4A747]'
+                          }`}
                           placeholder="your@email.com"
                         />
                       </div>
+                      {errors.email && (
+                        <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+                      )}
                     </div>
 
                     {/* Password Field */}
@@ -168,18 +158,16 @@ export default function SignUp() {
                         <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                           type="password"
-                          name="password"
-                          value={formData.password}
-                          onChange={handleChange}
-                          required
-                          className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 transition-all"
-                          style={{ 
-                            focusRingColor: '#C4A747',
-                            focusBorderColor: '#C4A747'
-                          }}
+                          {...register('password', validation.password)}
+                          className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:outline-none focus:ring-2 transition-all ${
+                            errors.password ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 focus:ring-[#C4A747]'
+                          }`}
                           placeholder="Create a password"
                         />
                       </div>
+                      {errors.password && (
+                        <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
+                      )}
                     </div>
 
                     {/* Confirm Password Field */}
@@ -191,28 +179,34 @@ export default function SignUp() {
                         <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                           type="password"
-                          name="confirmPassword"
-                          value={formData.confirmPassword}
-                          onChange={handleChange}
-                          required
-                          className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 transition-all"
-                          style={{ 
-                            focusRingColor: '#C4A747',
-                            focusBorderColor: '#C4A747'
-                          }}
+                          {...register('confirmPassword', confirmPasswordValidation)}
+                          className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:outline-none focus:ring-2 transition-all ${
+                            errors.confirmPassword ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 focus:ring-[#C4A747]'
+                          }`}
                           placeholder="Confirm your password"
                         />
                       </div>
+                      {errors.confirmPassword && (
+                        <p className="mt-1 text-sm text-red-500">{errors.confirmPassword.message}</p>
+                      )}
                     </div>
+
+                    {/* Error Display */}
+                    {error && (
+                      <div className="p-3 rounded-lg bg-red-50 border border-red-200">
+                        <p className="text-sm text-red-600">{error}</p>
+                      </div>
+                    )}
 
                     {/* Submit Button */}
                     <button
                       type="submit"
-                      className="w-full py-4 rounded-lg font-semibold hover:scale-105 transition-transform duration-300 flex items-center justify-center gap-2 text-white shadow-lg"
+                      disabled={isLoading || isSubmitting}
+                      className="w-full py-4 rounded-lg font-semibold hover:scale-105 transition-transform duration-300 flex items-center justify-center gap-2 text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                       style={{ backgroundColor: '#4B3B8C' }}
                     >
-                      Create Account
-                      <ArrowRight className="w-5 h-5" />
+                      {isLoading || isSubmitting ? 'Creating account...' : 'Create Account'}
+                      {!isLoading && !isSubmitting && <ArrowRight className="w-5 h-5" />}
                     </button>
                   </form>
 

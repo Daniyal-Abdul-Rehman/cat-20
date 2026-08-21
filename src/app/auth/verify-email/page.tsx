@@ -1,11 +1,29 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Mail, CheckCircle, ArrowRight, Sparkles } from 'lucide-react';
+import { useAuthStore } from '@/store/authStore';
 
 export default function VerifyEmail() {
+  const router = useRouter();
+  const { sendVerificationEmail, error, isLoading, clearError, user } = useAuthStore();
+
+  const handleResendEmail = async () => {
+    try {
+      clearError();
+      await sendVerificationEmail();
+    } catch (error) {
+      console.error('Resend email error:', error);
+    }
+  };
+
+  const handleGoToHome = () => {
+    router.push('/');
+  };
+
   return (
     <div className="min-h-screen bg-[#FAF6EF] flex flex-col" style={{ color: '#1a1a1a' }}>
       <Navbar />
@@ -103,23 +121,32 @@ export default function VerifyEmail() {
                       We've sent a verification link to your email address. Please check your inbox (and spam folder) to verify your account.
                     </p>
 
+                    {/* Error Display */}
+                    {error && (
+                      <div className="p-3 rounded-lg bg-red-50 border border-red-200 mb-4">
+                        <p className="text-sm text-red-600">{error}</p>
+                      </div>
+                    )}
+
                     {/* Resend Link */}
                     <div className="w-full border-t border-gray-200 pt-6 mt-2">
                       <p className="text-sm mb-3" style={{ color: '#666666' }}>
                         Didn't receive the email?
                       </p>
                       <button
-                        className="text-sm font-semibold hover:underline transition-colors"
+                        onClick={handleResendEmail}
+                        disabled={isLoading}
+                        className="text-sm font-semibold hover:underline transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         style={{ color: '#4B3B8C' }}
                       >
-                        Resend verification email
+                        {isLoading ? 'Sending...' : 'Resend verification email'}
                       </button>
                     </div>
 
                     {/* Back to Home */}
                     <div className="w-full border-t border-gray-200 pt-6 mt-6">
-                      <Link
-                        href="/"
+                      <button
+                        onClick={handleGoToHome}
                         className="w-full py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300 flex items-center justify-center gap-2 border-2"
                         style={{ 
                           borderColor: '#D0D0D0',
@@ -128,7 +155,7 @@ export default function VerifyEmail() {
                       >
                         Back to Home
                         <ArrowRight className="w-4 h-4" />
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 </div>

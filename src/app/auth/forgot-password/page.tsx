@@ -1,20 +1,26 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Mail, ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
+import { useForgotPasswordForm } from '@/hooks/useFormValidation';
+import { useAuthStore } from '@/store/authStore';
 
 export default function ForgotPassword() {
-  const [email, setEmail] = useState('');
+  const router = useRouter();
+  const { register, handleSubmit, errors, isSubmitting, validation } = useForgotPasswordForm();
+  const { forgotPasswordOTP, error, isLoading, clearError } = useAuthStore();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle forgot password logic here
-    console.log('Reset password for:', email);
-    // Redirect to OTP confirmation page
-    window.location.href = '/auth/otp-confirmation';
+  const onSubmit = async (data: { email: string }) => {
+    try {
+      clearError();
+      await forgotPasswordOTP(data.email);
+      router.push('/auth/otp-confirmation');
+    } catch (error) {
+      console.error('Forgot password error:', error);
+    }
   };
 
   return (
@@ -100,7 +106,7 @@ export default function ForgotPassword() {
                     </p>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="space-y-5">
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     {/* Email Field */}
                     <div>
                       <label className="block text-sm font-medium mb-2" style={{ color: '#1a1a1a' }}>
@@ -110,27 +116,34 @@ export default function ForgotPassword() {
                         <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                           type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          required
-                          className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 transition-all"
-                          style={{ 
-                            focusRingColor: '#C4A747',
-                            focusBorderColor: '#C4A747'
-                          }}
+                          {...register('email', validation.email)}
+                          className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:outline-none focus:ring-2 transition-all ${
+                            errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 focus:ring-[#C4A747]'
+                          }`}
                           placeholder="your@email.com"
                         />
                       </div>
+                      {errors.email && (
+                        <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+                      )}
                     </div>
+
+                    {/* Error Display */}
+                    {error && (
+                      <div className="p-3 rounded-lg bg-red-50 border border-red-200">
+                        <p className="text-sm text-red-600">{error}</p>
+                      </div>
+                    )}
 
                     {/* Submit Button */}
                     <button
                       type="submit"
-                      className="w-full py-4 rounded-lg font-semibold hover:scale-105 transition-transform duration-300 flex items-center justify-center gap-2 text-white shadow-lg"
+                      disabled={isLoading || isSubmitting}
+                      className="w-full py-4 rounded-lg font-semibold hover:scale-105 transition-transform duration-300 flex items-center justify-center gap-2 text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                       style={{ backgroundColor: '#4B3B8C' }}
                     >
-                      Send Verification Code
-                      <ArrowRight className="w-5 h-5" />
+                      {isLoading || isSubmitting ? 'Sending...' : 'Send Verification Code'}
+                      {!isLoading && !isSubmitting && <ArrowRight className="w-5 h-5" />}
                     </button>
                   </form>
 

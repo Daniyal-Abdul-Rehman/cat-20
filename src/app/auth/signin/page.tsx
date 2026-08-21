@@ -1,30 +1,26 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Mail, Lock, ArrowRight, Sparkles } from 'lucide-react';
+import { useSignInForm } from '@/hooks/useFormValidation';
+import { useAuthStore } from '@/store/authStore';
 
 export default function SignIn() {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
+  const router = useRouter();
+  const { register, handleSubmit, errors, isSubmitting, validation } = useSignInForm();
+  const { login, error, isLoading, clearError } = useAuthStore();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle sign in logic here
-    console.log('Sign in:', formData);
-    // Redirect to dashboard or home
-    window.location.href = '/';
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const onSubmit = async (data: { email: string; password: string }) => {
+    try {
+      clearError();
+      await login(data.email, data.password);
+      router.push('/');
+    } catch (error) {
+      console.error('Sign in error:', error);
+    }
   };
 
   return (
@@ -110,7 +106,7 @@ export default function SignIn() {
                     </p>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="space-y-5">
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     {/* Email Field */}
                     <div>
                       <label className="block text-sm font-medium mb-2" style={{ color: '#1a1a1a' }}>
@@ -120,18 +116,16 @@ export default function SignIn() {
                         <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                           type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          required
-                          className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 transition-all"
-                          style={{ 
-                            focusRingColor: '#C4A747',
-                            focusBorderColor: '#C4A747'
-                          }}
+                          {...register('email', validation.email)}
+                          className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:outline-none focus:ring-2 transition-all ${
+                            errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 focus:ring-[#C4A747]'
+                          }`}
                           placeholder="your@email.com"
                         />
                       </div>
+                      {errors.email && (
+                        <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+                      )}
                     </div>
 
                     {/* Password Field */}
@@ -143,18 +137,16 @@ export default function SignIn() {
                         <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                           type="password"
-                          name="password"
-                          value={formData.password}
-                          onChange={handleChange}
-                          required
-                          className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 transition-all"
-                          style={{ 
-                            focusRingColor: '#C4A747',
-                            focusBorderColor: '#C4A747'
-                          }}
+                          {...register('password', validation.password)}
+                          className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:outline-none focus:ring-2 transition-all ${
+                            errors.password ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 focus:ring-[#C4A747]'
+                          }`}
                           placeholder="Enter your password"
                         />
                       </div>
+                      {errors.password && (
+                        <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
+                      )}
                     </div>
 
                     {/* Forgot Password Link */}
@@ -168,14 +160,22 @@ export default function SignIn() {
                       </Link>
                     </div>
 
+                    {/* Error Display */}
+                    {error && (
+                      <div className="p-3 rounded-lg bg-red-50 border border-red-200">
+                        <p className="text-sm text-red-600">{error}</p>
+                      </div>
+                    )}
+
                     {/* Submit Button */}
                     <button
                       type="submit"
-                      className="w-full py-4 rounded-lg font-semibold hover:scale-105 transition-transform duration-300 flex items-center justify-center gap-2 text-white shadow-lg"
+                      disabled={isLoading || isSubmitting}
+                      className="w-full py-4 rounded-lg font-semibold hover:scale-105 transition-transform duration-300 flex items-center justify-center gap-2 text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                       style={{ backgroundColor: '#4B3B8C' }}
                     >
-                      Sign In
-                      <ArrowRight className="w-5 h-5" />
+                      {isLoading || isSubmitting ? 'Signing in...' : 'Sign In'}
+                      {!isLoading && !isSubmitting && <ArrowRight className="w-5 h-5" />}
                     </button>
                   </form>
 
