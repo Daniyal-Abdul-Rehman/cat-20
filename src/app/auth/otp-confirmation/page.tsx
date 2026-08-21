@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navigation';
@@ -8,12 +8,29 @@ import Footer from '@/components/Footer';
 import { Lock, ArrowLeft, ArrowRight, Sparkles, ShieldCheck } from 'lucide-react';
 import { useOTPForm } from '@/hooks/useFormValidation';
 import { useAuthStore } from '@/store/authStore';
+import { useToastStore } from '@/store/toastStore';
 
 export default function OTPConfirmation() {
   const router = useRouter();
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const { register, handleSubmit, errors, isSubmitting, validation, confirmPasswordValidation } = useOTPForm();
-  const { resetPasswordWithOTP, error, isLoading, clearError } = useAuthStore();
+  const { resetPasswordWithOTP, error, isLoading, clearError, success, clearSuccess } = useAuthStore();
+  const { addToast } = useToastStore();
+
+  // Show error toast when error state changes
+  useEffect(() => {
+    if (error) {
+      addToast('error', error);
+    }
+  }, [error, addToast]);
+
+  // Show success toast when success state changes
+  useEffect(() => {
+    if (success) {
+      addToast('success', success);
+      clearSuccess();
+    }
+  }, [success, addToast, clearSuccess]);
 
   const handleOTPChange = (index: number, value: string) => {
     if (value.length > 1) value = value[0]; // Only allow single digit

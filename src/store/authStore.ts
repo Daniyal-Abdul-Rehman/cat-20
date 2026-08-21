@@ -55,6 +55,7 @@ interface AuthState {
   tokens: AuthTokens | null;
   isLoading: boolean;
   error: string | null;
+  success: string | null;
   isAuthenticated: boolean;
 }
 
@@ -79,6 +80,8 @@ interface AuthActions {
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   clearError: () => void;
+  setSuccess: (success: string | null) => void;
+  clearSuccess: () => void;
   setUser: (user: User | null) => void;
   setTokens: (tokens: AuthTokens | null) => void;
 }
@@ -93,6 +96,7 @@ export const useAuthStore = create<AuthStore>()(
       tokens: null,
       isLoading: false,
       error: null,
+      success: null,
       isAuthenticated: false,
 
       // Auth actions
@@ -217,7 +221,7 @@ export const useAuthStore = create<AuthStore>()(
 
       // Password reset actions
       forgotPassword: async (email: string) => {
-        set({ isLoading: true, error: null });
+        set({ isLoading: true, error: null, success: null });
         try {
           const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
             method: 'POST',
@@ -232,7 +236,7 @@ export const useAuthStore = create<AuthStore>()(
             throw new Error(errorData.message || 'Failed to send reset email');
           }
 
-          set({ isLoading: false });
+          set({ isLoading: false, success: 'Password reset email sent successfully!' });
         } catch (error) {
           set({
             error: parseErrorMessage(error),
@@ -243,7 +247,7 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       forgotPasswordOTP: async (email: string) => {
-        set({ isLoading: true, error: null });
+        set({ isLoading: true, error: null, success: null });
         try {
           const response = await fetch(`${API_BASE_URL}/auth/forgot-password-otp`, {
             method: 'POST',
@@ -258,7 +262,7 @@ export const useAuthStore = create<AuthStore>()(
             throw new Error(errorData.message || 'Failed to send OTP');
           }
 
-          set({ isLoading: false });
+          set({ isLoading: false, success: 'OTP sent successfully to your email!' });
         } catch (error) {
           set({
             error: parseErrorMessage(error),
@@ -327,7 +331,7 @@ export const useAuthStore = create<AuthStore>()(
           throw new Error('No access token available');
         }
 
-        set({ isLoading: true, error: null });
+        set({ isLoading: true, error: null, success: null });
         try {
           const response = await fetch(`${API_BASE_URL}/auth/send-verification-email`, {
             method: 'POST',
@@ -342,7 +346,7 @@ export const useAuthStore = create<AuthStore>()(
             throw new Error(errorData.message || 'Failed to send verification email');
           }
 
-          set({ isLoading: false });
+          set({ isLoading: false, success: 'Verification email sent successfully!' });
         } catch (error) {
           set({
             error: parseErrorMessage(error),
@@ -387,6 +391,8 @@ export const useAuthStore = create<AuthStore>()(
       setLoading: (loading: boolean) => set({ isLoading: loading }),
       setError: (error: string | null) => set({ error }),
       clearError: () => set({ error: null }),
+      setSuccess: (success: string | null) => set({ success }),
+      clearSuccess: () => set({ success: null }),
       setUser: (user: User | null) => set({ user, isAuthenticated: !!user }),
       setTokens: (tokens: AuthTokens | null) => set({ tokens }),
     }),

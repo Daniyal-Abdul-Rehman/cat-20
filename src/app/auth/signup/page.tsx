@@ -13,7 +13,7 @@ import { useEffect } from 'react';
 export default function SignUp() {
   const router = useRouter();
   const { register, handleSubmit, errors, isSubmitting, validation, confirmPasswordValidation } = useSignUpForm();
-  const { register: registerUser, error, isLoading, clearError } = useAuthStore();
+  const { register: registerUser, error, isLoading, clearError, success, clearSuccess } = useAuthStore();
   const { addToast } = useToastStore();
 
   // Show error toast when error state changes
@@ -22,6 +22,14 @@ export default function SignUp() {
       addToast('error', error);
     }
   }, [error, addToast]);
+
+  // Show success toast when success state changes
+  useEffect(() => {
+    if (success) {
+      addToast('success', success);
+      clearSuccess();
+    }
+  }, [success, addToast, clearSuccess]);
 
   const onSubmit = async (data: { name: string; email: string; password: string; confirmPassword: string }) => {
     try {

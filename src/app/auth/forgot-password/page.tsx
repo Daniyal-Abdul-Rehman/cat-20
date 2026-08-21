@@ -2,16 +2,34 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import Navbar from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Mail, ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
 import { useForgotPasswordForm } from '@/hooks/useFormValidation';
 import { useAuthStore } from '@/store/authStore';
+import { useToastStore } from '@/store/toastStore';
 
 export default function ForgotPassword() {
   const router = useRouter();
   const { register, handleSubmit, errors, isSubmitting, validation } = useForgotPasswordForm();
-  const { forgotPasswordOTP, error, isLoading, clearError } = useAuthStore();
+  const { forgotPasswordOTP, error, isLoading, clearError, success, clearSuccess } = useAuthStore();
+  const { addToast } = useToastStore();
+
+  // Show error toast when error state changes
+  useEffect(() => {
+    if (error) {
+      addToast('error', error);
+    }
+  }, [error, addToast]);
+
+  // Show success toast when success state changes
+  useEffect(() => {
+    if (success) {
+      addToast('success', success);
+      clearSuccess();
+    }
+  }, [success, addToast, clearSuccess]);
 
   const onSubmit = async (data: { email: string }) => {
     try {

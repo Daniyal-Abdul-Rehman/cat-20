@@ -2,21 +2,57 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Mail, CheckCircle, ArrowRight, Sparkles } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
+import { useToastStore } from '@/store/toastStore';
 
 export default function VerifyEmail() {
   const router = useRouter();
-  const { sendVerificationEmail, error, isLoading, clearError, user } = useAuthStore();
+  const { sendVerificationEmail, error, isLoading, clearError, user, success, clearSuccess } = useAuthStore();
+  const { addToast } = useToastStore();
+  const [countdown, setCountdown] = useState(0);
+  const [canResend, setCanResend] = useState(true);
+
+  // Show success toast when success state changes
+  useEffect(() => {
+    if (success) {
+      addToast('success', success);
+      clearSuccess();
+    }
+  }, [success, addToast, clearSuccess]);
+
+  // Show error toast when error state changes
+  useEffect(() => {
+    if (error) {
+      addToast('error', error);
+    }
+  }, [error, addToast]);
+
+  // Countdown timer for resend delay
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setCanResend(true);
+    }
+  }, [countdown]);
 
   const handleResendEmail = async () => {
+    if (!canResend) return;
+
     try {
       clearError();
+      setCanResend(false);
+      setCountdown(30); // 30 seconds cooldown
       await sendVerificationEmail();
     } catch (error) {
       console.error('Resend email error:', error);
+      setCanResend(true);
+      setCountdown(0);
     }
   };
 
@@ -135,11 +171,13 @@ export default function VerifyEmail() {
                       </p>
                       <button
                         onClick={handleResendEmail}
-                        disabled={isLoading}
+                        disabled={isLoading || !canResend}
                         className="text-sm font-semibold hover:underline transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         style={{ color: '#4B3B8C' }}
                       >
-                        {isLoading ? 'Sending...' : 'Resend verification email'}
+                        {isLoading ? 'Sending...' : 
+                         !canResend ? `Resend verification email (${countdown}s)` : 
+                         'Resend verification email'}
                       </button>
                     </div>
 
