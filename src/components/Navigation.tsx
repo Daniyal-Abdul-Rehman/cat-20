@@ -62,14 +62,21 @@ export default function Navigation() {
             </Link>
           </div>
 
-          {/* Take Test Again Button - Right */}
-          <div className="hidden lg:flex items-center">
+          {/* Auth Buttons - Right */}
+          <div className="hidden lg:flex items-center gap-3">
             <Link 
-              href="/assessment" 
-              className="px-8 py-3 font-semibold rounded-lg hover:scale-105 transition transform text-white"
+              href="/auth/signin" 
+              className="px-6 py-3 font-medium rounded-lg hover:scale-105 transition transform"
+              style={{ color: '#1a1a1a', border: '2px solid #D0D0D0' }}
+            >
+              Sign In
+            </Link>
+            <Link 
+              href="/auth/signup" 
+              className="px-6 py-3 font-semibold rounded-lg hover:scale-105 transition transform text-white"
               style={{ backgroundColor: '#4B3B8C' }}
             >
-              Take Test Again
+              Sign Up
             </Link>
           </div>
 
@@ -131,13 +138,22 @@ export default function Navigation() {
             >
               FAQ
             </Link>
-            <Link 
-              href="/assessment" 
-              className="block px-3 py-2 rounded-lg font-semibold transition-all mt-4 text-white"
-              style={{ backgroundColor: '#4B3B8C' }}
-            >
-              Take Test Again
-            </Link>
+            <div className="border-t border-gray-200 pt-3 mt-3">
+              <Link
+                href="/auth/signin"
+                className="block px-3 py-2 rounded-md font-medium text-sm transition-colors"
+                style={{ color: '#1a1a1a' }}
+              >
+                Sign In
+              </Link>
+              <Link 
+                href="/auth/signup" 
+                className="block px-3 py-2 rounded-lg font-semibold transition-all mt-2 text-white"
+                style={{ backgroundColor: '#4B3B8C' }}
+              >
+                Sign Up
+              </Link>
+            </div>
           </div>
         </div>
       )}
