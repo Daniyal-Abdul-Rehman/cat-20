@@ -7,16 +7,27 @@ import Footer from '@/components/Footer';
 import { Mail, Lock, User, ArrowRight, Sparkles } from 'lucide-react';
 import { useSignUpForm } from '@/hooks/useFormValidation';
 import { useAuthStore } from '@/store/authStore';
+import { useToastStore } from '@/store/toastStore';
+import { useEffect } from 'react';
 
 export default function SignUp() {
   const router = useRouter();
   const { register, handleSubmit, errors, isSubmitting, validation, confirmPasswordValidation } = useSignUpForm();
   const { register: registerUser, error, isLoading, clearError } = useAuthStore();
+  const { addToast } = useToastStore();
+
+  // Show error toast when error state changes
+  useEffect(() => {
+    if (error) {
+      addToast('error', error);
+    }
+  }, [error, addToast]);
 
   const onSubmit = async (data: { name: string; email: string; password: string; confirmPassword: string }) => {
     try {
       clearError();
       await registerUser(data.name, data.email, data.password);
+      addToast('success', 'Account created successfully! Please check your email to verify.');
       router.push('/auth/verify-email');
     } catch (error) {
       console.error('Sign up error:', error);
@@ -190,13 +201,6 @@ export default function SignUp() {
                         <p className="mt-1 text-sm text-red-500">{errors.confirmPassword.message}</p>
                       )}
                     </div>
-
-                    {/* Error Display */}
-                    {error && (
-                      <div className="p-3 rounded-lg bg-red-50 border border-red-200">
-                        <p className="text-sm text-red-600">{error}</p>
-                      </div>
-                    )}
 
                     {/* Submit Button */}
                     <button

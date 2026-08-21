@@ -3,6 +3,34 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/v1';
 
+// Helper function to parse error messages
+const parseErrorMessage = (error: any): string => {
+  if (typeof error === 'string') return error;
+  
+  if (error?.message) {
+    const message = error.message;
+    
+    // Handle MongoDB duplicate key errors
+    if (message.includes('E11000 duplicate key error')) {
+      if (message.includes('email')) return 'An account with this email already exists';
+      if (message.includes('username')) return 'This username is already taken';
+      return 'A record with this information already exists';
+    }
+    
+    // Handle validation errors
+    if (message.includes('validation')) return 'Please check your input and try again';
+    
+    // Handle network errors
+    if (message.includes('fetch') || message.includes('network')) return 'Network error. Please check your connection';
+    
+    return message;
+  }
+  
+  if (error?.error) return parseErrorMessage(error.error);
+  
+  return 'An unexpected error occurred. Please try again';
+};
+
 interface User {
   id: string;
   name: string;
@@ -93,7 +121,7 @@ export const useAuthStore = create<AuthStore>()(
           });
         } catch (error) {
           set({
-            error: error instanceof Error ? error.message : 'Registration failed',
+            error: parseErrorMessage(error),
             isLoading: false,
           });
           throw error;
@@ -125,7 +153,7 @@ export const useAuthStore = create<AuthStore>()(
           });
         } catch (error) {
           set({
-            error: error instanceof Error ? error.message : 'Login failed',
+            error: parseErrorMessage(error),
             isLoading: false,
           });
           throw error;
@@ -207,7 +235,7 @@ export const useAuthStore = create<AuthStore>()(
           set({ isLoading: false });
         } catch (error) {
           set({
-            error: error instanceof Error ? error.message : 'Failed to send reset email',
+            error: parseErrorMessage(error),
             isLoading: false,
           });
           throw error;
@@ -233,7 +261,7 @@ export const useAuthStore = create<AuthStore>()(
           set({ isLoading: false });
         } catch (error) {
           set({
-            error: error instanceof Error ? error.message : 'Failed to send OTP',
+            error: parseErrorMessage(error),
             isLoading: false,
           });
           throw error;
@@ -259,7 +287,7 @@ export const useAuthStore = create<AuthStore>()(
           set({ isLoading: false });
         } catch (error) {
           set({
-            error: error instanceof Error ? error.message : 'Password reset failed',
+            error: parseErrorMessage(error),
             isLoading: false,
           });
           throw error;
@@ -285,7 +313,7 @@ export const useAuthStore = create<AuthStore>()(
           set({ isLoading: false });
         } catch (error) {
           set({
-            error: error instanceof Error ? error.message : 'Password reset failed',
+            error: parseErrorMessage(error),
             isLoading: false,
           });
           throw error;
@@ -317,7 +345,7 @@ export const useAuthStore = create<AuthStore>()(
           set({ isLoading: false });
         } catch (error) {
           set({
-            error: error instanceof Error ? error.message : 'Failed to send verification email',
+            error: parseErrorMessage(error),
             isLoading: false,
           });
           throw error;
@@ -348,7 +376,7 @@ export const useAuthStore = create<AuthStore>()(
           }
         } catch (error) {
           set({
-            error: error instanceof Error ? error.message : 'Email verification failed',
+            error: parseErrorMessage(error),
             isLoading: false,
           });
           throw error;
