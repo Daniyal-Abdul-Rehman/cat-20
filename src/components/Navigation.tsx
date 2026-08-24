@@ -1,14 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useAuthStore } from '@/store/authStore';
 
 export default function Navigation() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { isAuthenticated, user, logout } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
 
   const isActive = (path: string) => pathname === path;
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
+  };
 
   return (
     <nav className="bg-[#FAF6EF] relative z-50 sticky top-0">
@@ -63,21 +71,33 @@ export default function Navigation() {
           </div>
 
           {/* Auth Buttons - Right */}
-          <div className="hidden lg:flex items-center gap-3">
-            <Link 
-              href="/auth/signin" 
-              className="px-6 py-3 font-medium rounded-lg hover:scale-105 transition transform"
-              style={{ color: '#1a1a1a', border: '2px solid #D0D0D0' }}
-            >
-              Sign In
-            </Link>
-            <Link 
-              href="/auth/signup" 
-              className="px-6 py-3 font-semibold rounded-lg hover:scale-105 transition transform text-white"
-              style={{ backgroundColor: '#4B3B8C' }}
-            >
-              Sign Up
-            </Link>
+          <div className="hidden lg:flex items-center">
+            {isAuthenticated ? (
+              <div className="flex items-center gap-4">
+                <Link 
+                  href="/account" 
+                  className="px-6 py-3 font-medium rounded-lg hover:scale-105 transition transform"
+                  style={{ color: '#4B3B8C', border: '2px solid #4B3B8C' }}
+                >
+                  My Account
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="px-6 py-3 font-semibold rounded-lg hover:scale-105 transition transform text-white"
+                  style={{ backgroundColor: '#4B3B8C' }}
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link 
+                href="/assessment" 
+                className="px-8 py-3 font-semibold rounded-lg hover:scale-105 transition transform text-white"
+                style={{ backgroundColor: '#4B3B8C' }}
+              >
+                Take Test Again
+              </Link>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -138,22 +158,39 @@ export default function Navigation() {
             >
               FAQ
             </Link>
-            <div className="border-t border-gray-200 pt-3 mt-3">
-              <Link
-                href="/auth/signin"
-                className="block px-3 py-2 rounded-md font-medium text-sm transition-colors"
-                style={{ color: '#1a1a1a' }}
-              >
-                Sign In
-              </Link>
-              <Link 
-                href="/auth/signup" 
-                className="block px-3 py-2 rounded-lg font-semibold transition-all mt-2 text-white"
-                style={{ backgroundColor: '#4B3B8C' }}
-              >
-                Sign Up
-              </Link>
-            </div>
+            {isAuthenticated ? (
+              <>
+                <div className="border-t border-gray-200 pt-3 mt-3">
+                  <div className="px-3 py-2 text-sm font-medium" style={{ color: '#666666' }}>
+                    Signed in as {user?.name || 'User'}
+                  </div>
+                  <Link 
+                    href="/account" 
+                    className="block px-3 py-2 rounded-md font-medium transition-colors"
+                    style={{ color: '#4B3B8C' }}
+                  >
+                    My Account
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-3 py-2 rounded-lg font-semibold transition-all mt-2 text-white"
+                    style={{ backgroundColor: '#4B3B8C' }}
+                  >
+                    Logout
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="border-t border-gray-200 pt-3 mt-3">
+                <Link 
+                  href="/assessment" 
+                  className="block px-3 py-2 rounded-lg font-semibold transition-all text-white"
+                  style={{ backgroundColor: '#4B3B8C' }}
+                >
+                  Take Test Again
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}
