@@ -20,7 +20,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col" style={{ color: '#1a1a1a' }}>
+    <div className="min-h-screen bg-[#FAF6EF] flex flex-col" style={{ color: '#1a1a1a' }}>
       <Navigation />
       
       <main className="flex-1">
@@ -38,7 +38,7 @@ export default function Contact() {
               </p>
             </div>
 
-            <div className="rounded-lg border p-10 transition" style={{ borderColor: '#E8E8E8' }}>
+            <div className="rounded-lg border p-10 transition bg-white" style={{ borderColor: '#E8E8E8' }}>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block text-sm font-semibold mb-2 uppercase tracking-widest" style={{ color: '#1a1a1a' }}>Name</label>
@@ -46,7 +46,7 @@ export default function Contact() {
                     type="text"
                     placeholder="Your name"
                     className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:outline-none transition duration-300"
-                    style={{ borderColor: '#E8E8E8', backgroundColor: '#F5F5F5', color: '#1a1a1a' }}
+                    style={{ borderColor: '#E8E8E8', backgroundColor: '#FFFFFF', color: '#1a1a1a' }}
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
@@ -59,7 +59,7 @@ export default function Contact() {
                     type="email"
                     placeholder="your@email.com"
                     className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:outline-none transition duration-300"
-                    style={{ borderColor: '#E8E8E8', backgroundColor: '#F5F5F5', color: '#1a1a1a' }}
+                    style={{ borderColor: '#E8E8E8', backgroundColor: '#FFFFFF', color: '#1a1a1a' }}
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     required
@@ -72,7 +72,7 @@ export default function Contact() {
                     type="text"
                     placeholder="What's this about?"
                     className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:outline-none transition duration-300"
-                    style={{ borderColor: '#E8E8E8', backgroundColor: '#F5F5F5', color: '#1a1a1a' }}
+                    style={{ borderColor: '#E8E8E8', backgroundColor: '#FFFFFF', color: '#1a1a1a' }}
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                     required
@@ -83,7 +83,7 @@ export default function Contact() {
                   <label className="block text-sm font-semibold mb-2 uppercase tracking-widest" style={{ color: '#1a1a1a' }}>Message</label>
                   <textarea
                     className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:outline-none transition duration-300 h-32"
-                    style={{ borderColor: '#E8E8E8', backgroundColor: '#F5F5F5', color: '#1a1a1a' }}
+                    style={{ borderColor: '#E8E8E8', backgroundColor: '#FFFFFF', color: '#1a1a1a' }}
                     placeholder="Your message..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}

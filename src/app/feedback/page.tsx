@@ -19,32 +19,31 @@ export default function Feedback() {
   };
 
   return (
-    <div className="min-h-screen bg-[#090711] text-white flex flex-col">
+    <div className="min-h-screen bg-[#FAF6EF] flex flex-col" style={{ color: '#1a1a1a' }}>
       <Navigation />
       
-      <main className="flex-1 relative overflow-hidden border-b border-white/10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,#8b5cf640,transparent_45%)]" />
-        
-        <div className="container mx-auto px-6 py-24 relative z-10">
+      <main className="flex-1">
+        <div className="container mx-auto px-6 lg:px-12 py-24 lg:py-32">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-16">
-              <span className="inline-flex rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300">
+              <span className="inline-block border px-4 py-2 text-sm font-semibold uppercase tracking-widest" style={{ borderColor: '#C4A747', color: '#C4A747' }}>
                 We Value Your Input
               </span>
-              <h1 className="mt-8 text-5xl lg:text-6xl font-bold">
+              <h1 className="mt-8 text-5xl lg:text-6xl font-bold" style={{ fontFamily: "'Playfair Display', 'Georgia', serif" }}>
                 Share Your Feedback
               </h1>
-              <p className="mt-4 text-lg text-gray-400">
+              <p className="mt-4 text-lg" style={{ color: '#666666' }}>
                 Help us improve CAT-20
               </p>
             </div>
 
-            <div className="rounded-3xl border border-white/10 p-10 hover:border-violet-500/40 transition">
+            <div className="rounded-lg border p-10 transition bg-white hover:shadow-xl" style={{ borderColor: '#E8E8E8' }}>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Feedback Category</label>
+                  <label className="block text-sm font-semibold mb-2 uppercase tracking-widest" style={{ color: '#1a1a1a' }}>Feedback Category</label>
                   <select
-                    className="w-full px-4 py-3 border border-white/10 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 bg-white/5 text-white"
+                    className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:outline-none transition duration-300"
+                    style={{ borderColor: '#E8E8E8', backgroundColor: '#FFFFFF', color: '#1a1a1a' }}
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                     required
@@ -60,9 +59,10 @@ export default function Feedback() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Your Feedback</label>
+                  <label className="block text-sm font-semibold mb-2 uppercase tracking-widest" style={{ color: '#1a1a1a' }}>Your Feedback</label>
                   <textarea
-                    className="w-full px-4 py-3 border border-white/10 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 h-32 bg-white/5 text-white placeholder-gray-500"
+                    className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:outline-none transition duration-300 h-32"
+                    style={{ borderColor: '#E8E8E8', backgroundColor: '#FFFFFF', color: '#1a1a1a' }}
                     placeholder="Please share your thoughts, suggestions, or report any issues..."
                     value={formData.feedback}
                     onChange={(e) => setFormData({ ...formData, feedback: e.target.value })}
@@ -71,18 +71,19 @@ export default function Feedback() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Email (Optional)</label>
+                  <label className="block text-sm font-semibold mb-2 uppercase tracking-widest" style={{ color: '#1a1a1a' }}>Email (Optional)</label>
                   <input
                     type="email"
                     placeholder="your@email.com"
-                    className="w-full px-4 py-3 border border-white/10 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 bg-white/5 text-white placeholder-gray-500"
+                    className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:outline-none transition duration-300"
+                    style={{ borderColor: '#E8E8E8', backgroundColor: '#FFFFFF', color: '#1a1a1a' }}
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
-                  <p className="text-sm text-gray-500 mt-1">We'll only contact you if we need clarification</p>
+                  <p className="text-sm mt-1" style={{ color: '#666666' }}>We'll only contact you if we need clarification</p>
                 </div>
 
-                <button type="submit" className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white py-3 rounded-xl hover:scale-105 transition font-semibold">
+                <button type="submit" className="w-full py-3 rounded-lg hover:scale-105 transition-transform duration-300 font-semibold text-white shadow-lg" style={{ backgroundColor: '#4B3B8C' }}>
                   Submit Feedback
                 </button>
               </form>

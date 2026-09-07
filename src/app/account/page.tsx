@@ -189,31 +189,39 @@ function LatestTest() {
 
 export default function Account() {
   const router = useRouter();
-  const { isAuthenticated, isLoading, checkAuth, user } = useAuthStore();
+  const { isAuthenticated, isLoading, user, checkAuth } = useAuthStore();
 
+  // Check auth immediately on component mount
   useEffect(() => {
+    console.log('Account page mounted, checking auth...');
     checkAuth();
   }, [checkAuth]);
 
+  // Check authentication after a short delay to allow state to load
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push('/login?redirect=/account');
-    }
-  }, [isAuthenticated, isLoading, router]);
+    const timer = setTimeout(() => {
+      console.log('Delayed auth check - isAuthenticated:', isAuthenticated, 'isLoading:', isLoading);
+      if (!isAuthenticated) {
+        console.log('Not authenticated, redirecting to signin');
+        router.push('/auth/signin?redirect=/account');
+      } else {
+        console.log('User is authenticated, showing account page');
+      }
+    }, 100); // 100ms delay to allow state to load
 
-  if (isLoading) {
+    return () => clearTimeout(timer);
+  }, [isAuthenticated, isLoading, router, checkAuth]);
+
+  // Show loading state while checking
+  if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#FAF6EF] flex items-center justify-center" style={{ color: '#1a1a1a' }}>
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto" style={{ borderColor: '#4B3B8C' }}></div>
-          <p className="mt-4" style={{ fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Loading...</p>
+          <p className="mt-4" style={{ fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Checking authentication...</p>
         </div>
       </div>
     );
-  }
-
-  if (!isAuthenticated) {
-    return null; // Will redirect
   }
 
   return (
@@ -228,9 +236,14 @@ export default function Account() {
               <h1 className="text-[37px] font-bold leading-tight tracking-[-.045em] md:text-[43px]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>Welcome back, {user?.name || 'User'}. <span className="text-[33px]" style={{ fontFamily: 'sans-serif' }}>👋</span></h1>
               <p className="mt-1 text-[17px] md:text-[19px]" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Here&apos;s your pattern. Keep exploring.</p>
             </div>
-            <div className="hidden items-center gap-7 pt-2 lg:flex" style={{ color: '#1a1a1a' }}>
+            <div className="flex items-center gap-3 pt-1 lg:gap-7 lg:pt-2" style={{ color: '#1a1a1a' }}>
+              <Link href="/assessment" className="inline-flex items-center gap-2 rounded-[7px] px-4 py-3 text-sm font-semibold text-white shadow-[0_4px_12px_rgba(84,32,165,.2)] transition hover:opacity-90 md:px-5" style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                <Icon name="brain" size={18} />
+                <span className="hidden sm:inline">Take new assessment</span>
+                <span className="sm:hidden">New assessment</span>
+              </Link>
               <Link href="/notifications" aria-label="Notifications" className="transition-colors hover:opacity-80"><Icon name="bell" size={30} /></Link>
-              <div className="flex h-[54px] w-[54px] items-center justify-center rounded-full font-serif text-[27px] font-bold text-white" style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-playfair), serif' }}>{user?.name?.charAt(0).toUpperCase() || 'U'}</div>
+              <div className="hidden h-[54px] w-[54px] items-center justify-center rounded-full font-serif text-[27px] font-bold text-white lg:flex" style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-playfair), serif' }}>{user?.name?.charAt(0).toUpperCase() || 'U'}</div>
             </div>
           </header>
 

@@ -42,3 +42,50 @@ h1, h2, h3, h4, h5, h6 {
 .font-handwriting {
   font-family: var(--font-lugrasimo), cursive;
 }
+
+@keyframes assessment-enter-next {
+  from { opacity: 0; transform: translate3d(34px, 12px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes assessment-enter-previous {
+  from { opacity: 0; transform: translate3d(-34px, 12px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+.assessment-question-next {
+  animation: assessment-enter-next 520ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.assessment-question-previous {
+  animation: assessment-enter-previous 520ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.assessment-question-next .assessment-answer,
+.assessment-question-previous .assessment-answer {
+  animation: assessment-enter-next 420ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.assessment-question-previous .assessment-answer {
+  animation-name: assessment-enter-previous;
+}
+
+.assessment-question-next .assessment-answer:nth-child(2),
+.assessment-question-previous .assessment-answer:nth-child(2) { animation-delay: 55ms; }
+.assessment-question-next .assessment-answer:nth-child(3),
+.assessment-question-previous .assessment-answer:nth-child(3) { animation-delay: 105ms; }
+.assessment-question-next .assessment-answer:nth-child(4),
+.assessment-question-previous .assessment-answer:nth-child(4) { animation-delay: 155ms; }
+.assessment-question-next .assessment-answer:nth-child(5),
+.assessment-question-previous .assessment-answer:nth-child(5) { animation-delay: 205ms; }
+.assessment-question-next .assessment-answer:nth-child(6),
+.assessment-question-previous .assessment-answer:nth-child(6) { animation-delay: 255ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .assessment-question-next,
+  .assessment-question-previous,
+  .assessment-question-next .assessment-answer,
+  .assessment-question-previous .assessment-answer {
+    animation: none;
+  }
+}

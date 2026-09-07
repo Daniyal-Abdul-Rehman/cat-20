@@ -1,20 +1,24 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, Suspense } from 'react';
 import Navbar from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { Mail, Lock, ArrowRight, Sparkles } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Sparkles, Loader2 } from 'lucide-react';
 import { useSignInForm } from '@/hooks/useFormValidation';
 import { useAuthStore } from '@/store/authStore';
 import { useToastStore } from '@/store/toastStore';
 
-export default function SignIn() {
+function SignInContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { register, handleSubmit, errors, isSubmitting, validation } = useSignInForm();
   const { login, error, isLoading, clearError, success, clearSuccess } = useAuthStore();
   const { addToast } = useToastStore();
+  
+  const redirectPath = searchParams.get('redirect') || '/account';
+  console.log('Redirect path:', redirectPath);
 
   // Show error toast when error state changes
   useEffect(() => {
@@ -26,6 +30,7 @@ export default function SignIn() {
   // Show success toast when success state changes
   useEffect(() => {
     if (success) {
+      console.log('Login successful, showing toast');
       addToast('success', success);
       clearSuccess();
     }
@@ -34,8 +39,15 @@ export default function SignIn() {
   const onSubmit = async (data: { email: string; password: string }) => {
     try {
       clearError();
-      await login(data.email, data.password);
-      router.push('/');
+      const loginResult = await login(data.email, data.password);
+      // Check if user is admin and redirect accordingly
+      const adminRedirect = loginResult?.user?.role === 'admin' ? '/admin/dashboard' : redirectPath;
+      console.log('Login completed, redirecting to:', adminRedirect);
+      setTimeout(() => {
+        console.log('Executing redirect to:', adminRedirect);
+        // Use window.location.href for a full page refresh to ensure auth state is loaded
+        window.location.href = adminRedirect;
+      }, 1000);
     } catch (error) {
       console.error('Sign in error:', error);
     }
@@ -219,5 +231,17 @@ export default function SignIn() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function SignIn() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#FAF6EF] flex items-center justify-center" style={{ color: '#1a1a1a' }}>
+        <Loader2 className="w-16 h-16 animate-spin" style={{ color: '#4B3B8C' }} />
+      </div>
+    }>
+      <SignInContent />
+    </Suspense>
   );
 }

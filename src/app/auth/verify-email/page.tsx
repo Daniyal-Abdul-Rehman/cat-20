@@ -1,20 +1,35 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
 import Navbar from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { Mail, CheckCircle, ArrowRight, Sparkles } from 'lucide-react';
+import { Mail, CheckCircle, ArrowRight, Sparkles, XCircle, Loader2 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useToastStore } from '@/store/toastStore';
 
-export default function VerifyEmail() {
+function VerifyEmailContent() {
   const router = useRouter();
-  const { sendVerificationEmail, error, isLoading, clearError, user, success, clearSuccess } = useAuthStore();
+  const searchParams = useSearchParams();
+  const { verifyEmail, resendVerificationEmail, error, isLoading, clearError, user, success, clearSuccess } = useAuthStore();
   const { addToast } = useToastStore();
+  
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [canResend, setCanResend] = useState(true);
+  const [emailInput, setEmailInput] = useState('');
+  const [showEmailInput, setShowEmailInput] = useState(false);
+
+  const token = searchParams.get('token');
+
+  // Auto-verify if token is present in URL
+  useEffect(() => {
+    if (token && !isVerified && !isVerifying) {
+      handleVerifyEmail();
+    }
+  }, [token]);
 
   // Show success toast when success state changes
   useEffect(() => {
@@ -41,6 +56,26 @@ export default function VerifyEmail() {
     }
   }, [countdown]);
 
+  const handleVerifyEmail = async () => {
+    if (!token) return;
+
+    try {
+      setIsVerifying(true);
+      clearError();
+      await verifyEmail(token);
+      setIsVerified(true);
+      addToast('success', 'Email verified successfully!');
+      
+      // Redirect to account page after 2 seconds
+      setTimeout(() => {
+        router.push('/account');
+      }, 2000);
+    } catch (error) {
+      console.error('Verification error:', error);
+      setIsVerifying(false);
+    }
+  };
+
   const handleResendEmail = async () => {
     if (!canResend) return;
 
@@ -48,7 +83,36 @@ export default function VerifyEmail() {
       clearError();
       setCanResend(false);
       setCountdown(30); // 30 seconds cooldown
-      await sendVerificationEmail();
+      
+      // Show email input if user is not logged in
+      if (!user?.email) {
+        setShowEmailInput(true);
+        setCanResend(true);
+        setCountdown(0);
+        return;
+      }
+      
+      await resendVerificationEmail(user.email);
+      addToast('success', 'Verification email resent!');
+    } catch (error) {
+      console.error('Resend email error:', error);
+      setCanResend(true);
+      setCountdown(0);
+    }
+  };
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!emailInput) return;
+
+    try {
+      clearError();
+      setCanResend(false);
+      setCountdown(30);
+      await resendVerificationEmail(emailInput);
+      addToast('success', 'Verification email resent!');
+      setShowEmailInput(false);
+      setEmailInput('');
     } catch (error) {
       console.error('Resend email error:', error);
       setCanResend(true);
@@ -60,6 +124,97 @@ export default function VerifyEmail() {
     router.push('/');
   };
 
+  const handleGoToAccount = () => {
+    router.push('/account');
+  };
+
+  // Loading state
+  if (isVerifying) {
+    return (
+      <div className="min-h-screen bg-[#FAF6EF] flex flex-col" style={{ color: '#1a1a1a' }}>
+        <Navbar />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="w-16 h-16 animate-spin mx-auto mb-4" style={{ color: '#4B3B8C' }} />
+            <h2 className="text-2xl font-serif font-bold mb-2" style={{ color: '#1a1a1a' }}>
+              Verifying your email...
+            </h2>
+            <p className="text-sm" style={{ color: '#666666' }}>
+              Please wait while we verify your account.
+            </p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Success state
+  if (isVerified) {
+    return (
+      <div className="min-h-screen bg-[#FAF6EF] flex flex-col" style={{ color: '#1a1a1a' }}>
+        <Navbar />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="text-center max-w-md">
+            <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: 'rgba(75, 59, 140, 0.1)' }}>
+              <CheckCircle className="w-10 h-10" style={{ color: '#4B3B8C' }} />
+            </div>
+            <h2 className="text-3xl font-serif font-bold mb-4" style={{ color: '#1a1a1a' }}>
+              Email Verified Successfully!
+            </h2>
+            <p className="text-lg mb-6" style={{ color: '#666666' }}>
+              Your account has been verified. You can now access your account and start using CAT-20.
+            </p>
+            <button
+              onClick={handleGoToAccount}
+              className="w-full py-4 rounded-lg font-semibold hover:scale-105 transition-transform duration-300 flex items-center justify-center gap-2 text-white shadow-lg"
+              style={{ backgroundColor: '#4B3B8C' }}
+            >
+              Go to Account
+              <ArrowRight className="w-5 h-5" />
+            </button>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Error state
+  if (error && !token) {
+    return (
+      <div className="min-h-screen bg-[#FAF6EF] flex flex-col" style={{ color: '#1a1a1a' }}>
+        <Navbar />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="text-center max-w-md">
+            <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: 'rgba(220, 38, 38, 0.1)' }}>
+              <XCircle className="w-10 h-10" style={{ color: '#dc2626' }} />
+            </div>
+            <h2 className="text-3xl font-serif font-bold mb-4" style={{ color: '#1a1a1a' }}>
+              Verification Failed
+            </h2>
+            <p className="text-lg mb-6" style={{ color: '#666666' }}>
+              {error || 'Invalid or expired verification link.'}
+            </p>
+            <button
+              onClick={handleGoToHome}
+              className="w-full py-4 rounded-lg font-semibold hover:scale-105 transition-transform duration-300 flex items-center justify-center gap-2 border-2"
+              style={{ 
+                borderColor: '#D0D0D0',
+                color: '#1a1a1a'
+              }}
+            >
+              Back to Home
+              <ArrowRight className="w-5 h-5" />
+            </button>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Default state - email sent confirmation
   return (
     <div className="min-h-screen bg-[#FAF6EF] flex flex-col" style={{ color: '#1a1a1a' }}>
       <Navbar />
@@ -169,16 +324,54 @@ export default function VerifyEmail() {
                       <p className="text-sm mb-3" style={{ color: '#666666' }}>
                         Didn't receive the email?
                       </p>
-                      <button
-                        onClick={handleResendEmail}
-                        disabled={isLoading || !canResend}
-                        className="text-sm font-semibold hover:underline transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        style={{ color: '#4B3B8C' }}
-                      >
-                        {isLoading ? 'Sending...' : 
-                         !canResend ? `Resend verification email (${countdown}s)` : 
-                         'Resend verification email'}
-                      </button>
+                      
+                      {showEmailInput ? (
+                        <form onSubmit={handleEmailSubmit} className="space-y-3">
+                          <input
+                            type="email"
+                            value={emailInput}
+                            onChange={(e) => setEmailInput(e.target.value)}
+                            placeholder="Enter your email address"
+                            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#C4A747]"
+                            required
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              type="submit"
+                              disabled={isLoading}
+                              className="flex-1 py-2 rounded-lg font-medium text-white disabled:opacity-50"
+                              style={{ backgroundColor: '#4B3B8C' }}
+                            >
+                              {isLoading ? 'Sending...' : 'Send'}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setShowEmailInput(false);
+                                setEmailInput('');
+                              }}
+                              className="px-4 py-2 rounded-lg font-medium border-2"
+                              style={{ 
+                                borderColor: '#D0D0D0',
+                                color: '#1a1a1a'
+                              }}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </form>
+                      ) : (
+                        <button
+                          onClick={handleResendEmail}
+                          disabled={isLoading || !canResend}
+                          className="text-sm font-semibold hover:underline transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          style={{ color: '#4B3B8C' }}
+                        >
+                          {isLoading ? 'Sending...' : 
+                           !canResend ? `Resend verification email (${countdown}s)` : 
+                           'Resend verification email'}
+                        </button>
+                      )}
                     </div>
 
                     {/* Back to Home */}
@@ -205,5 +398,17 @@ export default function VerifyEmail() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function VerifyEmail() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#FAF6EF] flex items-center justify-center" style={{ color: '#1a1a1a' }}>
+        <Loader2 className="w-16 h-16 animate-spin" style={{ color: '#4B3B8C' }} />
+      </div>
+    }>
+      <VerifyEmailContent />
+    </Suspense>
   );
 }

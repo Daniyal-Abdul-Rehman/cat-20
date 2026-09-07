@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
+import { LogIn, UserPlus, User, LogOut } from 'lucide-react';
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -76,27 +77,40 @@ export default function Navigation() {
               <div className="flex items-center gap-4">
                 <Link 
                   href="/account" 
-                  className="px-6 py-3 font-medium rounded-lg hover:scale-105 transition transform"
+                  className="px-6 py-3 font-medium rounded-lg hover:scale-105 transition transform flex items-center gap-2"
                   style={{ color: '#4B3B8C', border: '2px solid #4B3B8C' }}
                 >
+                  <User className="w-4 h-4" />
                   My Account
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="px-6 py-3 font-semibold rounded-lg hover:scale-105 transition transform text-white"
+                  className="px-6 py-3 font-semibold rounded-lg hover:scale-105 transition transform text-white flex items-center gap-2"
                   style={{ backgroundColor: '#4B3B8C' }}
                 >
+                  <LogOut className="w-4 h-4" />
                   Logout
                 </button>
               </div>
             ) : (
-              <Link 
-                href="/assessment" 
-                className="px-8 py-3 font-semibold rounded-lg hover:scale-105 transition transform text-white"
-                style={{ backgroundColor: '#4B3B8C' }}
-              >
-                Take Test Again
-              </Link>
+              <div className="flex items-center gap-3">
+                <Link 
+                  href="/auth/signup" 
+                  className="px-6 py-3 font-medium rounded-lg hover:scale-105 transition transform flex items-center gap-2"
+                  style={{ color: '#4B3B8C', border: '2px solid #4B3B8C' }}
+                >
+                  <UserPlus className="w-4 h-4" />
+                  Sign Up
+                </Link>
+                <Link 
+                  href="/auth/signin" 
+                  className="px-6 py-3 font-semibold rounded-lg hover:scale-105 transition transform text-white flex items-center gap-2"
+                  style={{ backgroundColor: '#4B3B8C' }}
+                >
+                  <LogIn className="w-4 h-4" />
+                  Sign In
+                </Link>
+              </div>
             )}
           </div>
 
@@ -173,21 +187,31 @@ export default function Navigation() {
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="block w-full text-left px-3 py-2 rounded-lg font-semibold transition-all mt-2 text-white"
+                    className="block w-full text-left px-3 py-2 rounded-lg font-semibold transition-all mt-2 text-white flex items-center gap-2"
                     style={{ backgroundColor: '#4B3B8C' }}
                   >
+                    <LogOut className="w-4 h-4" />
                     Logout
                   </button>
                 </div>
               </>
             ) : (
-              <div className="border-t border-gray-200 pt-3 mt-3">
+              <div className="border-t border-gray-200 pt-3 mt-3 space-y-2">
                 <Link 
-                  href="/assessment" 
-                  className="block px-3 py-2 rounded-lg font-semibold transition-all text-white"
+                  href="/auth/signup" 
+                  className="block px-3 py-2 rounded-lg font-medium transition-all flex items-center gap-2"
+                  style={{ color: '#4B3B8C', border: '2px solid #4B3B8C' }}
+                >
+                  <UserPlus className="w-4 h-4" />
+                  Sign Up
+                </Link>
+                <Link 
+                  href="/auth/signin" 
+                  className="block px-3 py-2 rounded-lg font-semibold transition-all text-white flex items-center gap-2"
                   style={{ backgroundColor: '#4B3B8C' }}
                 >
-                  Take Test Again
+                  <LogIn className="w-4 h-4" />
+                  Sign In
                 </Link>
               </div>
             )}

@@ -1,29 +1,20 @@
 import { create } from 'zustand';
+import { officialQuestions, AssessmentQuestion } from '@/data/assessmentQuestions';
 
 interface Answer {
   questionId: number;
-  value: number;
-}
-
-interface Question {
-  id: number;
-  text: string;
-  category?: string;
-  clusterMapping?: Map<string, string>;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  value: string;
 }
 
 interface AssessmentState {
   currentQuestion: number;
   answers: Answer[];
-  questions: Question[];
+  questions: AssessmentQuestion[];
   isComplete: boolean;
   isLoading: boolean;
   error: string | null;
   setCurrentQuestion: (question: number) => void;
-  setAnswer: (questionId: number, value: number) => void;
+  setAnswer: (questionId: number, value: string) => void;
   resetAssessment: () => void;
   completeAssessment: () => void;
   fetchQuestions: () => Promise<void>;
@@ -51,19 +42,24 @@ export const useAssessmentStore = create<AssessmentState>((set, get) => ({
   resetAssessment: () => set({ currentQuestion: 0, answers: [], isComplete: false, error: null }),
   completeAssessment: () => set({ isComplete: true }),
   fetchQuestions: async () => {
-    set({ isLoading: true, error: null });
+    set({ isLoading: true, error: null, questions: officialQuestions });
     try {
-      const response = await fetch('http://localhost:5000/api/questions');
-      const data = await response.json();
-      
-      if (data.success) {
-        set({ questions: data.data, isLoading: false });
-      } else {
-        set({ error: 'Failed to fetch questions', isLoading: false });
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/questions`);
+      if (response.ok) {
+        const data = await response.json();
+        if (Array.isArray(data) && data.length === 20) {
+          set({ questions: data.map((item) => ({
+            ...item,
+            title: item.title || `Question ${item.order || item.id}`,
+            prompt: item.prompt || item.text,
+            answers: item.answers || [],
+          })) });
+        }
       }
-    } catch (error) {
-      set({ error: 'Error fetching questions', isLoading: false });
+    } catch {
+      // The official client set keeps the assessment available when the API is offline.
     }
+    set({ isLoading: false });
   },
   submitAssessment: async () => {
     set({ isLoading: true, error: null });
@@ -84,7 +80,7 @@ export const useAssessmentStore = create<AssessmentState>((set, get) => ({
       } else {
         set({ error: 'Failed to submit assessment', isLoading: false });
       }
-    } catch (error) {
+    } catch {
       set({ error: 'Error submitting assessment', isLoading: false });
     }
   },
