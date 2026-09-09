@@ -8,10 +8,10 @@ import { ImportedQuestion, readQuestionDocument } from '@/lib/questionImport';
 
 type Cluster = 'thinker' | 'seeker' | 'builder' | 'nurturer' | 'spark' | 'wanderer';
 type Option = { value: string; text: string; scores: Record<string, number> };
-type AdminQuestion = { _id: string; text: string; category?: string; order: number; isActive: boolean; answers?: Option[] };
+type AdminQuestion = { _id: string; id: number; text: string; category?: string; order: number; isActive: boolean; answers?: Option[] };
 const clusters: Cluster[] = ['thinker', 'seeker', 'builder', 'nurturer', 'spark', 'wanderer'];
 const blankOptions = (): Option[] => ['A', 'B', 'C', 'D', 'E'].map((value) => ({ value, text: '', scores: {} }));
-const emptyForm = (order = 1) => ({ text: '', category: 'CAT-20', order, isActive: true, answers: blankOptions() });
+const emptyForm = (order = 1) => ({ id: order, text: '', category: 'CAT-20', order, isActive: true, answers: blankOptions() });
 
 export default function QuestionsManagement() {
   const { isAuthenticated, tokens } = useAuthStore();
@@ -32,7 +32,7 @@ export default function QuestionsManagement() {
 
   const openEditor = (question?: AdminQuestion) => {
     setEditingQuestion(question || null);
-    setFormData(question ? { text: question.text, category: question.category || 'CAT-20', order: question.order, isActive: question.isActive, answers: question.answers?.length ? question.answers : blankOptions() } : emptyForm(questions.length + 1));
+    setFormData(question ? { id: question.id, text: question.text, category: question.category || 'CAT-20', order: question.order, isActive: question.isActive, answers: question.answers?.length ? question.answers : blankOptions() } : emptyForm(questions.length + 1));
     setIsModalOpen(true);
   };
   const updateOption = (index: number, patch: Partial<Option>) => setFormData((current) => ({ ...current, answers: current.answers.map((answer, answerIndex) => answerIndex === index ? { ...answer, ...patch } : answer) }));
@@ -49,7 +49,8 @@ export default function QuestionsManagement() {
       await updateQuestion(editingQuestion._id, payload);
     } else {
       const { isActive, ...createPayload } = payload;
-      await createQuestion(createPayload);
+      // Ensure id is included for new questions
+      await createQuestion({ ...createPayload, id: createPayload.order });
     }
     setIsModalOpen(false);
   };

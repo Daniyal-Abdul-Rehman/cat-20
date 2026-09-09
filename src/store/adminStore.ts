@@ -89,6 +89,7 @@ interface DashboardStats {
 
 interface Question {
   _id: string;
+  id: number;
   text: string;
   minValue: number;
   maxValue: number;

@@ -5,6 +5,7 @@ export type ImportedOption = {
 };
 
 export type ImportedQuestion = {
+  id: number;
   text: string;
   order: number;
   category: string;
@@ -64,6 +65,7 @@ export function parseQuestionDocument(rawText: string): ImportedQuestion[] {
     const scores = parseScores(scoringPart);
 
     return {
+      id,
       text: prompt,
       order: id,
       category: 'CAT-20',

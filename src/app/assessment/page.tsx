@@ -1,19 +1,27 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ArrowLeft, ArrowRight, Check, Clock3, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Clock3, ShieldCheck, AlertCircle, X } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import { useAssessmentStore } from '@/store/assessmentStore';
 
 export default function Assessment() {
-  const { currentQuestion, answers, questions, isLoading, setCurrentQuestion, setAnswer, fetchQuestions, submitAssessment } = useAssessmentStore();
+  const { currentQuestion, answers, questions, isLoading, setCurrentQuestion, setAnswer, fetchQuestions, submitAssessment, assessmentId, error, clearError } = useAssessmentStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [transitionDirection, setTransitionDirection] = useState<'next' | 'previous'>('next');
+  const [showError, setShowError] = useState(false);
 
   useEffect(() => { fetchQuestions(); }, [fetchQuestions]);
+  
+  // Show error modal when there's an error
+  useEffect(() => {
+    if (error) {
+      setShowError(true);
+    }
+  }, [error]);
 
   const question = questions[currentQuestion];
-  const selectedValue = question ? answers.find((answer) => answer.questionId === question.id)?.value : undefined;
+  const selectedValue = question ? answers.find((answer) => String(answer.questionId) === String(question.id))?.value : undefined;
   const progress = questions.length ? ((currentQuestion + 1) / questions.length) * 100 : 0;
   const isLastQuestion = currentQuestion === questions.length - 1;
 
@@ -29,14 +37,36 @@ export default function Assessment() {
       return;
     }
     setIsSubmitting(true);
-    await submitAssessment();
-    window.location.href = '/results';
+    try {
+      const result = await submitAssessment();
+      // Redirect to results page with assessment ID for public access
+      window.location.href = `/assessment/result?assessmentId=${result.assessmentId}`;
+    } catch (error) {
+      console.error('Failed to submit assessment:', error);
+      setIsSubmitting(false);
+    }
+  };
+
+  const dismissError = () => {
+    setShowError(false);
+    clearError();
+  };
+
+  const goToFirstMissingQuestion = () => {
+    const answeredQuestionIds = new Set(answers.map(a => String(a.questionId)));
+    const missingQuestions = questions.filter(q => !answeredQuestionIds.has(String(q.id)));
+    if (missingQuestions.length > 0) {
+      const firstMissingIndex = questions.findIndex(q => q.id === missingQuestions[0].id);
+      setCurrentQuestion(firstMissingIndex);
+      setShowError(false);
+    }
   };
 
   const moveToQuestion = (index: number) => {
     if (index === currentQuestion) return;
     setTransitionDirection(index > currentQuestion ? 'next' : 'previous');
     setCurrentQuestion(index);
+    clearError();
   };
 
   if (isLoading || !question) {
@@ -69,7 +99,7 @@ export default function Assessment() {
               <div className="absolute left-[13px] right-[13px] top-[21px] h-px bg-[#D9D0C0]" />
               <div className="absolute left-[13px] top-[21px] h-px bg-[#C4A747] transition-all duration-700" style={{ width: `calc(${Math.max(progress - 5, 0)}% - 13px)` }} />
               <div className="relative grid grid-cols-10 gap-1 lg:grid-cols-5">
-                {questions.map((item, index) => <button key={item.id} onClick={() => moveToQuestion(index)} aria-label={`Go to question ${item.id}`} className="group flex flex-col items-center gap-2"><span className={`relative z-10 flex h-7 w-7 items-center justify-center rounded-full border-2 text-[10px] font-bold transition-all duration-300 ${index === currentQuestion ? 'scale-125 border-[#4B3B8C] bg-[#4B3B8C] text-white shadow-[0_0_0_5px_rgba(75,59,140,.12)]' : index < currentQuestion || answers.some((answer) => answer.questionId === item.id) ? 'border-[#C4A747] bg-[#D9C98D] text-[#1a1a1a]' : 'border-[#D9D0C0] bg-[#FAF6EF] text-[#77716A] group-hover:border-[#4B3B8C]'}`}>{index + 1}</span><span className={`text-[10px] transition-colors ${index === currentQuestion ? 'font-bold text-[#4B3B8C]' : 'text-transparent group-hover:text-[#77716A]'}`}>{index === currentQuestion ? 'Now' : ' '}</span></button>)}
+                {questions.map((item, index) => <button key={`question-${index}`} onClick={() => moveToQuestion(index)} aria-label={`Go to question ${item.id}`} className="group flex flex-col items-center gap-2"><span className={`relative z-10 flex h-7 w-7 items-center justify-center rounded-full border-2 text-[10px] font-bold transition-all duration-300 ${index === currentQuestion ? 'scale-125 border-[#4B3B8C] bg-[#4B3B8C] text-white shadow-[0_0_0_5px_rgba(75,59,140,.12)]' : index < currentQuestion || answers.some((answer) => String(answer.questionId) === String(item.id)) ? 'border-[#C4A747] bg-[#D9C98D] text-[#1a1a1a]' : 'border-[#D9D0C0] bg-[#FAF6EF] text-[#77716A] group-hover:border-[#4B3B8C]'}`}>{index + 1}</span><span className={`text-[10px] transition-colors ${index === currentQuestion ? 'font-bold text-[#4B3B8C]' : 'text-transparent group-hover:text-[#77716A]'}`}>{index === currentQuestion ? 'Now' : ' '}</span></button>)}
               </div>
             </div>
             <div className="mt-10 hidden items-start gap-3 border-t border-[#D9D0C0] pt-5 text-xs leading-5 text-[#77716A] lg:flex"><ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#C4A747]" />Your responses are private and saved as you move through the assessment.</div>
@@ -86,6 +116,43 @@ export default function Assessment() {
           </section>
         </div>
       </main>
+      
+      {/* Error Modal */}
+      {showError && error && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0">
+                <AlertCircle className="h-6 w-6 text-red-500" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Assessment Error</h3>
+                <p className="text-gray-600 text-sm mb-4">{error}</p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={goToFirstMissingQuestion}
+                    className="flex-1 bg-[#4B3B8C] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-[#3C2E72] transition"
+                  >
+                    Go to First Missing Question
+                  </button>
+                  <button
+                    onClick={dismissError}
+                    className="flex-1 bg-gray-200 text-gray-800 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-300 transition"
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              </div>
+              <button
+                onClick={dismissError}
+                className="flex-shrink-0 text-gray-400 hover:text-gray-600"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

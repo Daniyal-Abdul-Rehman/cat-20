@@ -11,7 +11,9 @@ import {
   Settings,
   LogOut,
   Menu,
-  Brain
+  Brain,
+  Layers,
+  FileText
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 
@@ -19,6 +21,8 @@ const menuItems = [
   { href: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/admin/users', icon: Users, label: 'User Management' },
   { href: '/admin/profiles', icon: Brain, label: 'Profiles' },
+  { href: '/admin/profile-clusters', icon: Layers, label: 'Profile Clusters' },
+  { href: '/admin/profile-configs', icon: FileText, label: 'Scoring Configs' },
   { href: '/admin/questions', icon: HelpCircle, label: 'Questions' },
   { href: '/admin/packages', icon: CreditCard, label: 'Packages' },
   { href: '/admin/subscriptions', icon: UserCircle, label: 'Subscriptions' },
