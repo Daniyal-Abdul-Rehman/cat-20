@@ -13,7 +13,8 @@ import {
   Menu,
   Brain,
   Layers,
-  FileText
+  FileText,
+  DollarSign
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 
@@ -26,6 +27,7 @@ const menuItems = [
   { href: '/admin/questions', icon: HelpCircle, label: 'Questions' },
   { href: '/admin/packages', icon: CreditCard, label: 'Packages' },
   { href: '/admin/subscriptions', icon: UserCircle, label: 'Subscriptions' },
+  { href: '/admin/payments', icon: DollarSign, label: 'Payments' },
   { href: '/admin/settings', icon: Settings, label: 'Settings' },
 ];
 

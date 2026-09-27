@@ -30,7 +30,7 @@ export default function UsersManagement() {
       console.log('[UsersManagement] Auth ready, fetching users');
       fetchUsers(currentPage);
     }
-  }, [isAuthenticated, tokens, fetchUsers, currentPage]);
+  }, [isAuthenticated, tokens, currentPage]);
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

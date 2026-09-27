@@ -23,11 +23,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/how-it-works" className="transition-colors" style={{ color: '#666666' }}>
-                  How It Works
-                </Link>
-              </li>
-              <li>
                 <Link href="/archetypes" className="transition-colors" style={{ color: '#666666' }}>
                   Archetypes
                 </Link>

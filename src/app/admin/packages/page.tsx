@@ -38,7 +38,7 @@ export default function PackagesManagement() {
       console.log('[PackagesManagement] Auth ready, fetching packages');
       fetchPackages();
     }
-  }, [isAuthenticated, tokens, fetchPackages]);
+  }, [isAuthenticated, tokens]);
 
   const handleToggleActive = async (id: string) => {
     const pkg = packages.find(p => p._id === id);

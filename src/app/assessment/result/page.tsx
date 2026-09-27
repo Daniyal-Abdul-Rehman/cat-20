@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAssessmentStore } from '@/store/assessmentStore';
+import { useAuthStore } from '@/store/authStore';
 import { ScoringResult, getAssessmentResultPublic } from '@/lib/api/scoring';
 
 const CLUSTER_DISPLAY_NAMES: Record<string, string> = {
@@ -27,15 +28,19 @@ export default function AssessmentResult() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { scoringResult, assessmentId, isComplete } = useAssessmentStore();
+  const { user, isAuthenticated } = useAuthStore();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [publicResult, setPublicResult] = useState<ScoringResult | null>(null);
+  
+  // Check if user has premium access
+  const hasPremiumAccess = isAuthenticated && user?.subscriptionTier === 'premium';
 
   useEffect(() => {
     // Check if assessment ID is provided in URL for public access
     const urlAssessmentId = searchParams.get('assessmentId');
     
-    if (urlAssessmentId) {
+    if (urlAssessmentId && urlAssessmentId !== 'null') {
       // Public access - fetch result using public endpoint
       setIsLoading(true);
       getAssessmentResultPublic(urlAssessmentId)
@@ -44,17 +49,24 @@ export default function AssessmentResult() {
           setIsLoading(false);
         })
         .catch((err) => {
+          console.error('Failed to fetch public result:', err);
           setError(err instanceof Error ? err.message : 'Failed to load results');
           setIsLoading(false);
         });
-    } else if (!isComplete || !scoringResult) {
-      // If assessment is not complete and no public ID, redirect to assessment page
-      router.push('/assessment');
-      return;
-    } else {
+    } else if (isAuthenticated && user?.assessmentResults) {
+      // User is authenticated and has assessment results - redirect to account page
+      console.log('User is authenticated with assessment results, redirecting to account');
+      router.push('/account');
+    } else if (isComplete && scoringResult) {
+      // Use the store result if assessment is complete
+      console.log('Using store result for completed assessment');
       setIsLoading(false);
+    } else {
+      // If assessment is not complete and no valid public ID, redirect to assessment page
+      console.log('No valid assessment data, redirecting to assessment');
+      router.push('/assessment');
     }
-  }, [isComplete, scoringResult, router, searchParams]);
+  }, [isComplete, scoringResult, router, searchParams, isAuthenticated, user?.assessmentResults]);
 
   if (isLoading) {
     return (
@@ -318,55 +330,126 @@ export default function AssessmentResult() {
             </p>
           </div>
 
-          <div className="p-6">
-            <h3 className="mb-3 font-serif text-base font-bold leading-5">
-              You know your drivers.
-              Now see what&apos;s underneath.
-            </h3>
+          {hasPremiumAccess ? (
+            <div className="p-6">
+              <h3 className="mb-3 font-serif text-base font-bold leading-5">
+                Your Premium Insights
+              </h3>
 
-            <p className="mb-2 text-xs text-[#414052]">
-              Unlock the rest of your profile, including:
-            </p>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl text-[#cd775d]">♡</span>
+                  <div>
+                    <h4 className="font-semibold mb-1" style={{ color: '#1a1a1a' }}>Love & Relationships</h4>
+                    <p className="text-sm text-gray-600">
+                      {generateLoveRelationshipsText(primaryRoles, secondaryRoles)}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl text-[#cd775d]">▣</span>
+                  <div>
+                    <h4 className="font-semibold mb-1" style={{ color: '#1a1a1a' }}>Career & Direction</h4>
+                    <p className="text-sm text-gray-600">
+                      {generateCareerDirectionText(primaryRoles, secondaryRoles)}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl text-[#cd775d]">♧</span>
+                  <div>
+                    <h4 className="font-semibold mb-1" style={{ color: '#1a1a1a' }}>Social & Communication</h4>
+                    <p className="text-sm text-gray-600">
+                      {generateSocialCommunicationText(primaryRoles, secondaryRoles)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="p-6">
+              <h3 className="mb-3 font-serif text-base font-bold leading-5">
+                You know your drivers.
+                Now see what&apos;s underneath.
+              </h3>
 
-            <ul className="mb-3 space-y-1 text-sm text-[#3d3b4f]">
-              <li>
-                <span className="mr-2 text-lg text-[#cd775d]">♡</span>
-                Love &amp; Relationships
-              </li>
-              <li>
-                <span className="mr-2 text-lg text-[#cd775d]">▣</span>
-                Career &amp; Direction
-              </li>
-              <li>
-                <span className="mr-2 text-lg text-[#cd775d]">♧</span>
-                Social &amp; Communication
-              </li>
-            </ul>
+              <p className="mb-2 text-xs text-[#414052]">
+                Unlock the rest of your profile, including:
+              </p>
 
-            <button className="w-full rounded-lg bg-[#4f2696] px-3 py-3 text-xs font-bold text-white transition hover:bg-[#3d1d78]">
-              Unlock Full Profile — $7 <span className="ml-2 text-base">→</span>
-            </button>
-          </div>
+              <ul className="mb-3 space-y-1 text-sm text-[#3d3b4f]">
+                <li>
+                  <span className="mr-2 text-lg text-[#cd775d]">♡</span>
+                  Love &amp; Relationships
+                </li>
+                <li>
+                  <span className="mr-2 text-lg text-[#cd775d]">▣</span>
+                  Career &amp; Direction
+                </li>
+                <li>
+                  <span className="mr-2 text-lg text-[#cd775d]">♧</span>
+                  Social &amp; Communication
+                </li>
+              </ul>
+
+              <button 
+                onClick={() => {
+                  const currentAssessmentId = result.assessmentId || assessmentId || '';
+                  if (isAuthenticated) {
+                    // User is already authenticated, go directly to payment
+                    router.push(`/payment?assessmentId=${currentAssessmentId}`);
+                  } else {
+                    // User needs to sign in first
+                    router.push(`/auth/signin?redirect=/payment&assessmentId=${currentAssessmentId}`);
+                  }
+                }}
+                className="w-full rounded-lg bg-[#4f2696] px-3 py-3 text-xs font-bold text-white transition hover:bg-[#3d1d78]"
+              >
+                Unlock Full Profile — $10 <span className="ml-2 text-base">→</span>
+              </button>
+            </div>
+          )}
         </section>
 
         {/* Footer Actions */}
-        <footer className="flex items-center justify-between gap-4 px-2 pt-6">
-          <button 
-            onClick={() => {
-              useAssessmentStore.getState().resetAssessment();
-              router.push('/assessment');
-            }}
-            className="rounded-full border border-[#6855a0] px-4 py-3 text-xs font-bold text-[#503e90] transition hover:bg-[#eee8f7] sm:px-6"
-          >
-            <span className="mr-2 text-base">←</span>
-            Retake Test
-          </button>
+        <footer className="flex flex-col gap-4 px-2 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => {
+                useAssessmentStore.getState().resetAssessment();
+                router.push('/assessment');
+              }}
+              className="rounded-full border border-[#6855a0] px-4 py-3 text-xs font-bold text-[#503e90] transition hover:bg-[#eee8f7] sm:px-6"
+            >
+              <span className="mr-2 text-base">←</span>
+              Retake Test
+            </button>
+
+            <button 
+              onClick={() => router.push('/account')}
+              className="rounded-lg bg-[#4f2696] px-4 py-3 text-xs font-bold text-white transition hover:bg-[#3d1d78] sm:px-6"
+            >
+              Go to Dashboard <span className="ml-2 text-base">→</span>
+            </button>
+          </div>
 
           <button 
-            onClick={() => router.push('/account')}
-            className="rounded-lg bg-[#4f2696] px-4 py-3 text-xs font-bold text-white transition hover:bg-[#3d1d78] sm:px-6"
+            onClick={() => {
+              // Store result data for share card builder
+              localStorage.setItem('shareCardData', JSON.stringify({
+                primaryRoles,
+                secondaryRoles,
+                profileCode,
+                primaryNames,
+                secondaryNames,
+                result: result
+              }));
+              router.push('/share-card');
+            }}
+            className="rounded-lg border-2 border-[#cd775d] bg-[#fef9f0] px-4 py-3 text-xs font-bold text-[#cd775d] transition hover:bg-[#fef6e8] sm:px-6"
           >
-            Go to Dashboard <span className="ml-2 text-base">→</span>
+            <span className="mr-2 text-lg">✦</span>
+            Create Your Share Card
           </button>
         </footer>
       </div>
@@ -646,4 +729,61 @@ function generateConnectionText(primaryRoles: string[], secondaryRoles: string[]
     }
   }
   return "You tend to feel closer to people who appreciate your unique perspective and approach to life.";
+}
+
+function generateLoveRelationshipsText(primaryRoles: string[], secondaryRoles: string[]): string {
+  const loveMap: Record<string, string> = {
+    thinker: "In relationships, you need intellectual stimulation and deep conversations. You feel most connected when you can analyze life's questions together and explore ideas without judgment.",
+    seeker: "You thrive in relationships that offer constant discovery and growth. You need a partner who enjoys exploring new ideas and experiences alongside you.",
+    builder: "You value practical support and reliability in relationships. You feel most connected when you can build a life together and turn shared dreams into reality.",
+    nurturer: "Emotional intimacy is essential for you. You thrive in relationships where you can be vulnerable and provide mutual support and care.",
+    spark: "You need creativity and excitement in relationships. You feel most alive with a partner who shares your enthusiasm and inspires you to see the world differently.",
+    wanderer: "You need independence and freedom within relationships. You feel most connected when you have space to be yourself while sharing your journey with someone who respects your autonomy.",
+  };
+
+  if (primaryRoles.length > 0) {
+    const role = primaryRoles[0] as keyof typeof loveMap;
+    if (loveMap[role]) {
+      return loveMap[role];
+    }
+  }
+  return "You bring unique insights and depth to your relationships, valuing authentic connections that honor your individual perspective.";
+}
+
+function generateCareerDirectionText(primaryRoles: string[], secondaryRoles: string[]): string {
+  const careerMap: Record<string, string> = {
+    thinker: "You excel in roles that require deep analysis, research, and strategic thinking. Careers in research, analysis, philosophy, or complex problem-solving will suit you well.",
+    seeker: "You thrive in dynamic environments that offer continuous learning and exploration. Careers in innovation, research, consulting, or fields that require constant discovery will energize you.",
+    builder: "You're drawn to practical, hands-on work where you can see tangible results. Careers in construction, engineering, project management, or entrepreneurship will allow you to thrive.",
+    nurturer: "You excel in people-focused roles where you can support and guide others. Careers in counseling, healthcare, education, or human resources will allow you to use your natural gifts.",
+    spark: "You shine in creative fields where you can generate new ideas and inspire others. Careers in design, marketing, entertainment, or innovation will allow your creativity to flourish.",
+    wanderer: "You're suited for flexible careers that offer variety and independence. Roles in consulting, freelancing, travel, or entrepreneurship will allow you to maintain your freedom.",
+  };
+
+  if (primaryRoles.length > 0) {
+    const role = primaryRoles[0] as keyof typeof careerMap;
+    if (careerMap[role]) {
+      return careerMap[role];
+    }
+  }
+  return "Your unique cognitive pattern offers valuable strengths that can be applied across many career paths. Seek roles that honor your natural way of thinking and working.";
+}
+
+function generateSocialCommunicationText(primaryRoles: string[], secondaryRoles: string[]): string {
+  const socialMap: Record<string, string> = {
+    thinker: "You communicate best through thoughtful, analytical conversations. You prefer depth over breadth and enjoy discussions that explore complex ideas and systems.",
+    seeker: "You're an engaging conversationalist who loves asking questions and exploring new perspectives. You naturally draw people into interesting discussions and discoveries.",
+    builder: "You communicate clearly and practically, focusing on actionable information. You're most effective when discussing concrete plans and real-world applications.",
+    nurturer: "You're a natural listener who creates safe spaces for others to share. You communicate with empathy and are skilled at understanding and responding to emotional needs.",
+    spark: "You bring energy and enthusiasm to conversations, naturally inspiring those around you. You excel at brainstorming and getting people excited about new possibilities.",
+    wanderer: "You communicate authentically and directly, valuing genuine connections over social conventions. You're comfortable in diverse social situations and adapt easily to different communication styles.",
+  };
+
+  if (primaryRoles.length > 0) {
+    const role = primaryRoles[0] as keyof typeof socialMap;
+    if (socialMap[role]) {
+      return socialMap[role];
+    }
+  }
+  return "Your communication style brings a unique perspective to social interactions. You connect best with people who appreciate authenticity and depth in conversation.";
 }

@@ -25,7 +25,7 @@ export default function AdminDashboard() {
       fetchDashboardStats();
       fetchQuestions();
     }
-  }, [isAuthenticated, tokens, fetchDashboardStats, fetchQuestions]);
+  }, [isAuthenticated, tokens]);
 
   const statCards = [
     {

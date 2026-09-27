@@ -31,7 +31,8 @@ export default function ProfileClustersManagement() {
     order: 0,
     description: '',
     influenceThreshold: 15.0,
-    tags: [] as string[]
+    tags: [] as string[],
+    color: '#4B3B8C'
   });
 
   useEffect(() => {
@@ -56,13 +57,15 @@ export default function ProfileClustersManagement() {
   const handleCreate = async () => {
     try {
       const newCluster = await createProfileCluster({
+        id: formData.id,
         displayName: formData.displayName,
         code: formData.code,
         isActive: formData.isActive,
         order: formData.order,
         description: formData.description,
         influenceThreshold: formData.influenceThreshold,
-        tags: formData.tags
+        tags: formData.tags,
+        color: formData.color
       });
       await fetchClusters();
       setIsModalOpen(false);
@@ -136,7 +139,8 @@ export default function ProfileClustersManagement() {
       order: cluster.order,
       description: cluster.description || '',
       influenceThreshold: cluster.influenceThreshold,
-      tags: cluster.tags || []
+      tags: cluster.tags || [],
+      color: cluster.color || '#4B3B8C'
     });
     setIsModalOpen(true);
   };
@@ -150,7 +154,8 @@ export default function ProfileClustersManagement() {
       order: 0,
       description: '',
       influenceThreshold: 15.0,
-      tags: []
+      tags: [],
+      color: '#4B3B8C'
     });
   };
 
@@ -298,6 +303,9 @@ export default function ProfileClustersManagement() {
                 Tags
               </th>
               <th className="px-6 py-4 text-left font-semibold" style={{ color: '#1a1a1a', fontFamily: 'Montserrat, sans-serif' }}>
+                Color
+              </th>
+              <th className="px-6 py-4 text-left font-semibold" style={{ color: '#1a1a1a', fontFamily: 'Montserrat, sans-serif' }}>
                 Actions
               </th>
             </tr>
@@ -307,7 +315,7 @@ export default function ProfileClustersManagement() {
               <tr key={cluster.id} className="border-b border-[#E8E8E8] hover:bg-[#FAF6EF]/50 transition-colors">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-white" style={{ backgroundColor: '#4B3B8C' }}>
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-white" style={{ backgroundColor: cluster.color || '#4B3B8C' }}>
                       {cluster.code}
                     </div>
                     <div>
@@ -354,6 +362,17 @@ export default function ProfileClustersManagement() {
                         {tag}
                       </span>
                     ))}
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="w-6 h-6 rounded border border-gray-300"
+                      style={{ backgroundColor: cluster.color || '#4B3B8C' }}
+                    />
+                    <span className="text-sm" style={{ color: '#666666', fontFamily: 'Montserrat, sans-serif' }}>
+                      {cluster.color || '#4B3B8C'}
+                    </span>
                   </div>
                 </td>
                 <td className="px-6 py-4">
@@ -491,6 +510,28 @@ export default function ProfileClustersManagement() {
                   style={{ color: '#1a1a1a', fontFamily: 'Montserrat, sans-serif' }}
                   placeholder="Optional description of this cluster"
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#1a1a1a', fontFamily: 'Montserrat, sans-serif' }}>
+                  Color
+                </label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="color"
+                    value={formData.color}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    className="w-12 h-12 rounded border border-[#E8E8E8] cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={formData.color}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    className="flex-1 px-4 py-2 border border-[#E8E8E8] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C4A747] focus:border-transparent"
+                    style={{ color: '#1a1a1a', fontFamily: 'Montserrat, sans-serif' }}
+                    placeholder="#4B3B8C"
+                    maxLength={7}
+                  />
+                </div>
               </div>
               <div>
                 <label className="flex items-center gap-2">

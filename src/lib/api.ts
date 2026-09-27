@@ -15,7 +15,24 @@ async function apiRequest<T>(
   const { method = 'GET', body, headers = {} } = options;
 
   // Get token from localStorage (or Zustand store)
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  let token = null;
+  if (typeof window !== 'undefined') {
+    // Try to get token from auth-storage first (used by auth store)
+    const authStorage = localStorage.getItem('auth-storage');
+    if (authStorage) {
+      try {
+        const parsed = JSON.parse(authStorage);
+        token = parsed.state?.tokens?.access?.token;
+      } catch (error) {
+        console.error('Failed to parse auth storage:', error);
+      }
+    }
+    
+    // Fallback to legacy token storage
+    if (!token) {
+      token = localStorage.getItem('token');
+    }
+  }
 
   const config: RequestInit = {
     method,
@@ -85,4 +102,12 @@ export const subscriptionApi = {
   getSubscriptionById: (id: string) => apiRequest(`/admin/subscriptions/${id}`),
   cancelSubscription: (id: string) =>
     apiRequest(`/admin/subscriptions/${id}/cancel`, { method: 'PUT' }),
+};
+
+// Auth API
+export const authApi = {
+  getPublicProfile: (shareToken: string) => 
+    apiRequest<any>(`/auth/public-profile/${shareToken}`, { method: 'GET' }),
+  generateShareToken: () => 
+    apiRequest<{ shareToken: string }>('/auth/generate-share-token', { method: 'POST' }),
 };

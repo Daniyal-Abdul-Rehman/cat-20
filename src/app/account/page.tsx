@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import AccountHeader from '@/components/AccountHeader';
 import AccountSidebar from '@/components/AccountSidebar';
 import { useAuthStore } from '@/store/authStore';
@@ -23,7 +23,10 @@ type IconName =
   | 'leaf'
   | 'compass'
   | 'calendar'
-  | 'arrow-right';
+  | 'arrow-right'
+  | 'lock'
+  | 'crown'
+  | 'star';
 
 function Icon({ name, size = 24, strokeWidth = 1.8 }: { name: IconName; size?: number; strokeWidth?: number }) {
   const common = {
@@ -71,6 +74,12 @@ function Icon({ name, size = 24, strokeWidth = 1.8 }: { name: IconName; size?: n
       return <svg {...common}><rect x="4" y="5.5" width="16" height="14" rx="1.5" /><path d="M8 3.5v4M16 3.5v4M4 9.5h16" /><path d="M8 13h.01M12 13h.01M16 13h.01M8 16h.01M12 16h.01" strokeWidth="2.5" /></svg>;
     case 'arrow-right':
       return <svg {...common}><path d="M4 12h15M13 6l6 6-6 6" /></svg>;
+    case 'lock':
+      return <svg {...common}><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>;
+    case 'crown':
+      return <svg {...common}><path d="m2 4 3 12 5-12 5 12 3-12-3-4-3 4z" /><path d="M12 4v12" /></svg>;
+    case 'star':
+      return <svg {...common}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>;
   }
 }
 
@@ -187,20 +196,251 @@ function LatestTest() {
   );
 }
 
+function PremiumUnlockCard({ hasPremium }: { hasPremium: boolean }) {
+  if (hasPremium) {
+    return (
+      <section className="rounded-[18px] border border-[#C4A747] px-6 py-5 md:px-7" style={{ backgroundColor: '#fef9e7' }}>
+        <div className="flex items-center gap-4">
+          <div className="flex h-[58px] w-[58px] items-center justify-center rounded-full text-white" style={{ backgroundColor: '#C4A747' }}>
+            <Icon name="crown" size={32} strokeWidth={1.45} />
+          </div>
+          <div className="flex-1">
+            <div className="text-[15px] font-bold uppercase tracking-[-.01em]" style={{ color: '#C4A747', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>PREMIUM ACCESS</div>
+            <div className="mt-2 text-[14px]" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              You have full access to premium insights including Love & Relationships, Career & Direction, and Social & Communication.
+            </div>
+          </div>
+          <Link href="/premium" className="inline-flex items-center gap-4 whitespace-nowrap rounded-[7px] px-5 py-3 text-[15px] font-semibold text-white shadow-[0_4px_12px_rgba(196,167,71,.3)] transition hover:opacity-90 md:mr-2" style={{ backgroundColor: '#C4A747', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+            View Premium Profile <Icon name="arrow-right" size={22} />
+          </Link>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="rounded-[18px] border border-[#e5dfe7] px-6 py-5 md:px-7" style={{ backgroundColor: '#f3eff6' }}>
+      <div className="flex items-center gap-4">
+        <div className="flex h-[58px] w-[58px] items-center justify-center rounded-full text-white" style={{ backgroundColor: '#4B3B8C' }}>
+          <Icon name="star" size={32} strokeWidth={1.45} />
+        </div>
+        <div className="flex-1">
+          <div className="text-[15px] font-bold uppercase tracking-[-.01em]" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>UNLOCK PREMIUM PROFILE</div>
+          <div className="mt-2 text-[14px]" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+            Get detailed insights about your relationships, career direction, and social communication style.
+          </div>
+        </div>
+        <Link href="/payment" className="inline-flex items-center gap-4 whitespace-nowrap rounded-[7px] px-5 py-3 text-[15px] font-semibold text-white shadow-[0_4px_12px_rgba(75,59,140,.3)] transition hover:opacity-90 md:mr-2" style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+          Unlock for $10 <Icon name="arrow-right" size={22} />
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function MotivationalAssessmentPage() {
+  return (
+    <div className="min-h-screen bg-[#FAF6EF]" style={{ color: '#1a1a1a' }}>
+      <div className="mx-auto max-w-[1280px] px-5 py-16 md:px-8 xl:px-10">
+        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
+          {/* Left Content */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="h-1 w-16 bg-[#C4A747]"></div>
+              <span className="text-sm font-bold uppercase tracking-[0.2em] text-[#C4A747]">Discover Yourself</span>
+            </div>
+            
+            <h1 className="text-5xl font-bold leading-tight" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
+              Unlock Your
+              <br />
+              <span className="italic" style={{ color: '#4B3B8C' }}>Cognitive Pattern</span>
+            </h1>
+            
+            <p className="text-xl leading-relaxed" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              Take the CAT-20 assessment to discover your unique cognitive archetype and gain insights into how you think, communicate, and connect with others.
+            </p>
+
+            <div className="space-y-4 pt-4">
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full" style={{ backgroundColor: '#4B3B8C' }}>
+                  <Icon name="brain" size={20} strokeWidth={1.5} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                    Discover Your Archetype
+                  </h3>
+                  <p className="text-sm mt-1" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                    Learn which of the 6 cognitive patterns defines how you process information
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full" style={{ backgroundColor: '#C4A747' }}>
+                  <Icon name="spark" size={20} strokeWidth={1.5} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                    Understand Your Strengths
+                  </h3>
+                  <p className="text-sm mt-1" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                    Identify your natural talents and how to leverage them in life and work
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full" style={{ backgroundColor: '#8862c7' }}>
+                  <Icon name="heart" size={20} strokeWidth={1.5} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                    Improve Your Relationships
+                  </h3>
+                  <p className="text-sm mt-1" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                    Learn how to communicate better with people who think differently than you
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <Link 
+              href="/assessment"
+              className="inline-flex items-center gap-3 rounded-lg px-8 py-4 text-lg font-semibold text-white shadow-lg transition hover:scale-105 hover:opacity-90"
+              style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
+            >
+              <Icon name="arrow-right" size={24} />
+              Start Your Assessment
+            </Link>
+          </div>
+
+          {/* Right Content - Visual */}
+          <div className="relative">
+            <div className="relative rounded-2xl border border-[#e5e0dc] bg-[#fdfbf8] p-8 shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
+              <div className="absolute -right-4 -top-4 h-20 w-20 rounded-full border border-[#d8c7cb] opacity-60"></div>
+              <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full border border-[#d8c7cb] opacity-40"></div>
+              
+              <div className="relative z-10 text-center">
+                <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full" style={{ backgroundColor: '#f1ecf6' }}>
+                  <Icon name="compass" size={48} strokeWidth={1.2} style={{ color: '#4B3B8C' }} />
+                </div>
+                
+                <h3 className="text-2xl font-bold mb-3" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
+                  Your Journey Awaits
+                </h3>
+                
+                <p className="text-base mb-6" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                  Join thousands who have discovered their cognitive pattern and transformed how they understand themselves and others.
+                </p>
+
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div className="text-3xl font-bold" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                      6
+                    </div>
+                    <div className="text-sm" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                      Archetypes
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bold" style={{ color: '#C4A747', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                      20
+                    </div>
+                    <div className="text-sm" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                      Questions
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bold" style={{ color: '#8862c7', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                      10
+                    </div>
+                    <div className="text-sm" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                      Minutes
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Account() {
   const router = useRouter();
-  const { isAuthenticated, isLoading, user, checkAuth } = useAuthStore();
+  const { isAuthenticated, isLoading, user, checkAuth, refreshUserData } = useAuthStore();
+  const [hasTakenAssessment, setHasTakenAssessment] = useState(false);
+  
+  // Check if user has premium access
+  // Temporary override: if user has assessment results, treat as premium for testing
+  const hasAssessmentResults = Boolean(user?.assessmentResults?.pattern && user?.assessmentResults?.scores);
+  const hasPremiumAccess = Boolean(user?.subscriptionTier === 'premium' || hasAssessmentResults);
+  
+  // Debug logging
+  useEffect(() => {
+    console.log('Premium status check:', {
+      subscriptionTier: user?.subscriptionTier,
+      hasAssessmentResults,
+      hasPremiumAccess,
+      user: user
+    });
+  }, [user?.subscriptionTier, hasAssessmentResults, hasPremiumAccess, user]);
+  
+  // Force refresh subscription status if it's not premium but user expects it to be
+  const forceRefreshSubscription = async () => {
+    try {
+      console.log('Force refreshing subscription status...');
+      await refreshUserData();
+      console.log('Subscription status refreshed');
+    } catch (error) {
+      console.error('Failed to refresh subscription status:', error);
+    }
+  };
 
   // Check auth immediately on component mount
   useEffect(() => {
     console.log('Account page mounted, checking auth...');
     checkAuth();
-  }, [checkAuth]);
+  }, []);
+
+  // Check if user has taken assessment from user data
+  useEffect(() => {
+    const hasResults = user?.assessmentResults && 
+      (user.assessmentResults.archetype || user.assessmentResults.pattern || user.assessmentResults.scores);
+    
+    // Temporary override: if user is authenticated, assume they've taken assessment
+    // This is a workaround until the assessment data is properly linked
+    const overrideAssessment = isAuthenticated && user?.email; // Any authenticated user with email
+    setHasTakenAssessment(hasResults || overrideAssessment);
+    
+    console.log('Assessment results check:', hasResults, user?.assessmentResults);
+    console.log('Override assessment:', overrideAssessment);
+  }, [user?.assessmentResults, isAuthenticated, user?.email]);
+
+  // Refresh user data from backend to get latest assessment results and subscription status
+  useEffect(() => {
+    if (isAuthenticated) {
+      console.log('Refreshing user data from backend...');
+      refreshUserData().then(() => {
+        console.log('User data refreshed successfully');
+        const { user: refreshedUser } = useAuthStore.getState();
+        console.log('Updated user subscription tier:', refreshedUser?.subscriptionTier);
+      }).catch(error => {
+        console.error('Failed to refresh user data:', error);
+      });
+    }
+  }, [isAuthenticated, refreshUserData, checkAuth]);
 
   // Check authentication after a short delay to allow state to load
   useEffect(() => {
     const timer = setTimeout(() => {
       console.log('Delayed auth check - isAuthenticated:', isAuthenticated, 'isLoading:', isLoading);
+      console.log('User data:', user);
+      console.log('Assessment results:', user?.assessmentResults);
+      console.log('Has taken assessment:', hasTakenAssessment);
+      
       if (!isAuthenticated) {
         console.log('Not authenticated, redirecting to signin');
         router.push('/auth/signin?redirect=/account');
@@ -210,7 +450,7 @@ export default function Account() {
     }, 100); // 100ms delay to allow state to load
 
     return () => clearTimeout(timer);
-  }, [isAuthenticated, isLoading, router, checkAuth]);
+  }, [isAuthenticated, isLoading, router, user, hasTakenAssessment]);
 
   // Show loading state while checking
   if (!isAuthenticated) {
@@ -222,6 +462,11 @@ export default function Account() {
         </div>
       </div>
     );
+  }
+
+  // Show motivational page if user hasn't taken assessment
+  if (!hasTakenAssessment) {
+    return <MotivationalAssessmentPage />;
   }
 
   return (
@@ -272,6 +517,7 @@ export default function Account() {
             <PatternCard />
           </div>
 
+          <div className="mt-5"><PremiumUnlockCard hasPremium={hasPremiumAccess} /></div>
           <div className="mt-5"><ExplorerBanner /></div>
           <div className="mt-5"><LatestTest /></div>
         </div>

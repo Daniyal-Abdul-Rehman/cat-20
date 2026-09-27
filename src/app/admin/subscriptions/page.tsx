@@ -29,7 +29,7 @@ export default function SubscriptionsManagement() {
       console.log('[SubscriptionsManagement] Auth ready, fetching subscriptions');
       fetchSubscriptions(currentPage);
     }
-  }, [isAuthenticated, tokens, fetchSubscriptions, currentPage]);
+  }, [isAuthenticated, tokens, currentPage]);
 
   const filteredSubscriptions = subscriptions.filter(sub => {
     const matchesSearch = sub.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

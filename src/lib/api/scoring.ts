@@ -52,6 +52,7 @@ export interface ProfileCluster {
   description?: string;
   influenceThreshold: number;
   tags: string[];
+  color: string;
 }
 
 export interface ProfileConfig {
@@ -112,7 +113,18 @@ export async function submitAssessment(
     scoringVersion?: string;
   }
 ): Promise<ScoringResult> {
-  const token = localStorage.getItem('token');
+  // Get token from auth store structure
+  const authStorage = localStorage.getItem('auth-storage');
+  let token = null;
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.tokens?.access?.token;
+    } catch (error) {
+      console.error('Failed to parse auth storage:', error);
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}/assessments/submit`, {
     method: 'POST',
     headers: {
@@ -159,7 +171,18 @@ export async function getAssessmentResultPublic(assessmentId: string): Promise<S
  * Get assessment result by ID (authenticated endpoint)
  */
 export async function getAssessmentResult(assessmentId: string): Promise<ScoringResult> {
-  const token = localStorage.getItem('token');
+  // Get token from auth store structure
+  const authStorage = localStorage.getItem('auth-storage');
+  let token = null;
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.tokens?.access?.token;
+    } catch (error) {
+      console.error('Failed to parse auth storage:', error);
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}/assessments/${assessmentId}/result`, {
     headers: {
       ...(token && { 'Authorization': `Bearer ${token}` }),
@@ -177,7 +200,18 @@ export async function getAssessmentResult(assessmentId: string): Promise<Scoring
  * Check if assessment has been scored
  */
 export async function isAssessmentScored(assessmentId: string): Promise<{ scored: boolean }> {
-  const token = localStorage.getItem('token');
+  // Get token from auth store structure
+  const authStorage = localStorage.getItem('auth-storage');
+  let token = null;
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.tokens?.access?.token;
+    } catch (error) {
+      console.error('Failed to parse auth storage:', error);
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}/assessments/${assessmentId}/scored`, {
     headers: {
       ...(token && { 'Authorization': `Bearer ${token}` }),
@@ -195,9 +229,21 @@ export async function isAssessmentScored(assessmentId: string): Promise<{ scored
  * Get all profile clusters (admin)
  */
 export async function getProfileClusters(): Promise<ProfileCluster[]> {
+  // Get token from auth store structure
+  const authStorage = localStorage.getItem('auth-storage');
+  let token = null;
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.tokens?.access?.token;
+    } catch (error) {
+      console.error('Failed to parse auth storage:', error);
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}/admin/profile-clusters`, {
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Authorization': `Bearer ${token}`,
     },
   });
 
@@ -212,9 +258,21 @@ export async function getProfileClusters(): Promise<ProfileCluster[]> {
  * Get active profile clusters
  */
 export async function getActiveProfileClusters(): Promise<ProfileCluster[]> {
+  // Get token from auth store structure
+  const authStorage = localStorage.getItem('auth-storage');
+  let token = null;
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.tokens?.access?.token;
+    } catch (error) {
+      console.error('Failed to parse auth storage:', error);
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}/admin/profile-clusters/active`, {
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Authorization': `Bearer ${token}`,
     },
   });
 
@@ -228,12 +286,24 @@ export async function getActiveProfileClusters(): Promise<ProfileCluster[]> {
 /**
  * Create profile cluster (admin)
  */
-export async function createProfileCluster(cluster: Omit<ProfileCluster, 'id'>): Promise<ProfileCluster> {
+export async function createProfileCluster(cluster: Pick<ProfileCluster, 'id' | 'displayName' | 'code' | 'isActive' | 'order' | 'description' | 'influenceThreshold' | 'tags' | 'color'>): Promise<ProfileCluster> {
+  // Get token from auth store structure
+  const authStorage = localStorage.getItem('auth-storage');
+  let token = null;
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.tokens?.access?.token;
+    } catch (error) {
+      console.error('Failed to parse auth storage:', error);
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}/admin/profile-clusters`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(cluster),
   });
@@ -252,11 +322,23 @@ export async function updateProfileCluster(
   id: string,
   cluster: Partial<ProfileCluster>
 ): Promise<ProfileCluster> {
+  // Get token from auth store structure
+  const authStorage = localStorage.getItem('auth-storage');
+  let token = null;
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.tokens?.access?.token;
+    } catch (error) {
+      console.error('Failed to parse auth storage:', error);
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}/admin/profile-clusters/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(cluster),
   });
@@ -272,10 +354,22 @@ export async function updateProfileCluster(
  * Delete profile cluster (admin)
  */
 export async function deleteProfileCluster(id: string): Promise<void> {
+  // Get token from auth store structure
+  const authStorage = localStorage.getItem('auth-storage');
+  let token = null;
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.tokens?.access?.token;
+    } catch (error) {
+      console.error('Failed to parse auth storage:', error);
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}/admin/profile-clusters/${id}`, {
     method: 'DELETE',
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Authorization': `Bearer ${token}`,
     },
   });
 
@@ -288,10 +382,22 @@ export async function deleteProfileCluster(id: string): Promise<void> {
  * Activate profile cluster (admin)
  */
 export async function activateProfileCluster(id: string): Promise<ProfileCluster> {
+  // Get token from auth store structure
+  const authStorage = localStorage.getItem('auth-storage');
+  let token = null;
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.tokens?.access?.token;
+    } catch (error) {
+      console.error('Failed to parse auth storage:', error);
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}/admin/profile-clusters/${id}/activate`, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Authorization': `Bearer ${token}`,
     },
   });
 
@@ -306,10 +412,22 @@ export async function activateProfileCluster(id: string): Promise<ProfileCluster
  * Deactivate profile cluster (admin)
  */
 export async function deactivateProfileCluster(id: string): Promise<ProfileCluster> {
+  // Get token from auth store structure
+  const authStorage = localStorage.getItem('auth-storage');
+  let token = null;
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.tokens?.access?.token;
+    } catch (error) {
+      console.error('Failed to parse auth storage:', error);
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}/admin/profile-clusters/${id}/deactivate`, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Authorization': `Bearer ${token}`,
     },
   });
 
@@ -324,10 +442,22 @@ export async function deactivateProfileCluster(id: string): Promise<ProfileClust
  * Initialize default profile clusters (admin)
  */
 export async function initializeDefaultClusters(): Promise<void> {
+  // Get token from auth store structure
+  const authStorage = localStorage.getItem('auth-storage');
+  let token = null;
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.tokens?.access?.token;
+    } catch (error) {
+      console.error('Failed to parse auth storage:', error);
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}/admin/profile-clusters/initialize-defaults`, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Authorization': `Bearer ${token}`,
     },
   });
 
@@ -340,9 +470,21 @@ export async function initializeDefaultClusters(): Promise<void> {
  * Get all profile configurations (admin)
  */
 export async function getProfileConfigs(): Promise<ProfileConfig[]> {
+  // Get token from auth store structure
+  const authStorage = localStorage.getItem('auth-storage');
+  let token = null;
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.tokens?.access?.token;
+    } catch (error) {
+      console.error('Failed to parse auth storage:', error);
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}/admin/profile-configs`, {
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Authorization': `Bearer ${token}`,
     },
   });
 
@@ -357,9 +499,21 @@ export async function getProfileConfigs(): Promise<ProfileConfig[]> {
  * Get current active configuration (admin)
  */
 export async function getCurrentProfileConfig(): Promise<ProfileConfig> {
+  // Get token from auth store structure
+  const authStorage = localStorage.getItem('auth-storage');
+  let token = null;
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.tokens?.access?.token;
+    } catch (error) {
+      console.error('Failed to parse auth storage:', error);
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}/admin/profile-configs/current`, {
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Authorization': `Bearer ${token}`,
     },
   });
 
@@ -374,11 +528,23 @@ export async function getCurrentProfileConfig(): Promise<ProfileConfig> {
  * Create profile configuration (admin)
  */
 export async function createProfileConfig(config: Omit<ProfileConfig, 'version'>): Promise<ProfileConfig> {
+  // Get token from auth store structure
+  const authStorage = localStorage.getItem('auth-storage');
+  let token = null;
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.tokens?.access?.token;
+    } catch (error) {
+      console.error('Failed to parse auth storage:', error);
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}/admin/profile-configs`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(config),
   });

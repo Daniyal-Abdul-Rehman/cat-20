@@ -37,7 +37,7 @@ export default function ProfilesManagement() {
       console.log('[ProfilesManagement] Auth ready, fetching profiles');
       fetchProfiles();
     }
-  }, [isAuthenticated, tokens, fetchProfiles]);
+  }, [isAuthenticated, tokens]);
 
   const filteredProfiles = profiles.filter(profile => {
     const matchesSearch = profile.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

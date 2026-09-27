@@ -77,6 +77,7 @@ interface AuthActions {
   logout: () => Promise<void>;
   refreshTokens: () => Promise<void>;
   checkAuth: () => void;
+  refreshUserData: () => Promise<void>;
   
   // Password reset actions
   forgotPassword: (email: string) => Promise<void>;
@@ -137,6 +138,8 @@ export const useAuthStore = create<AuthStore>()(
             username: data.user.username,
             isEmailVerified: data.user.isEmailVerified,
             role: data.user.role,
+            subscriptionTier: data.user.subscriptionTier,
+            assessmentResults: data.user.assessmentResults,
             createdAt: data.user.createdAt,
             updatedAt: data.user.updatedAt,
             __v: data.user.__v,
@@ -182,6 +185,8 @@ export const useAuthStore = create<AuthStore>()(
             username: data.user.username,
             isEmailVerified: data.user.isEmailVerified,
             role: data.user.role,
+            subscriptionTier: data.user.subscriptionTier,
+            assessmentResults: data.user.assessmentResults,
             createdAt: data.user.createdAt,
             updatedAt: data.user.updatedAt,
             __v: data.user.__v,
@@ -416,7 +421,7 @@ export const useAuthStore = create<AuthStore>()(
         // Update user verification status
         const { user } = get();
         if (user) {
-          set({ user: { ...user, isEmailVerified: true }, isLoading: false });
+          set({ user: { ...user, isEmailVerified: true, assessmentResults: user.assessmentResults }, isLoading: false });
         } else {
           set({ isLoading: false });
         }
@@ -466,23 +471,88 @@ export const useAuthStore = create<AuthStore>()(
     checkAuth: () => {
       if (typeof window === 'undefined') return;
       
+      const currentState = get();
       const storedUser = localStorage.getItem('auth-storage');
       console.log('Auth storage check:', storedUser);
+      
       if (storedUser) {
         try {
           const parsed = JSON.parse(storedUser);
           console.log('Parsed auth storage:', parsed);
+          
+          // Only update state if it's different from current state
           if (parsed.state?.user && parsed.state?.tokens) {
-            set({
-              user: parsed.state.user,
-              tokens: parsed.state.tokens,
-              isAuthenticated: parsed.state.isAuthenticated || true,
-            });
-            console.log('Auth state restored from localStorage');
+            const needsUpdate = 
+              !currentState.isAuthenticated ||
+              !currentState.user ||
+              !currentState.tokens ||
+              JSON.stringify(currentState.user) !== JSON.stringify(parsed.state.user) ||
+              JSON.stringify(currentState.tokens) !== JSON.stringify(parsed.state.tokens);
+            
+            if (needsUpdate) {
+              set({
+                user: parsed.state.user,
+                tokens: parsed.state.tokens,
+                isAuthenticated: parsed.state.isAuthenticated || true,
+              });
+              console.log('Auth state restored from localStorage');
+            } else {
+              console.log('Auth state already up to date, skipping update');
+            }
           }
         } catch (error) {
           console.error('Failed to parse auth storage:', error);
         }
+      }
+    },
+
+    refreshUserData: async () => {
+      const { tokens } = get();
+      if (!tokens?.access.token) {
+        throw new Error('No access token available');
+      }
+
+      set({ isLoading: true, error: null });
+      try {
+        const response = await fetch(`${API_BASE_URL}/auth/me`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${tokens.access.token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
+        const data = await response.json();
+        set({
+          user: {
+            _id: data._id,
+            name: data.name,
+            email: data.email,
+            username: data.username,
+            isEmailVerified: data.isEmailVerified,
+            role: data.role,
+            subscriptionTier: data.subscriptionTier,
+            assessmentResults: data.assessmentResults,
+            createdAt: data.createdAt,
+            updatedAt: data.updatedAt,
+            __v: data.__v,
+          },
+          isLoading: false,
+        });
+        
+        // Update localStorage
+        const currentState = get();
+        localStorage.setItem('auth-storage', JSON.stringify({ state: currentState }));
+      } catch (error) {
+        console.error('Failed to refresh user data:', error);
+        set({
+          error: parseErrorMessage(error),
+          isLoading: false,
+        });
+        throw error;
       }
     },
   })

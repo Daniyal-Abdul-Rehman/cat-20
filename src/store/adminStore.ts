@@ -142,6 +142,41 @@ interface UserProfile {
   };
 }
 
+interface Payment {
+  _id: string;
+  userId: string;
+  amount: number;
+  currency: string;
+  status: 'pending' | 'completed' | 'failed' | 'refunded';
+  stripeSessionId: string;
+  stripePaymentIntentId?: string;
+  assessmentId?: string;
+  createdAt: string;
+  updatedAt: string;
+  user?: {
+    name: string;
+    email: string;
+  };
+}
+
+interface PaymentStats {
+  totalPayments: number;
+  completedPayments: number;
+  pendingPayments: number;
+  failedPayments: number;
+  totalRevenue: number;
+}
+
+interface RevenueStats {
+  totalRevenue: number;
+  revenueByMonth: Array<{
+    _id: { year: number; month: number };
+    total: number;
+    count: number;
+  }>;
+  recentPayments: Payment[];
+}
+
 // Admin Store State
 interface AdminState {
   // Dashboard
@@ -179,6 +214,24 @@ interface AdminState {
   profiles: UserProfile[];
   profilesLoading: boolean;
   profilesError: string | null;
+
+  // Payments
+  payments: Payment[];
+  paymentsLoading: boolean;
+  paymentsError: string | null;
+  paymentsTotal: number;
+  paymentsPage: number;
+  paymentsTotalPages: number;
+
+  // Revenue Stats
+  revenueStats: RevenueStats | null;
+  revenueStatsLoading: boolean;
+  revenueStatsError: string | null;
+
+  // Payment Stats
+  paymentStats: PaymentStats | null;
+  paymentStatsLoading: boolean;
+  paymentStatsError: string | null;
 }
 
 // Admin Store Actions
@@ -210,6 +263,11 @@ interface AdminActions {
   // Profile actions
   fetchProfiles: () => Promise<void>;
 
+  // Payment actions
+  fetchPayments: (page?: number, limit?: number) => Promise<void>;
+  fetchRevenueStats: () => Promise<void>;
+  fetchPaymentStats: () => Promise<void>;
+
   // Clear errors
   clearDashboardError: () => void;
   clearUsersError: () => void;
@@ -217,6 +275,9 @@ interface AdminActions {
   clearPackagesError: () => void;
   clearSubscriptionsError: () => void;
   clearProfilesError: () => void;
+  clearPaymentsError: () => void;
+  clearRevenueStatsError: () => void;
+  clearPaymentStatsError: () => void;
 }
 
 type AdminStore = AdminState & AdminActions;
@@ -252,6 +313,24 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
   profiles: [],
   profilesLoading: false,
   profilesError: null,
+
+  // Payments
+  payments: [],
+  paymentsLoading: false,
+  paymentsError: null,
+  paymentsTotal: 0,
+  paymentsPage: 1,
+  paymentsTotalPages: 1,
+
+  // Revenue Stats
+  revenueStats: null,
+  revenueStatsLoading: false,
+  revenueStatsError: null,
+
+  // Payment Stats
+  paymentStats: null,
+  paymentStatsLoading: false,
+  paymentStatsError: null,
 
   // Dashboard actions
   fetchDashboardStats: async () => {
@@ -496,6 +575,57 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
     }
   },
 
+  // Payment actions
+  fetchPayments: async (page = 1, limit = 20) => {
+    set({ paymentsLoading: true, paymentsError: null });
+    try {
+      const response = await apiRequest<{
+        payments: Payment[];
+        total: number;
+        page: number;
+        totalPages: number;
+      }>(`/admin/payments?page=${page}&limit=${limit}`);
+      set({
+        payments: response.payments,
+        paymentsTotal: response.total,
+        paymentsPage: response.page,
+        paymentsTotalPages: response.totalPages,
+        paymentsLoading: false,
+      });
+    } catch (error) {
+      set({
+        paymentsError: error instanceof Error ? error.message : 'Failed to fetch payments',
+        paymentsLoading: false,
+      });
+    }
+  },
+
+  fetchRevenueStats: async () => {
+    set({ revenueStatsLoading: true, revenueStatsError: null });
+    try {
+      const stats = await apiRequest<RevenueStats>('/admin/payments/revenue');
+      set({ revenueStats: stats, revenueStatsLoading: false });
+    } catch (error) {
+      set({
+        revenueStatsError: error instanceof Error ? error.message : 'Failed to fetch revenue stats',
+        revenueStatsLoading: false,
+      });
+    }
+  },
+
+  fetchPaymentStats: async () => {
+    set({ paymentStatsLoading: true, paymentStatsError: null });
+    try {
+      const stats = await apiRequest<PaymentStats>('/admin/payments/stats');
+      set({ paymentStats: stats, paymentStatsLoading: false });
+    } catch (error) {
+      set({
+        paymentStatsError: error instanceof Error ? error.message : 'Failed to fetch payment stats',
+        paymentStatsLoading: false,
+      });
+    }
+  },
+
   // Clear errors
   clearDashboardError: () => set({ dashboardError: null }),
   clearUsersError: () => set({ usersError: null }),
@@ -503,4 +633,7 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
   clearPackagesError: () => set({ packagesError: null }),
   clearSubscriptionsError: () => set({ subscriptionsError: null }),
   clearProfilesError: () => set({ profilesError: null }),
+  clearPaymentsError: () => set({ paymentsError: null }),
+  clearRevenueStatsError: () => set({ revenueStatsError: null }),
+  clearPaymentStatsError: () => set({ paymentStatsError: null }),
 }));

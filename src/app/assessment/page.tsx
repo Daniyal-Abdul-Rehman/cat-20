@@ -39,8 +39,24 @@ export default function Assessment() {
     setIsSubmitting(true);
     try {
       const result = await submitAssessment();
-      // Redirect to results page with assessment ID for public access
-      window.location.href = `/assessment/result?assessmentId=${result.assessmentId}`;
+      console.log('Assessment submission result:', result);
+      
+      // Check if we have a valid assessment ID
+      if (!result.assessmentId) {
+        console.error('No assessment ID in result:', result);
+        // Fall back to using the store's assessment ID
+        const storeAssessmentId = assessmentId;
+        if (storeAssessmentId) {
+          window.location.href = `/assessment/result?assessmentId=${storeAssessmentId}`;
+        } else {
+          // If still no ID, redirect to account page
+          console.error('No assessment ID available, redirecting to account');
+          window.location.href = '/account';
+        }
+      } else {
+        // Redirect to results page with assessment ID for public access
+        window.location.href = `/assessment/result?assessmentId=${result.assessmentId}`;
+      }
     } catch (error) {
       console.error('Failed to submit assessment:', error);
       setIsSubmitting(false);

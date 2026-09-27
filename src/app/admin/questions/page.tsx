@@ -28,7 +28,7 @@ export default function QuestionsManagement() {
       console.log('[QuestionsManagement] Auth ready, fetching questions');
       fetchQuestions();
     }
-  }, [isAuthenticated, tokens, fetchQuestions]);
+  }, [isAuthenticated, tokens]);
 
   const openEditor = (question?: AdminQuestion) => {
     setEditingQuestion(question || null);

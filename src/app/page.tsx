@@ -7,37 +7,8 @@ import { Sparkles } from "lucide-react";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-const steps = [
-  {
-    number: 1,
-    title: <>
-      Answer <span className="text-[28px] font-medium">20</span> Questions
-    </>,
-    description: "Simple questions designed to reveal your patterns."
-  },
-  {
-    number: 2,
-    title: "Discover Your Pattern",
-    description: "Receive your cognitive blueprint instantly."
-  },
-  {
-    number: 3,
-    title: "Explore Your Results",
-    description: "Understand how your mind naturally works."
-  },
-  {
-    number: 4,
-    title: "Keep Learning",
-    description: "Use insights to grow and make better decisions."
-  }
-];
-
 export default function Home() {
-  const heroRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
-  const heroImageRef = useRef<HTMLDivElement>(null);
-  const howItWorksRef = useRef<HTMLDivElement>(null);
-  const stepsRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -49,14 +20,7 @@ export default function Home() {
       );
     }
 
-    if (heroImageRef.current) {
-      gsap.fromTo(heroImageRef.current,
-        { opacity: 0, x: 30 },
-        { opacity: 1, x: 0, duration: 1, delay: 0.3, ease: "power2.out" }
-      );
-    }
-
-    // How It Works section animations
+    // CTA section animations
     const observerOptions = {
       threshold: 0.2,
       rootMargin: "0px"
@@ -65,18 +29,6 @@ export default function Home() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          if (entry.target === howItWorksRef.current) {
-            gsap.fromTo(howItWorksRef.current,
-              { opacity: 0, y: 20 },
-              { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
-            );
-          }
-          if (entry.target === stepsRef.current) {
-            gsap.fromTo(stepsRef.current.children,
-              { opacity: 0, y: 30 },
-              { opacity: 1, y: 0, duration: 0.6, stagger: 0.15, ease: "power2.out" }
-            );
-          }
           if (entry.target === ctaRef.current) {
             gsap.fromTo(ctaRef.current,
               { opacity: 0, y: 30 },
@@ -88,8 +40,6 @@ export default function Home() {
       });
     }, observerOptions);
 
-    if (howItWorksRef.current) observer.observe(howItWorksRef.current);
-    if (stepsRef.current) observer.observe(stepsRef.current);
     if (ctaRef.current) observer.observe(ctaRef.current);
 
     return () => observer.disconnect();
@@ -211,59 +161,8 @@ export default function Home() {
                     Discover Your Pattern
                     <span className="text-lg">→</span>
                   </Link>
-
-                  <Link
-                    href="#how-it-works"
-                    className="rounded-lg border-2 px-10 py-4 font-medium hover:shadow-lg hover:bg-gray-50 transition-all duration-300 flex items-center gap-2"
-                    style={{
-                      borderColor: "#D0D0D0",
-                      color: "#1a1a1a",
-                      backgroundColor: "transparent",
-                    }}
-                  >
-                    <span className="text-sm">▶</span>
-                    How It Works
-                  </Link>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* How It Works Section */}
-        <section ref={howItWorksRef} id="how-it-works" className="mt-4" >
-          <div className="max-w-6xl mx-auto px-6 lg:px-12">
-            {/* Section Header */}
-            <div className="text-center mb-12">
-              <p className="text-sm font-bold uppercase tracking-widest mb-3" style={{ color: "#C4A747" }}>
-                SIMPLE. PRIVATE. POWERFUL.
-              </p>
-              <h2 className="text-xl lg:text-4xl font-bold mb-4" style={{ color: "#1a1a1a" }}>How CAT-<span className="text-[50px] font-medium">20</span> Works</h2>
-              <div className="w-24 h-0.5 rounded-full mx-auto" style={{ backgroundColor: "#C4A747" }} />
-            </div>
-
-            {/* Steps Grid */}
-            <div ref={stepsRef} className="grid md:grid-cols-4 gap-12">
-              {steps.map((step, idx) => (
-                <div key={step.number} className="relative">
-                  {/* Dotted connection line */}
-                  {idx < steps.length - 1 && (
-                    <div className="hidden md:block absolute top-7 left-[55%] right-[-50%] h-px border-t-2 border-dashed" style={{ borderColor: "#B8943D" }} />
-                  )}
-
-                  <div className="text-center relative z-10">
-                    {/* Circle with number */}
-                    <div className="mx-auto w-14 h-14 rounded-full border-2 flex items-center justify-center mb-8 transition-all duration-300 hover:scale-110 hover:shadow-xl" style={{ borderColor: "#C4A747", backgroundColor: "#FFFFFF", boxShadow: '0 4px 16px rgba(0,0,0,0.06)' }}>
-                      <span className="text-3xl font-bold" style={{ color: "#C4A747" }}>
-                        {step.number}
-                      </span>
-                    </div>
-
-                    <h3 className="text-xl font-semibold mb-4" style={{ color: "#1a1a1a" }}>{step.title}</h3>
-                    <p className="text-base leading-7" style={{ color: "#444444" }}>{step.description}</p>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </section>
@@ -329,6 +228,7 @@ export default function Home() {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 }

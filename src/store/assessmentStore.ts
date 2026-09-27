@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { officialQuestions, AssessmentQuestion } from '@/data/assessmentQuestions';
-import { submitAssessmentPublic, ScoringResult, getActiveQuestions, Question } from '@/lib/api/scoring';
+import { submitAssessmentPublic, submitAssessment, ScoringResult, getActiveQuestions, Question } from '@/lib/api/scoring';
+import { useAuthStore } from './authStore';
 
 interface Answer {
   questionId: number; // Keep as number for UI compatibility
@@ -98,10 +99,17 @@ export const useAssessmentStore = create<AssessmentState>((set, get) => ({
         throw new Error(errorMsg);
       }
 
-      const result = await submitAssessmentPublic(answers, {
-        questionnaireVersion: '1.0',
-        scoringVersion: '1.0',
-      });
+      // Use authenticated endpoint if user is logged in, otherwise use public endpoint
+      const { isAuthenticated } = useAuthStore.getState();
+      const result = isAuthenticated 
+        ? await submitAssessment(answers, {
+            questionnaireVersion: '1.0',
+            scoringVersion: '1.0',
+          })
+        : await submitAssessmentPublic(answers, {
+            questionnaireVersion: '1.0',
+            scoringVersion: '1.0',
+          });
       
       set({ 
         isComplete: true, 

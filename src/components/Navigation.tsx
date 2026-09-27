@@ -40,21 +40,13 @@ export default function Navigation() {
             >
               Home
             </Link>
-            <Link 
-              href="/about" 
+            <Link
+              href="/about"
               className={`font-medium text-sm px-4 py-2 transition-colors ${isActive('/about') ? 'border-b-2' : ''}`}
               style={{ color: isActive('/about') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
             >
               About CAT-20
             </Link>
-            <Link 
-              href="/how-it-works" 
-              className={`font-medium text-sm px-4 py-2 transition-colors ${isActive('/how-it-works') ? 'border-b-2' : ''}`}
-              style={{ color: isActive('/how-it-works') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
-            >
-              How It Works
-            </Link>
-            
             <Link 
               href="/archetypes" 
               className={`font-medium text-sm px-4 py-2 transition-colors ${isActive('/archetypes') || pathname.startsWith('/archetypes/') ? 'border-b-2' : ''}`}
@@ -150,14 +142,6 @@ export default function Navigation() {
             >
               About CAT-20
             </Link>
-            <Link
-              href="/how-it-works"
-              className={`block px-3 py-2 rounded-md font-medium text-sm transition-colors ${isActive('/how-it-works') ? 'border-l-2' : ''}`}
-              style={{ color: isActive('/how-it-works') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
-            >
-              How It Works
-            </Link>
-
             <Link
               href="/archetypes"
               className={`block px-3 py-2 rounded-md font-medium text-sm transition-colors ${isActive('/archetypes') || pathname.startsWith('/archetypes/') ? 'border-l-2' : ''}`}
