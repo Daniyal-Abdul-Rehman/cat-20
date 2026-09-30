@@ -33,8 +33,8 @@ export default function Navigation() {
           
           {/* Desktop Navigation - Centered */}
           <div className="hidden lg:flex items-center space-x-1">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className={`font-medium text-sm px-4 py-2 transition-colors ${isActive('/') ? 'border-b-2' : ''}`}
               style={{ color: isActive('/') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
             >
@@ -47,15 +47,22 @@ export default function Navigation() {
             >
               About CAT-20
             </Link>
-            <Link 
-              href="/archetypes" 
+            <Link
+              href="/archetypes"
               className={`font-medium text-sm px-4 py-2 transition-colors ${isActive('/archetypes') || pathname.startsWith('/archetypes/') ? 'border-b-2' : ''}`}
               style={{ color: isActive('/archetypes') || pathname.startsWith('/archetypes/') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
             >
               Archetypes
             </Link>
-            <Link 
-              href="/faq" 
+            <Link
+              href="/profiles"
+              className={`font-medium text-sm px-4 py-2 transition-colors ${isActive('/profiles') ? 'border-b-2' : ''}`}
+              style={{ color: isActive('/profiles') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
+            >
+              Profiles
+            </Link>
+            <Link
+              href="/faq"
               className={`font-medium text-sm px-4 py-2 transition-colors ${isActive('/faq') ? 'border-b-2' : ''}`}
               style={{ color: isActive('/faq') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
             >
@@ -148,6 +155,13 @@ export default function Navigation() {
               style={{ color: isActive('/archetypes') || pathname.startsWith('/archetypes/') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
             >
               Archetypes
+            </Link>
+            <Link
+              href="/profiles"
+              className={`block px-3 py-2 rounded-md font-medium text-sm transition-colors ${isActive('/profiles') ? 'border-l-2' : ''}`}
+              style={{ color: isActive('/profiles') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
+            >
+              Profiles
             </Link>
             <Link
               href="/faq"

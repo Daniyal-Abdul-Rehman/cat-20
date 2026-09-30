@@ -37,12 +37,6 @@ const faqs: FAQItem[] = [
   },
   {
     id: 4,
-    category: 'Assessment',
-    question: 'Why are some profiles still unavailable?',
-    answer: <>CAT-<span className="text-[24px] font-light">20</span> is actively growing. Some profile combinations are still being developed and written. If your exact profile isn't available yet, you'll be notified, and it will be added as the framework continues to expand.</>,
-  },
-  {
-    id: 5,
     category: 'Results & Profiles',
     question: <>How is CAT-<span className="text-[32px] font-light">20</span> different from other systems?</>,
     answer: <>CAT-<span className="text-[24px] font-light">20</span> didn't start by trying to be different. It started with noticing the same kinds of patterns in people again and again—what they naturally paid attention to, what seemed to bother them more than others, what they couldn't easily let go of, and the ways they kept approaching situations. Over time, those patterns became hard to ignore. CAT-<span className="text-[24px] font-light">20</span> was created as a way to <span className="font-bold">put words to something we kept seeing but didn't always know how to explain.</span> Rather than trying to describe your entire personality, CAT-<span className="text-[24px] font-light">20</span> focuses on those recurring pulls—<span className="font-bold">what keeps grabbing you and where you naturally seem to go from there.</span></>,
@@ -216,7 +210,7 @@ export default function FAQ() {
                             >
                               {faq.id}
                             </div>
-                            
+
                             {/* Question text */}
                             <div className="flex-1 pt-2">
                               <h3 className="text-xl lg:text-2xl font-serif font-semibold leading-tight transition-colors"
@@ -246,9 +240,9 @@ export default function FAQ() {
 
                         {/* Answer */}
                         <div
-                          className="ml-16 pr-12 overflow-hidden transition-all duration-500 ease-out"
+                          className="ml-16 pr-4 lg:pr-12 overflow-hidden transition-all duration-500 ease-out"
                           style={{
-                            maxHeight: openId === faq.id ? '500px' : '0',
+                            maxHeight: openId === faq.id ? '1000px' : '0',
                             opacity: openId === faq.id ? '1' : '0',
                             marginTop: openId === faq.id ? '1.5rem' : '0'
                           }}
@@ -256,7 +250,7 @@ export default function FAQ() {
                           <div className="border-l-2 pl-6 py-2"
                             style={{ borderColor: '#C4A747' }}
                           >
-                            <div className="text-lg leading-relaxed font-serif" style={{ color: '#555555' }}>
+                            <div className="text-base lg:text-lg leading-relaxed font-serif" style={{ color: '#555555' }}>
                               {faq.answer}
                             </div>
                           </div>

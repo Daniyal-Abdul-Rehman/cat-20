@@ -28,8 +28,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/insights" className="transition-colors" style={{ color: '#666666' }}>
-                  Insights
+                <Link href="/profiles" className="transition-colors" style={{ color: '#666666' }}>
+                  Profiles
                 </Link>
               </li>
               <li>

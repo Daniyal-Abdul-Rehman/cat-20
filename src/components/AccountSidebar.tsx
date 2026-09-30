@@ -95,7 +95,7 @@ export default function AccountSidebar() {
     <aside className="fixed inset-y-0 left-0 z-30 hidden w-[272px] flex-col border-r border-[#e7e1dc] bg-[#FAF6EF] lg:flex">
       <div className="px-7 pb-8 pt-7">
         <div className="text-[60px] font-bold leading-[.82] tracking-[-.07em]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
-          CAT<span style={{ color: '#4B3B8C', fontFamily: 'var(--font-playfair), serif' }}>-20</span>
+          CAT<span className='text-[40px]' style={{ color: '#4B3B8C', fontFamily: 'var(--font-playfair), serif' }}>-20</span>
         </div>
         <div className="mt-3 text-[11px] font-semibold tracking-[-.01em]" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
           COGNITIVE ARCHETYPE TAXONOMY
@@ -124,7 +124,7 @@ export default function AccountSidebar() {
 
       <div className="mt-auto overflow-hidden px-8 pb-8 pt-10">
         <div className="mb-7 text-4xl" style={{ color: '#4B3B8C' }}>✦</div>
-        <h2 className="max-w-[170px] text-[20px] font-bold leading-[1.15]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>CAT-20 is always evolving.</h2>
+        <h2 className="max-w-[170px] text-[20px] font-bold leading-[1.15]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>CAT-<span className="text-[26px] font-medium">20</span> is always evolving.</h2>
         <p className="mt-3 max-w-[170px] text-[15px] leading-6" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>More insights, tools, and connections are on the way.</p>
         <div className="relative -ml-1 mt-3 h-[122px] w-[220px] opacity-45">
           {[0, 1, 2, 3, 4].map((ring) => (

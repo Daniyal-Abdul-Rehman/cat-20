@@ -45,17 +45,35 @@ const archetypeExploreColors: Record<string, string> = {
 
 const cognitiveProfiles = [
   { initials: 'TS', name: 'The Interpreter', combo: 'Thinker + Seeker', color: '#6B4C9A' },
-  { initials: 'BT', name: 'The Strategist', combo: 'Builder + Thinker', color: '#4A7FB5' },
-  { initials: 'SN', name: 'The Gentle Explorer', combo: 'Spark + Nurturer', color: '#C46B6B' },
-  { initials: 'KN', name: 'The Encourager', combo: 'Seeker + Nurturer', color: '#C4A747' },
-  { initials: 'BW', name: 'The Steady Builder', combo: 'Builder + Wanderer', color: '#4A7FB5' },
-  { initials: 'NT', name: 'The Reflector', combo: 'Nurturer + Thinker', color: '#C46B6B' },
-  { initials: 'KS', name: 'The Inspirer', combo: 'Spark + Seeker', color: '#6B4C9A' },
   { initials: 'TB', name: 'The Architect', combo: 'Thinker + Builder', color: '#4A7FB5' },
-  { initials: 'NW', name: 'The Haven', combo: 'Nurturer + Wanderer', color: '#C46B6B' },
-  { initials: 'KT', name: 'The Innovator', combo: 'Spark + Thinker', color: '#C4A747' },
-  { initials: 'SB', name: 'The Pathfinder', combo: 'Seeker + Builder', color: '#6B4C9A' },
+  { initials: 'TN', name: 'The Counselor', combo: 'Thinker + Nurturer', color: '#C46B6B' },
+  { initials: 'TK', name: 'The Visionary', combo: 'Thinker + Spark', color: '#6B4C9A' },
   { initials: 'TW', name: 'The Grounded', combo: 'Thinker + Wanderer', color: '#4A7FB5' },
+  { initials: 'ST', name: 'The Explorer', combo: 'Seeker + Thinker', color: '#C4A747' },
+  { initials: 'SB', name: 'The Pathfinder', combo: 'Seeker + Builder', color: '#6B4C9A' },
+  { initials: 'SN', name: 'The Gentle Guide', combo: 'Seeker + Nurturer', color: '#C46B6B' },
+  { initials: 'SK', name: 'The Catalyst', combo: 'Seeker + Spark', color: '#C4A747' },
+  { initials: 'SW', name: 'The Adventurer', combo: 'Seeker + Wanderer', color: '#6B4C9A' },
+  { initials: 'BT', name: 'The Strategist', combo: 'Builder + Thinker', color: '#4A7FB5' },
+  { initials: 'BS', name: 'The Constructor', combo: 'Builder + Seeker', color: '#4A7FB5' },
+  { initials: 'BN', name: 'The Provider', combo: 'Builder + Nurturer', color: '#C46B6B' },
+  { initials: 'BK', name: 'The Creator', combo: 'Builder + Spark', color: '#4A7FB5' },
+  { initials: 'BW', name: 'The Stabilizer', combo: 'Builder + Wanderer', color: '#4A7FB5' },
+  { initials: 'NT', name: 'The Reflector', combo: 'Nurturer + Thinker', color: '#C46B6B' },
+  { initials: 'NS', name: 'The Guide', combo: 'Nurturer + Seeker', color: '#C46B6B' },
+  { initials: 'NB', name: 'The Supporter', combo: 'Nurturer + Builder', color: '#C46B6B' },
+  { initials: 'NK', name: 'The Encourager', combo: 'Nurturer + Spark', color: '#C46B6B' },
+  { initials: 'NW', name: 'The Haven', combo: 'Nurturer + Wanderer', color: '#C46B6B' },
+  { initials: 'KT', name: 'The Innovator', combo: 'Spark + Thinker', color: '#6B4C9A' },
+  { initials: 'KS', name: 'The Inspirer', combo: 'Spark + Seeker', color: '#6B4C9A' },
+  { initials: 'KB', name: 'The Maker', combo: 'Spark + Builder', color: '#6B4C9A' },
+  { initials: 'KN', name: 'The Energizer', combo: 'Spark + Nurturer', color: '#6B4C9A' },
+  { initials: 'KW', name: 'The Voyager', combo: 'Spark + Wanderer', color: '#6B4C9A' },
+  { initials: 'WT', name: 'The Observer', combo: 'Wanderer + Thinker', color: '#C4A747' },
+  { initials: 'WS', name: 'The Seeker', combo: 'Wanderer + Seeker', color: '#C4A747' },
+  { initials: 'WB', name: 'The Traveler', combo: 'Wanderer + Builder', color: '#C4A747' },
+  { initials: 'WN', name: 'The Healer', combo: 'Wanderer + Nurturer', color: '#C4A747' },
+  { initials: 'WK', name: 'The Dreamer', combo: 'Wanderer + Spark', color: '#C4A747' },
 ];
 
 export default function Archetypes() {
@@ -265,16 +283,11 @@ export default function Archetypes() {
                   </span>
                 </div>
                 <h2 className="text-4xl lg:text-5xl font-serif mb-3" style={{ color: '#1a1a1a' }}>
-                  Countless <span className="text-sm font-normal" style={{ color: '#555' }}>unique</span>
-                  <br />
-                  cognitive profiles.
+                  30 Distinct Profiles.
                 </h2>
                 <p className="text-sm leading-relaxed mb-6" style={{ color: '#666666' }}>
-                  CAT-20 combines these archetypes in
+                  CAT-20 combines each archetype with a secondary direction, creating 30 different profiles based on which pattern leads and which one follows.
                   <br />
-                  meaningful ways to reveal how your
-                  <br />
-                  mind naturally works.
                   <br />
                   Which profile feels most like you?
                 </p>
@@ -283,7 +296,7 @@ export default function Archetypes() {
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white text-sm font-semibold hover:opacity-90 transition-opacity"
                   style={{ backgroundColor: '#4B3B8C' }}
                 >
-                  View All 20 Profiles
+                  View All 30 Profiles
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
@@ -291,9 +304,9 @@ export default function Archetypes() {
               </div>
 
               {/* Right - Profile cards carousel */}
-              <div className="lg:w-3/5 relative">
+              <div className="lg:w-3/5 relative overflow-hidden">
                 <div className="relative overflow-hidden">
-                  <div 
+                  <div
                     className="flex transition-transform duration-500 ease-in-out"
                     style={{ transform: `translateX(-${currentIndex * (100 / cardsPerView)}%)` }}
                   >

@@ -25,7 +25,7 @@ export default function AccountHeader() {
           {/* Logo - Left */}
           <div className="flex items-center flex-shrink-0">
             <Link href="/" className="flex flex-col">
-              <span className="text-4xl font-bold" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>CAT-<span className=" font-bold" style={{ color: '#4B3B8C', fontFamily: 'var(--font-playfair), serif' }}>20</span></span>
+              <span className="text-4xl font-bold" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>CAT-<span className=" font-bold text-[50px]" style={{ color: '#4B3B8C', fontFamily: 'var(--font-playfair), serif' }}>20</span></span>
               <span className="text-xs" style={{ color: '#666666', letterSpacing: '0.05em', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>COGNITIVE ARCHETYPE TAXONOMY</span>
             </Link>
           </div>

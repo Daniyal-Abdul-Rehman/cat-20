@@ -111,3 +111,24 @@ export const authApi = {
   generateShareToken: () => 
     apiRequest<{ shareToken: string }>('/auth/generate-share-token', { method: 'POST' }),
 };
+
+// Assessment/Scoring API
+export const assessmentApi = {
+  getUserHistory: () => 
+    apiRequest<any[]>('/assessments/user/history', { method: 'GET' }),
+  getLatestAssessment: () => 
+    apiRequest<any>('/assessments/user/latest', { method: 'GET' }),
+  getAssessmentResult: (id: string) => 
+    apiRequest<any>(`/assessments/${id}/result`, { method: 'GET' }),
+  compareAssessments: (assessmentId1: string, assessmentId2: string) => 
+    apiRequest<any>('/assessments/compare', { 
+      method: 'POST', 
+      body: { assessmentId1, assessmentId2 } 
+    }),
+};
+
+// Payment API
+export const paymentApi = {
+  getUserPaymentHistory: () => 
+    apiRequest<any[]>('/payment/user/history', { method: 'GET' }),
+};

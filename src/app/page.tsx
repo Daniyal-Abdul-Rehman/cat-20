@@ -99,7 +99,7 @@ export default function Home() {
                 className="flex flex-col justify-center col-span-4 lg:pl-8 pl-6 pt-16"
               >
                 {/* Label */}
-                <div className="flex items-center gap-2 mb-12">
+                <div className="flex items-center gap-2 mb-4">
                   <Sparkles
                     className="w-5 h-5"
                     style={{ color: "#C4A747" }}
@@ -111,6 +111,14 @@ export default function Home() {
                     DISCOVER YOUR PATTERN
                   </p>
                 </div>
+
+                {/* Tagline */}
+                <p
+                  className="text-lg font-semibold mb-8 tracking-wider"
+                  style={{ color: "#C4A747" }}
+                >
+                  SIMPLE. FREE. PRIVATE.
+                </p>
 
                 <p
                   className="text-xl leading-relaxed mb-8"
@@ -167,8 +175,85 @@ export default function Home() {
           </div>
         </section>
 
+        {/* How CAT-20 Works Section */}
+        <section className="py-16 lg:py-24">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2
+                className="text-4xl lg:text-5xl font-bold mb-4"
+                style={{ color: "#1a1a1a", fontFamily: "'Playfair Display', 'Georgia', serif" }}
+              >
+                How CAT-20 Works
+              </h2>
+              <div
+                className="w-20 h-1 mx-auto"
+                style={{ backgroundColor: "#C4A747" }}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+              {/* Step 01 */}
+              <div className="text-center">
+                <div
+                  className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
+                  style={{ backgroundColor: "#4B3B8C" }}
+                >
+                  <span className="text-2xl font-bold text-white">01</span>
+                </div>
+                <h3
+                  className="text-xl font-semibold mb-4"
+                  style={{ color: "#1a1a1a", fontFamily: "'Playfair Display', 'Georgia', serif" }}
+                >
+                  Take the Assessment
+                </h3>
+                <p className="text-base leading-relaxed" style={{ color: "#444444" }}>
+                  20 questions built around everyday situations. Choose what feels most natural to you — not what sounds best.
+                </p>
+              </div>
+
+              {/* Step 02 */}
+              <div className="text-center">
+                <div
+                  className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
+                  style={{ backgroundColor: "#C4A747" }}
+                >
+                  <span className="text-2xl font-bold text-white">02</span>
+                </div>
+                <h3
+                  className="text-xl font-semibold mb-4"
+                  style={{ color: "#1a1a1a", fontFamily: "'Playfair Display', 'Georgia', serif" }}
+                >
+                  See Your Pattern
+                </h3>
+                <p className="text-base leading-relaxed" style={{ color: "#444444" }}>
+                  Your answers come together to show which CAT-20 patterns stand out most strongly in the way you naturally move through situations.
+                </p>
+              </div>
+
+              {/* Step 03 */}
+              <div className="text-center">
+                <div
+                  className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
+                  style={{ backgroundColor: "#4B3B8C" }}
+                >
+                  <span className="text-2xl font-bold text-white">03</span>
+                </div>
+                <h3
+                  className="text-xl font-semibold mb-4"
+                  style={{ color: "#1a1a1a", fontFamily: "'Playfair Display', 'Georgia', serif" }}
+                >
+                  Understand Why
+                </h3>
+                <p className="text-base leading-relaxed" style={{ color: "#444444" }}>
+                  Your result doesn't stop at telling you what you do. It goes beneath the surface to explore what may be pulling you toward those patterns in the first place.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* CTA Banner Section */}
-        <section ref={ctaRef} className="py-24 lg:py-16">
+        <section ref={ctaRef} className="py-16 lg:py-16">
           <div className="max-w-6xl mx-auto px-4 lg:px-6">
             <div
               className="rounded-2xl overflow-hidden relative shadow-2xl"
@@ -178,12 +263,12 @@ export default function Home() {
               <img
                 src="/hero_footer.png"
                 alt="Person reflecting in natural environment"
-                className="absolute inset-y-0 right-0 w-1/2 h-full object-cover"
+                className="absolute inset-y-0 right-0 w-1/2 h-full object-cover hidden lg:block"
               />
 
               {/* Smooth Image Fade */}
               <div
-                className="absolute inset-y-0 right-0 w-1/2 right-0 pointer-events-none"
+                className="absolute inset-y-0 right-0 w-1/2 right-0 pointer-events-none hidden lg:block"
                 style={{
                   background:
                     "linear-gradient(to right, #FAF6EF 0%, rgba(250,246,239,0.95) 20%, rgba(250,246,239,0.5) 45%, rgba(250,246,239,0) 70%)",
@@ -191,13 +276,13 @@ export default function Home() {
               />
 
               {/* Content */}
-              <div className="relative p-6 lg:p-12 flex flex-col lg:flex-row items-center justify-between gap-16">
-                <div className="max-w-sm">
+              <div className="relative p-6 lg:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-16">
+                <div className="max-w-sm w-full">
                   <h2
                     className="text-xl lg:text-3xl font-bold"
                     style={{ color: "#1a1a1a" }}
                   >
-                    This is what you've been looking for.
+                    Ready to see your pattern?
                   </h2>
 
                   <div
@@ -209,15 +294,14 @@ export default function Home() {
                     className="text-md leading-8"
                     style={{ color: "#444444" }}
                   >
-                    Join thousands unlocking the power of self-awareness through
-                    cognitive pattern recognition.
+                    20 questions. Your CAT-20 profile starts here.
                   </p>
                 </div>
 
                 {/* Right CTA Button */}
                 <Link
                   href="/assessment"
-                  className="rounded-lg absolute right-6 bottom-6 px-12 py-4 font-semibold hover:scale-105 transition-transform duration-300 flex items-center gap-2 text-white whitespace-nowrap shadow-lg text-lg"
+                  className="rounded-lg px-12 py-4 font-semibold hover:scale-105 transition-transform duration-300 flex items-center gap-2 text-white whitespace-nowrap shadow-lg text-lg lg:absolute lg:right-6 lg:bottom-6"
                   style={{ backgroundColor: "#4B3B8C" }}
                 >
                   Discover Your Pattern

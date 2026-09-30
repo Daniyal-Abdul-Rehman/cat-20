@@ -49,7 +49,7 @@ export default function AdminSidebar() {
             <span className="text-white font-bold text-lg">C</span>
           </div>
           <div>
-            <h1 className="text-xl font-bold" style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}>CAT-20</h1>
+            <h1 className="text-xl font-bold" style={{ color: '#1a1a1a', fontFamily: "'Playfair Display', 'Georgia', serif" }}>CAT-<span className="text-[26px]">20</span></h1>
             <p className="text-xs" style={{ color: '#666666' }}>Admin Panel</p>
           </div>
         </Link>
