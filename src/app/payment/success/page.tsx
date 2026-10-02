@@ -49,7 +49,7 @@ export default function PaymentSuccess() {
   const updateSubscriptionStatus = async (session_id: string) => {
     setIsUpdating(true);
     setUpdateError(null);
-    
+
     try {
       const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
       const token = tokens?.access?.token;
@@ -57,6 +57,10 @@ export default function PaymentSuccess() {
       if (!token) {
         throw new Error('Authentication token not found');
       }
+
+      console.log('Updating subscription with session_id:', session_id);
+      console.log('Assessment ID from localStorage:', localStorage.getItem('pending_assessment_id'));
+      console.log('Assessment ID from state:', assessmentId);
 
       const response = await fetch(`${API_BASE_URL}/payment/update-subscription`, {
         method: 'POST',
@@ -67,20 +71,26 @@ export default function PaymentSuccess() {
         body: JSON.stringify({ sessionId: session_id }),
       });
 
+      console.log('Update subscription response status:', response.status);
+
       if (!response.ok) {
         const errorData = await response.json();
+        console.error('Update subscription error:', errorData);
         throw new Error(errorData.message || 'Failed to update subscription status');
       }
 
       // Try to get assessment ID from the response as backup
       const responseData = await response.json();
+      console.log('Update subscription response data:', responseData);
       if (responseData.assessmentId && !assessmentId) {
         setAssessmentId(responseData.assessmentId);
       }
 
       // Refresh auth state to get updated subscription tier
+      console.log('Refreshing user data...');
       await refreshUserData();
-      
+      console.log('User data refreshed. Current purchasedAssessments:', user?.purchasedAssessments);
+
       // Clean up localStorage after successful payment
       localStorage.removeItem('pending_assessment_id');
     } catch (error) {
@@ -135,25 +145,14 @@ export default function PaymentSuccess() {
             )}
 
             <div className="space-y-4">
-              {assessmentId ? (
-                <Link
-                  href={`/assessment/result?assessmentId=${assessmentId}`}
-                  className="block w-full py-4 rounded-lg font-semibold text-white transition-transform hover:scale-105"
-                  style={{ backgroundColor: '#4B3B8C' }}
-                >
-                  View Your Premium Profile
-                  <ArrowRight className="inline-block ml-2 w-5 h-5" />
-                </Link>
-              ) : (
-                <Link
-                  href="/premium"
-                  className="block w-full py-4 rounded-lg font-semibold text-white transition-transform hover:scale-105"
-                  style={{ backgroundColor: '#4B3B8C' }}
-                >
-                  View Your Premium Profile
-                  <ArrowRight className="inline-block ml-2 w-5 h-5" />
-                </Link>
-              )}
+              <Link
+                href="/premium"
+                className="block w-full py-4 rounded-lg font-semibold text-white transition-transform hover:scale-105"
+                style={{ backgroundColor: '#4B3B8C' }}
+              >
+                View Your Premium Profile
+                <ArrowRight className="inline-block ml-2 w-5 h-5" />
+              </Link>
 
               <Link
                 href="/account"

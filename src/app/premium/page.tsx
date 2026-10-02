@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation';
 import AccountHeader from '@/components/AccountHeader';
 import AccountSidebar from '@/components/AccountSidebar';
 import { useAuthStore } from '@/store/authStore';
+import { useThemeStore } from '@/store/themeStore';
 import { authApi } from '@/lib/api';
+import { parsePattern, CLUSTER_DISPLAY_NAMES } from '@/lib/clusterColors';
 
 type TabKey = 'love' | 'social' | 'career';
 
@@ -219,6 +221,7 @@ function InsightBlock({ insight, index }: { insight: Insight; index: number }) {
 export default function PremiumProfilePage() {
   const router = useRouter();
   const { isAuthenticated, user, isLoading, checkAuth, refreshUserData } = useAuthStore();
+  const { theme } = useThemeStore();
   const [activeTab, setActiveTab] = useState<TabKey>('love');
   const [hasPremiumAccess, setHasPremiumAccess] = useState(false);
   const [dynamicInsights, setDynamicInsights] = useState<Record<TabKey, Insight[]>>({
@@ -394,6 +397,9 @@ export default function PremiumProfilePage() {
   const pattern = user.assessmentResults.pattern;
   const archetype = user.assessmentResults.archetype || 'Your Pattern';
 
+  // Parse pattern to get cluster colors
+  const { primaryColor, secondaryColor, archetypeName, profileCode } = parsePattern(pattern);
+
   const handleShare = async () => {
     try {
       const response = await authApi.generateShareToken();
@@ -421,11 +427,11 @@ export default function PremiumProfilePage() {
         <div className="mx-auto max-w-[1280px] px-5 pb-10 pt-7 md:px-8 xl:px-10">
           {/* Back to Account */}
           <div className="mb-4 flex items-center justify-between">
-            <button 
-              type="button" 
-              onClick={() => router.push('/account')} 
+            <button
+              type="button"
+              onClick={() => router.push('/account')}
               className="inline-flex items-center gap-2 text-[15px] font-semibold transition-opacity hover:opacity-80"
-              style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
+              style={{ color: theme.primary, fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
             >
               <ArrowLeft size={18} />
               <span>Back to Account</span>
@@ -434,7 +440,7 @@ export default function PremiumProfilePage() {
               type="button"
               onClick={handleShare}
               className="inline-flex items-center gap-2 text-[15px] font-semibold transition-opacity hover:opacity-80"
-              style={{ color: '#C4A747', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
+              style={{ color: theme.secondary, fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
             >
               <svg width={18} height={18} viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -453,14 +459,14 @@ export default function PremiumProfilePage() {
                 type="button"
                 onClick={() => setActiveTab(tab.key)}
                 className={`relative shrink-0 py-2 text-[15px] font-semibold transition-colors ${
-                  activeTab === tab.key 
-                    ? 'text-[#4B3B8C]' 
-                    : 'text-[#666666] hover:text-[#4B3B8C]'
+                  activeTab === tab.key
+                    ? 'text-[var(--theme-primary)]'
+                    : 'text-[#666666] hover:text-[var(--theme-primary)]'
                 }`}
                 style={{ fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
               >
                 {tab.label}
-                {activeTab === tab.key && <span className="absolute -bottom-[2px] left-0 right-0 h-[2px]" style={{ backgroundColor: '#4B3B8C' }} />}
+                {activeTab === tab.key && <span className="absolute -bottom-[2px] left-0 right-0 h-[2px]" style={{ backgroundColor: theme.primary }} />}
               </button>
             ))}
           </div>
@@ -470,15 +476,15 @@ export default function PremiumProfilePage() {
             {activeTab === 'love' ? (
               <>
                 <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)] md:p-7">
-                  <p className="text-[12px] font-bold uppercase tracking-[0.2em]" style={{ color: '#C4A747', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Premium Profile</p>
+                  <p className="text-[12px] font-bold uppercase tracking-[0.2em]" style={{ color: theme.secondary, fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Premium Profile</p>
                   <h1 className="mt-3 text-[54px] font-bold leading-[0.91] tracking-[-.06em] md:text-[76px]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
                     {archetype}<br />
-                    <span style={{ color: '#4B3B8C' }}>in Love &amp; Relationships</span>
+                    <span style={{ color: theme.primary }}>in Love &amp; Relationships</span>
                   </h1>
                   <p className="mt-4 text-[30px] italic leading-none tracking-[-.04em]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
                     {pattern}
                   </p>
-                  <div className="mt-5 h-[2px] w-10" style={{ backgroundColor: '#4B3B8C' }} />
+                  <div className="mt-5 h-[2px] w-10" style={{ backgroundColor: theme.primary }} />
                 </section>
                 
                 <section aria-label="Love and relationship insights" className="space-y-5">
@@ -488,17 +494,17 @@ export default function PremiumProfilePage() {
             ) : activeTab === 'social' ? (
               <>
                 <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)] md:p-7">
-                  <p className="text-[12px] font-bold uppercase tracking-[0.2em]" style={{ color: '#C4A747', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Premium Profile</p>
+                  <p className="text-[12px] font-bold uppercase tracking-[0.2em]" style={{ color: theme.secondary, fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Premium Profile</p>
                   <h1 className="mt-3 text-[54px] font-bold leading-[0.91] tracking-[-.06em] md:text-[76px]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
                     {archetype}<br />
-                    <span style={{ color: '#4B3B8C' }}>in Social Dynamics</span>
+                    <span style={{ color: theme.primary }}>in Social Dynamics</span>
                   </h1>
                   <p className="mt-4 text-[30px] italic leading-none tracking-[-.04em]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
                     {pattern}
                   </p>
-                  <div className="mt-5 h-[2px] w-10" style={{ backgroundColor: '#4B3B8C' }} />
+                  <div className="mt-5 h-[2px] w-10" style={{ backgroundColor: theme.primary }} />
                 </section>
-                
+
                 <section aria-label="Social dynamics insights" className="space-y-5">
                   {dynamicInsights.social.map((insight, index) => <InsightBlock key={insight.number} insight={insight} index={index} />)}
                 </section>
@@ -506,15 +512,15 @@ export default function PremiumProfilePage() {
             ) : (
               <>
                 <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)] md:p-7">
-                  <p className="text-[12px] font-bold uppercase tracking-[0.2em]" style={{ color: '#C4A747', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Premium Profile</p>
+                  <p className="text-[12px] font-bold uppercase tracking-[0.2em]" style={{ color: theme.secondary, fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Premium Profile</p>
                   <h1 className="mt-3 text-[54px] font-bold leading-[0.91] tracking-[-.06em] md:text-[76px]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
                     {archetype}<br />
-                    <span style={{ color: '#4B3B8C' }}>in Career &amp; Direction</span>
+                    <span style={{ color: theme.primary }}>in Career &amp; Direction</span>
                   </h1>
                   <p className="mt-4 text-[30px] italic leading-none tracking-[-.04em]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
                     {pattern}
                   </p>
-                  <div className="mt-5 h-[2px] w-10" style={{ backgroundColor: '#4B3B8C' }} />
+                  <div className="mt-5 h-[2px] w-10" style={{ backgroundColor: theme.primary }} />
                 </section>
                 
                 <section aria-label="Career insights" className="space-y-5">

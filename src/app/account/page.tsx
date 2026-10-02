@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 import AccountHeader from '@/components/AccountHeader';
 import AccountSidebar from '@/components/AccountSidebar';
 import { useAuthStore } from '@/store/authStore';
+import { useToastStore } from '@/store/toastStore';
+import { getLatestAssessment, getUserAssessmentHistory, ScoringResult } from '@/lib/api/scoring';
 
 type IconName =
   | 'dashboard'
@@ -114,37 +116,108 @@ function ArchetypeIllustration() {
   );
 }
 
-const patternRows: { label: string; value: number; color: string; icon: IconName }[] = [
-  { label: 'Thinker', value: 34, color: '#4B3B8C', icon: 'brain' },
-  { label: 'Seeker', value: 28, color: '#C4A747', icon: 'searcher' },
-  { label: 'Nurturer', value: 22, color: '#8862c7', icon: 'heart' },
-  { label: 'Builder', value: 8, color: '#1b5dc9', icon: 'chart' },
-  { label: 'Spark', value: 15, color: '#efad10', icon: 'spark' },
-  { label: 'Wanderer', value: 3, color: '#11978c', icon: 'leaf' },
-];
+const CLUSTER_COLORS: Record<string, string> = {
+  thinker: '#3712E8',  // Deep Purple
+  seeker: '#F59A00',   // Orange
+  builder: '#1498E8',  // Blue
+  nurturer: '#E90A82', // Pink/Magenta
+  spark: '#FF3038',   // Red
+  wanderer: '#10A8A3', // Teal
+};
 
-function PatternCard() {
+const CLUSTER_DISPLAY_NAMES: Record<string, string> = {
+  thinker: 'Thinker',
+  seeker: 'Seeker',
+  builder: 'Builder',
+  nurturer: 'Nurturer',
+  spark: 'Spark',
+  wanderer: 'Wanderer',
+};
+
+const CLUSTER_CODES: Record<string, string> = {
+  thinker: 'T',
+  seeker: 'S',
+  builder: 'B',
+  nurturer: 'N',
+  spark: 'K',
+  wanderer: 'W',
+};
+
+const ARCHETYPE_NAMES: Record<string, string> = {
+  'TS': 'Interpreter',
+  'TB': 'Architect',
+  'TN': 'Quiet Interpreter',
+  'TK': 'Wildcard',
+  'TW': 'Grounded Thinker',
+  'ST': 'Explorer',
+  'SB': 'Pathfinder',
+  'SN': 'Gentle Explorer',
+  'SK': 'Adventure',
+  'SW': 'Wanderer',
+  'BT': 'Strategist',
+  'BS': 'Vision Builder',
+  'BN': 'Caretaker',
+  'BK': 'Creative Builder',
+  'BW': 'Steady Builder',
+  'NT': 'Reflector',
+  'NS': 'Heart Listener',
+  'NB': 'Guardian',
+  'NK': 'Heartlight',
+  'NW': 'Haven',
+  'KT': 'Innovator',
+  'KS': 'Inspirer',
+  'KB': 'Initiator',
+  'KN': 'Encourager',
+  'KW': 'Adventurer',
+  'WT': 'Observer',
+  'WS': 'Pilgrim',
+  'WB': 'Settler',
+  'WN': 'Listener',
+  'WK': 'Nomad',
+};
+
+const CLUSTER_ICONS: Record<string, IconName> = {
+  thinker: 'brain',
+  seeker: 'searcher',
+  builder: 'chart',
+  nurturer: 'heart',
+  spark: 'spark',
+  wanderer: 'leaf',
+};
+
+function getPatternRows(percentages: Record<string, number>): { label: string; value: number; color: string; icon: IconName }[] {
+  return Object.entries(percentages).map(([cluster, value]) => ({
+    label: CLUSTER_DISPLAY_NAMES[cluster] || cluster,
+    value: Math.round(value),
+    color: CLUSTER_COLORS[cluster] || '#4B3B8C',
+    icon: CLUSTER_ICONS[cluster] || 'brain',
+  })).sort((a, b) => b.value - a.value);
+}
+
+function PatternCard({ percentages }: { percentages: Record<string, number> }) {
+  const patternRows = getPatternRows(percentages);
+
   return (
-    <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)] md:p-7" aria-labelledby="pattern-heading">
-      <div className="flex items-center justify-between gap-4">
-        <h2 id="pattern-heading" className="text-[17px] font-bold tracking-[-.02em]" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>YOUR CAT-20 PATTERN</h2>
-        <Link href="/about#cat-20-pattern" className="flex items-center gap-2 text-[14px] hover:opacity-80" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-          What&apos;s This? <Icon name="info" size={19} />
+    <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-4 sm:p-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)] md:p-7" aria-labelledby="pattern-heading">
+      <div className="flex items-center justify-between gap-3 sm:gap-4">
+        <h2 id="pattern-heading" className="text-[15px] sm:text-[17px] font-bold tracking-[-.02em]" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>YOUR CAT-20 PATTERN</h2>
+        <Link href="/about#cat-20-pattern" className="flex items-center gap-2 text-[12px] sm:text-[14px] hover:opacity-80" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+          What&apos;s This? <Icon name="info" size={17} />
         </Link>
       </div>
 
-      <div className="mt-6 space-y-5">
+      <div className="mt-4 sm:mt-6 space-y-4 sm:space-y-5">
         {patternRows.map((row) => (
-          <div key={row.label} className="flex items-center gap-3">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-white" style={{ backgroundColor: row.color }}>
-              <Icon name={row.icon} size={25} strokeWidth={1.6} />
+          <div key={row.label} className="flex items-center gap-2 sm:gap-3">
+            <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-full text-white" style={{ backgroundColor: row.color }}>
+              <Icon name={row.icon} size={22} strokeWidth={1.6} />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-[16px] font-semibold" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>{row.label}</span>
-                <span className="text-[25px] font-bold tracking-[-.04em]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>{row.value}%</span>
+              <div className="flex items-center justify-between gap-2 sm:gap-3">
+                <span className="text-[14px] sm:text-[16px] font-semibold" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>{row.label}</span>
+                <span className="text-[20px] sm:text-[25px] font-bold tracking-[-.04em]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>{row.value}%</span>
               </div>
-              <div className="mt-1.5 h-[7px] overflow-hidden rounded-full bg-[#e8e5e5]">
+              <div className="mt-1.5 h-[6px] sm:h-[7px] overflow-hidden rounded-full bg-[#e8e5e5]">
                 <div className="h-full rounded-full" style={{ width: `${Math.min(row.value * 2.3, 100)}%`, backgroundColor: row.color }} />
               </div>
             </div>
@@ -152,9 +225,9 @@ function PatternCard() {
         ))}
       </div>
 
-      <div className="mt-7 border-t border-[#e7e2df] pt-5 text-center">
-        <Link href="/profile#breakdown" className="inline-flex items-center gap-4 text-[15px] font-semibold hover:opacity-80" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-          View Full Breakdown <Icon name="arrow-right" size={22} />
+      <div className="mt-5 sm:mt-7 border-t border-[#e7e2df] pt-4 sm:pt-5 text-center">
+        <Link href="/profile#breakdown" className="inline-flex items-center gap-3 sm:gap-4 text-[13px] sm:text-[15px] font-semibold hover:opacity-80" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+          View Full Breakdown <Icon name="arrow-right" size={20} />
         </Link>
       </div>
     </section>
@@ -163,8 +236,8 @@ function PatternCard() {
 
 function ExplorerBanner() {
   return (
-    <section className="relative flex flex-col gap-6 overflow-hidden rounded-[18px] border border-[#e5dfe7] bg-[#f3eff6] px-6 py-5 md:flex-row md:items-center md:px-7" aria-label="Continue exploring">
-      <div className="relative z-10 flex h-[102px] w-[102px] shrink-0 items-center justify-center rounded-full border border-[#e0d5e8] bg-[#eee7f3] shadow-inner" style={{ color: '#4B3B8C' }}>
+    <section className="relative flex flex-col gap-6 overflow-hidden rounded-[18px] border border-[#e5dfe7] bg-[#f3eff6] px-4 py-4 sm:px-6 sm:py-5 md:flex-row md:items-center md:px-7" aria-label="Continue exploring">
+      <div className="relative z-10 flex h-[80px] w-[80px] sm:h-[102px] sm:w-[102px] shrink-0 items-center justify-center rounded-full border border-[#e0d5e8] bg-[#eee7f3] shadow-inner" style={{ color: '#4B3B8C' }}>
         <Icon name="compass" size={65} strokeWidth={1.15} />
       </div>
       <div className="relative z-10 flex-1">
@@ -179,19 +252,35 @@ function ExplorerBanner() {
   );
 }
 
-function LatestTest() {
+function LatestTest({ latestAssessment }: { latestAssessment: ScoringResult | null }) {
+  if (!latestAssessment) {
+    return null;
+  }
+
+  const primaryCluster = latestAssessment.primaryRoles[0];
+  const secondaryCluster = latestAssessment.secondaryRoles[0] || latestAssessment.primaryRoles[1];
+  const primaryCode = CLUSTER_CODES[primaryCluster];
+  const secondaryCode = secondaryCluster ? CLUSTER_CODES[secondaryCluster] : '';
+  const profileCode = secondaryCluster ? `${primaryCode}${secondaryCode}` : primaryCode;
+  const archetypeName = ARCHETYPE_NAMES[profileCode] || 'Your Pattern';
+  const completedDate = new Date(latestAssessment.calculatedAt).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  });
+
   return (
-    <section className="flex flex-col gap-5 rounded-[18px] border border-[#e5e0dc] bg-[#fdfbf8] px-6 py-5 md:flex-row md:items-center md:justify-between md:px-7">
+    <section className="flex flex-col gap-5 rounded-[18px] border border-[#e5e0dc] bg-[#fdfbf8] px-4 py-4 sm:px-6 sm:py-5 md:flex-row md:items-center md:justify-between md:px-7">
       <div className="flex items-center gap-4">
         <div className="-mt-8 text-3xl" style={{ color: '#4B3B8C' }}>✦</div>
         <div className="flex h-[58px] w-[58px] items-center justify-center rounded-full bg-[#f1ecf6]" style={{ color: '#4B3B8C' }}><Icon name="brain" size={32} strokeWidth={1.45} /></div>
         <div>
           <div className="text-[15px] font-bold uppercase tracking-[-.01em]" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>YOUR LATEST TEST</div>
-          <div className="mt-2 flex flex-wrap items-center gap-2 text-[14px]" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}><Icon name="calendar" size={17} /> Completed on May 17, 2026</div>
-          <div className="mt-2 inline-flex rounded-full bg-[#efebf2] px-4 py-1 text-[14px] font-semibold" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Primary: The Interpreter (TS)</div>
+          <div className="mt-2 flex flex-wrap items-center gap-2 text-[14px]" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}><Icon name="calendar" size={17} /> Completed on {completedDate}</div>
+          <div className="mt-2 inline-flex rounded-full bg-[#efebf2] px-4 py-1 text-[14px] font-semibold" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Primary: {archetypeName} ({profileCode})</div>
         </div>
       </div>
-      <Link href="/results" className="inline-flex items-center gap-4 whitespace-nowrap text-[15px] font-semibold hover:opacity-80 md:mr-2" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>View Full Results <Icon name="arrow-right" size={22} /></Link>
+      <Link href={`/assessment/result?assessmentId=${latestAssessment.assessmentId}`} className="inline-flex items-center gap-4 whitespace-nowrap text-[15px] font-semibold hover:opacity-80 md:mr-2" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>View Full Results <Icon name="arrow-right" size={22} /></Link>
     </section>
   );
 }
@@ -199,19 +288,19 @@ function LatestTest() {
 function PremiumUnlockCard({ hasPremium }: { hasPremium: boolean }) {
   if (hasPremium) {
     return (
-      <section className="rounded-[18px] border border-[#C4A747] px-6 py-5 md:px-7" style={{ backgroundColor: '#fef9e7' }}>
-        <div className="flex items-center gap-4">
-          <div className="flex h-[58px] w-[58px] items-center justify-center rounded-full text-white" style={{ backgroundColor: '#C4A747' }}>
-            <Icon name="crown" size={32} strokeWidth={1.45} />
+      <section className="rounded-[18px] border border-[#C4A747] px-4 py-4 sm:px-6 sm:py-5 md:px-7" style={{ backgroundColor: '#fef9e7' }}>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="flex h-[50px] w-[50px] sm:h-[58px] sm:w-[58px] items-center justify-center rounded-full text-white shrink-0" style={{ backgroundColor: '#C4A747' }}>
+            <Icon name="crown" size={30} strokeWidth={1.45} />
           </div>
-          <div className="flex-1">
-            <div className="text-[15px] font-bold uppercase tracking-[-.01em]" style={{ color: '#C4A747', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>PREMIUM ACCESS</div>
-            <div className="mt-2 text-[14px]" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+          <div className="flex-1 min-w-0">
+            <div className="text-[14px] sm:text-[15px] font-bold uppercase tracking-[-.01em]" style={{ color: '#C4A747', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>PREMIUM ACCESS</div>
+            <div className="mt-2 text-[13px] sm:text-[14px]" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
               You have full access to premium insights including Love & Relationships, Career & Direction, and Social & Communication.
             </div>
           </div>
-          <Link href="/premium" className="inline-flex items-center gap-4 whitespace-nowrap rounded-[7px] px-5 py-3 text-[15px] font-semibold text-white shadow-[0_4px_12px_rgba(196,167,71,.3)] transition hover:opacity-90 md:mr-2" style={{ backgroundColor: '#C4A747', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-            View Premium Profile <Icon name="arrow-right" size={22} />
+          <Link href="/premium" className="inline-flex items-center justify-center gap-3 sm:gap-4 whitespace-nowrap rounded-[7px] px-4 sm:px-5 py-2.5 sm:py-3 text-[14px] sm:text-[15px] font-semibold text-white shadow-[0_4px_12px_rgba(196,167,71,.3)] transition hover:opacity-90 w-full sm:w-auto md:mr-2" style={{ backgroundColor: '#C4A747', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+            View Premium Profile <Icon name="arrow-right" size={20} />
           </Link>
         </div>
       </section>
@@ -219,19 +308,19 @@ function PremiumUnlockCard({ hasPremium }: { hasPremium: boolean }) {
   }
 
   return (
-    <section className="rounded-[18px] border border-[#e5dfe7] px-6 py-5 md:px-7" style={{ backgroundColor: '#f3eff6' }}>
-      <div className="flex items-center gap-4">
-        <div className="flex h-[58px] w-[58px] items-center justify-center rounded-full text-white" style={{ backgroundColor: '#4B3B8C' }}>
-          <Icon name="star" size={32} strokeWidth={1.45} />
+    <section className="rounded-[18px] border border-[#e5dfe7] px-4 py-4 sm:px-6 sm:py-5 md:px-7" style={{ backgroundColor: '#f3eff6' }}>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <div className="flex h-[50px] w-[50px] sm:h-[58px] sm:w-[58px] items-center justify-center rounded-full text-white shrink-0" style={{ backgroundColor: '#4B3B8C' }}>
+          <Icon name="star" size={30} strokeWidth={1.45} />
         </div>
-        <div className="flex-1">
-          <div className="text-[15px] font-bold uppercase tracking-[-.01em]" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>UNLOCK PREMIUM PROFILE</div>
-          <div className="mt-2 text-[14px]" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+        <div className="flex-1 min-w-0">
+          <div className="text-[14px] sm:text-[15px] font-bold uppercase tracking-[-.01em]" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>UNLOCK PREMIUM PROFILE</div>
+          <div className="mt-2 text-[13px] sm:text-[14px]" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
             Get detailed insights about your relationships, career direction, and social communication style.
           </div>
         </div>
-        <Link href="/payment" className="inline-flex items-center gap-4 whitespace-nowrap rounded-[7px] px-5 py-3 text-[15px] font-semibold text-white shadow-[0_4px_12px_rgba(75,59,140,.3)] transition hover:opacity-90 md:mr-2" style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-          Unlock for $10 <Icon name="arrow-right" size={22} />
+        <Link href="/payment" className="inline-flex items-center justify-center gap-3 sm:gap-4 whitespace-nowrap rounded-[7px] px-4 sm:px-5 py-2.5 sm:py-3 text-[14px] sm:text-[15px] font-semibold text-white shadow-[0_4px_12px_rgba(75,59,140,.3)] transition hover:opacity-90 w-full sm:w-auto md:mr-2" style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+          Unlock for $10 <Icon name="arrow-right" size={20} />
         </Link>
       </div>
     </section>
@@ -322,7 +411,9 @@ function MotivationalAssessmentPage() {
               
               <div className="relative z-10 text-center">
                 <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full" style={{ backgroundColor: '#f1ecf6' }}>
-                  <Icon name="compass" size={48} strokeWidth={1.2} style={{ color: '#4B3B8C' }} />
+                  <div style={{ color: '#4B3B8C' }}>
+                    <Icon name="compass" size={48} strokeWidth={1.2} />
+                  </div>
                 </div>
                 
                 <h3 className="text-2xl font-bold mb-3" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
@@ -371,12 +462,23 @@ function MotivationalAssessmentPage() {
 export default function Account() {
   const router = useRouter();
   const { isAuthenticated, isLoading, user, checkAuth, refreshUserData } = useAuthStore();
+  const { addToast } = useToastStore();
   const [hasTakenAssessment, setHasTakenAssessment] = useState(false);
+  const [latestAssessment, setLatestAssessment] = useState<ScoringResult | null>(null);
+  const [isLoadingAssessment, setIsLoadingAssessment] = useState(true);
   
   // Check if user has premium access
-  // Temporary override: if user has assessment results, treat as premium for testing
   const hasAssessmentResults = Boolean(user?.assessmentResults?.pattern && user?.assessmentResults?.scores);
   const hasPremiumAccess = Boolean(user?.subscriptionTier === 'premium' || hasAssessmentResults);
+  
+  // Show login success toast if user just signed in
+  useEffect(() => {
+    const loginSuccess = localStorage.getItem('login_success');
+    if (loginSuccess === 'true') {
+      addToast('success', 'Login successful!');
+      localStorage.removeItem('login_success');
+    }
+  }, [addToast]);
   
   // Debug logging
   useEffect(() => {
@@ -388,36 +490,30 @@ export default function Account() {
     });
   }, [user?.subscriptionTier, hasAssessmentResults, hasPremiumAccess, user]);
   
-  // Force refresh subscription status if it's not premium but user expects it to be
-  const forceRefreshSubscription = async () => {
-    try {
-      console.log('Force refreshing subscription status...');
-      await refreshUserData();
-      console.log('Subscription status refreshed');
-    } catch (error) {
-      console.error('Failed to refresh subscription status:', error);
-    }
-  };
-
   // Check auth immediately on component mount
   useEffect(() => {
     console.log('Account page mounted, checking auth...');
     checkAuth();
   }, []);
 
-  // Check if user has taken assessment from user data
+  // Fetch latest assessment data from backend
   useEffect(() => {
-    const hasResults = user?.assessmentResults && 
-      (user.assessmentResults.archetype || user.assessmentResults.pattern || user.assessmentResults.scores);
-    
-    // Temporary override: if user is authenticated, assume they've taken assessment
-    // This is a workaround until the assessment data is properly linked
-    const overrideAssessment = isAuthenticated && user?.email; // Any authenticated user with email
-    setHasTakenAssessment(hasResults || overrideAssessment);
-    
-    console.log('Assessment results check:', hasResults, user?.assessmentResults);
-    console.log('Override assessment:', overrideAssessment);
-  }, [user?.assessmentResults, isAuthenticated, user?.email]);
+    if (isAuthenticated) {
+      setIsLoadingAssessment(true);
+      getLatestAssessment()
+        .then((data) => {
+          console.log('Latest assessment fetched:', data);
+          setLatestAssessment(data);
+          setHasTakenAssessment(true);
+          setIsLoadingAssessment(false);
+        })
+        .catch((error) => {
+          console.error('Failed to fetch latest assessment:', error);
+          setHasTakenAssessment(false);
+          setIsLoadingAssessment(false);
+        });
+    }
+  }, [isAuthenticated]);
 
   // Refresh user data from backend to get latest assessment results and subscription status
   useEffect(() => {
@@ -464,62 +560,86 @@ export default function Account() {
     );
   }
 
+  // Show loading state while fetching assessment
+  if (isLoadingAssessment) {
+    return (
+      <div className="min-h-screen bg-[#FAF6EF] flex items-center justify-center" style={{ color: '#1a1a1a' }}>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto" style={{ borderColor: '#4B3B8C' }}></div>
+          <p className="mt-4" style={{ fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Loading your assessment data...</p>
+        </div>
+      </div>
+    );
+  }
+
   // Show motivational page if user hasn't taken assessment
-  if (!hasTakenAssessment) {
+  if (!hasTakenAssessment || !latestAssessment) {
     return <MotivationalAssessmentPage />;
   }
+
+  // Get archetype data from latest assessment
+  const primaryCluster = latestAssessment.primaryRoles[0];
+  const secondaryCluster = latestAssessment.secondaryRoles[0] || latestAssessment.primaryRoles[1];
+  const primaryCode = CLUSTER_CODES[primaryCluster];
+  const secondaryCode = secondaryCluster ? CLUSTER_CODES[secondaryCluster] : '';
+  const profileCode = secondaryCluster ? `${primaryCode}${secondaryCode}` : primaryCode;
+  const archetypeName = ARCHETYPE_NAMES[profileCode] || 'Your Pattern';
+  const primaryColor = CLUSTER_COLORS[primaryCluster];
+  const secondaryColor = secondaryCluster ? CLUSTER_COLORS[secondaryCluster] : primaryColor;
+  const primaryDisplayName = CLUSTER_DISPLAY_NAMES[primaryCluster];
+  const secondaryDisplayName = secondaryCluster ? CLUSTER_DISPLAY_NAMES[secondaryCluster] : '';
 
   return (
     <div className="min-h-screen bg-[#FAF6EF]" style={{ color: '#1a1a1a' }}>
       <AccountHeader />
       <AccountSidebar />
 
-      <main className="lg:pl-[272px]">
-        <div className="mx-auto max-w-[1280px] px-5 pb-10 pt-7 md:px-8 xl:px-10">
-          <header className="mb-6 flex items-start justify-between gap-5">
+      <main className="md:pl-[272px]">
+        <div className="mx-auto max-w-[1280px] px-4 pb-10 pt-7 sm:px-5 md:px-8 xl:px-10">
+          <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-5">
             <div>
-              <h1 className="text-[37px] font-bold leading-tight tracking-[-.045em] md:text-[43px]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>Welcome back, {user?.name || 'User'}. <span className="text-[33px]" style={{ fontFamily: 'sans-serif' }}>👋</span></h1>
-              <p className="mt-1 text-[17px] md:text-[19px]" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Here&apos;s your pattern. Keep exploring.</p>
+              <h1 className="text-[28px] font-bold leading-tight tracking-[-.045em] sm:text-[37px] md:text-[43px]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>Welcome back, {user?.name || 'User'}. <span className="text-[24px] sm:text-[33px]" style={{ fontFamily: 'sans-serif' }}>👋</span></h1>
+              <p className="mt-1 text-[15px] sm:text-[17px] md:text-[19px]" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Here&apos;s your pattern. Keep exploring.</p>
             </div>
-            <div className="flex items-center gap-3 pt-1 lg:gap-7 lg:pt-2" style={{ color: '#1a1a1a' }}>
-              <Link href="/assessment" className="inline-flex items-center gap-2 rounded-[7px] px-4 py-3 text-sm font-semibold text-white shadow-[0_4px_12px_rgba(84,32,165,.2)] transition hover:opacity-90 md:px-5" style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-                <Icon name="brain" size={18} />
+            <div className="flex items-center gap-2 pt-1 lg:gap-7 lg:pt-2" style={{ color: '#1a1a1a' }}>
+              <Link href="/assessment" className="inline-flex items-center gap-2 rounded-[7px] px-3 py-2.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(84,32,165,.2)] transition hover:opacity-90 sm:px-4 sm:py-3 sm:text-sm md:px-5" style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                <Icon name="brain" size={16} />
                 <span className="hidden sm:inline">Take new assessment</span>
                 <span className="sm:hidden">New assessment</span>
               </Link>
-              <Link href="/notifications" aria-label="Notifications" className="transition-colors hover:opacity-80"><Icon name="bell" size={30} /></Link>
+              <Link href="/notifications" aria-label="Notifications" className="transition-colors hover:opacity-80"><Icon name="bell" size={26} /></Link>
               <div className="hidden h-[54px] w-[54px] items-center justify-center rounded-full font-serif text-[27px] font-bold text-white lg:flex" style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-playfair), serif' }}>{user?.name?.charAt(0).toUpperCase() || 'U'}</div>
             </div>
           </header>
 
           <div className="grid gap-5 xl:grid-cols-[minmax(0,1.25fr)_minmax(390px,.95fr)]">
-            <section className="relative overflow-hidden rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)] md:p-7" aria-labelledby="archetype-heading">
-              <div className="relative z-10 flex items-center gap-3 text-[17px] font-bold tracking-[-.02em]" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}><Icon name="brain" size={31} strokeWidth={1.35} /> YOUR COGNITIVE ARCHETYPE</div>
-              <div className="mt-7 grid items-center md:grid-cols-[minmax(0,1fr)_185px] md:gap-1">
+            <section className="relative overflow-hidden rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-4 sm:p-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)] md:p-7" aria-labelledby="archetype-heading">
+              <div className="relative z-10 flex items-center gap-2 sm:gap-3 text-[15px] sm:text-[17px] font-bold tracking-[-.02em]" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}><Icon name="brain" size={28} strokeWidth={1.35} /> YOUR COGNITIVE ARCHETYPE</div>
+              <div className="mt-5 sm:mt-7 grid items-center md:grid-cols-[minmax(0,1fr)_185px] md:gap-1">
                 <div className="relative z-10">
-                  <h2 id="archetype-heading" className="text-[67px] font-bold leading-[.88] tracking-[-.06em] md:text-[76px]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>The<br />Interpreter <span className="text-[22px] font-semibold tracking-[-.04em] md:text-[24px]" style={{ fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>(TS)</span></h2>
-                  <p className="mt-5 text-[30px] italic leading-none tracking-[-.04em]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}><span>Thinker</span><span className="px-2" style={{ color: '#4B3B8C' }}>×</span><span style={{ color: '#C4A747' }}>Seeker</span></p>
-                  <div className="mt-5 h-[2px] w-10" style={{ backgroundColor: '#4B3B8C' }} />
-                  <p className="mt-4 max-w-[390px] text-[15px] leading-[1.58] md:text-[16px]" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>You naturally look for understanding before moving on, often thinking things through until they finally make sense. But even once you&apos;ve found clarity, your curiosity rarely stays still for long. Looking beyond the obvious and exploring what else might be true simply comes <strong className="font-bold" style={{ color: '#4B3B8C' }}>naturally to you.</strong></p>
-                  <Link href="/profile" className="mt-5 inline-flex items-center gap-7 rounded-[7px] px-5 py-3 text-[15px] font-semibold text-white shadow-[0_4px_12px_rgba(84,32,165,.2)] transition hover:opacity-90" style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Explore Your Profile <Icon name="arrow-right" size={23} /></Link>
+                  <h2 id="archetype-heading" className="text-[42px] font-bold leading-[.88] tracking-[-.06em] sm:text-[55px] md:text-[67px] lg:text-[76px]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>The<br />{archetypeName} <span className="text-[16px] font-semibold tracking-[-.04em] sm:text-[20px] md:text-[22px] lg:text-[24px]" style={{ fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>({profileCode})</span></h2>
+                  <p className="mt-4 text-[20px] italic leading-none tracking-[-.04em] sm:text-[26px] md:text-[30px]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}><span style={{ color: primaryColor }}>{primaryDisplayName}</span><span className="px-1.5 sm:px-2" style={{ color: '#4B3B8C' }}>&times;</span><span style={{ color: secondaryColor }}>{secondaryDisplayName}</span></p>
+                  <div className="mt-4 sm:mt-5 h-[2px] w-8 sm:w-10" style={{ backgroundColor: primaryColor }} />
+                  <p className="mt-3 sm:mt-4 max-w-[390px] text-[13px] leading-[1.58] sm:text-[15px] md:text-[16px]" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>You naturally look for understanding before moving on, often thinking things through until they finally make sense. But even once you&apos;ve found clarity, your curiosity rarely stays still for long. Looking beyond the obvious and exploring what else might be true simply comes <strong className="font-bold" style={{ color: primaryColor }}>naturally to you.</strong></p>
+                  <Link href={`/assessment/result?assessmentId=${latestAssessment.assessmentId}`} className="mt-4 sm:mt-5 inline-flex items-center gap-4 sm:gap-7 rounded-[7px] px-4 py-2.5 text-[13px] font-semibold text-white shadow-[0_4px_12px_rgba(84,32,165,.2)] transition hover:opacity-90 sm:px-5 sm:py-3 sm:text-[15px]" style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Explore Your Profile <Icon name="arrow-right" size={20} /></Link>
                 </div>
-                <div className="relative z-10 mt-8 md:mt-16"><ArchetypeIllustration /></div>
+                <div className="relative z-10 mt-6 md:mt-16 flex justify-center sm:mt-8"><ArchetypeIllustration /></div>
               </div>
-              <div className="pointer-events-none absolute -right-12 top-16 h-[310px] w-[200px] opacity-60">
+              <div className="pointer-events-none absolute -right-12 top-16 h-[310px] w-[200px] opacity-60 sm:block hidden">
                 <div className="absolute inset-0 rounded-full border border-[#d8c7cb]" />
                 <div className="absolute inset-[30px] rounded-full border border-[#d8c7cb]" />
                 <div className="absolute inset-[61px] rounded-full border border-[#d8c7cb]" />
-                <div className="absolute right-[90px] top-[108px] h-3 w-3 rounded-full" style={{ backgroundColor: '#C4A747' }} />
-                <div className="absolute right-[110px] top-[230px] h-3 w-3 rounded-full" style={{ backgroundColor: '#4B3B8C' }} />
+                <div className="absolute right-[90px] top-[108px] h-3 w-3 rounded-full" style={{ backgroundColor: secondaryColor }} />
+                <div className="absolute right-[110px] top-[230px] h-3 w-3 rounded-full" style={{ backgroundColor: primaryColor }} />
               </div>
             </section>
 
-            <PatternCard />
+            <PatternCard percentages={latestAssessment.percentages} />
           </div>
 
           <div className="mt-5"><PremiumUnlockCard hasPremium={hasPremiumAccess} /></div>
           <div className="mt-5"><ExplorerBanner /></div>
-          <div className="mt-5"><LatestTest /></div>
+          <div className="mt-5"><LatestTest latestAssessment={latestAssessment} /></div>
         </div>
       </main>
     </div>

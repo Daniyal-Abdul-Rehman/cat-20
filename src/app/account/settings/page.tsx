@@ -181,26 +181,26 @@ export default function AccountSettingsPage() {
       <div className="flex">
         <AccountSidebar />
         
-        <main className="flex-1 lg:ml-[272px] p-6 lg:p-8">
+        <main className="flex-1 md:ml-[272px] p-4 sm:p-6 lg:p-8">
           <div className="max-w-5xl mx-auto">
             {/* Header */}
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold mb-2" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
+            <div className="mb-6 sm:mb-8">
+              <h1 className="text-3xl sm:text-4xl font-bold mb-2" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
                 Account Settings
               </h1>
-              <p className="text-lg" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              <p className="text-base sm:text-lg" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 Manage your account and view payment history
               </p>
             </div>
 
             {/* Account Info */}
-            <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-6 mb-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
-              <h2 className="text-xl font-bold mb-4" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto' }}>
+            <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-4 sm:p-6 mb-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
+              <h2 className="text-lg sm:text-xl font-bold mb-4" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto' }}>
                 Account Information
               </h2>
               
               <div className="space-y-4">
-                <div className="flex items-center justify-between py-3 border-b border-[#e5e0dc]">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 border-b border-[#e5e0dc] gap-2">
                   <div>
                     <div className="text-sm" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                       Name
@@ -210,19 +210,19 @@ export default function AccountSettingsPage() {
                     </div>
                   </div>
                 </div>
-                
-                <div className="flex items-center justify-between py-3 border-b border-[#e5e0dc]">
+
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 border-b border-[#e5e0dc] gap-2">
                   <div>
                     <div className="text-sm" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                       Email
                     </div>
-                    <div className="text-base font-semibold" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                    <div className="text-base font-semibold truncate" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                       {user?.email || 'Not set'}
                     </div>
                   </div>
                 </div>
-                
-                <div className="flex items-center justify-between py-3 border-b border-[#e5e0dc]">
+
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 border-b border-[#e5e0dc] gap-2">
                   <div>
                     <div className="text-sm" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                       Subscription
@@ -242,16 +242,16 @@ export default function AccountSettingsPage() {
                   {user?.subscriptionTier !== 'premium' && (
                     <button
                       onClick={() => router.push('/payment')}
-                      className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition"
+                      className="inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition w-full sm:w-auto"
                       style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                     >
                       Upgrade to Premium <Icon name="arrow-right" size={16} />
                     </button>
                   )}
                 </div>
-                
+
                 {user?.subscriptionExpiry && (
-                  <div className="flex items-center justify-between py-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 gap-2">
                     <div>
                       <div className="text-sm" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                         Subscription Expires
@@ -266,12 +266,12 @@ export default function AccountSettingsPage() {
             </section>
 
             {/* Payment History */}
-            <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto' }}>
+            <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-4 sm:p-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <h2 className="text-lg sm:text-xl font-bold" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto' }}>
                   Payment History
                 </h2>
-                <div className="text-3xl" style={{ color: '#C4A747' }}>✦</div>
+                <div className="text-2xl sm:text-3xl" style={{ color: '#C4A747' }}>✦</div>
               </div>
 
               {error && (
@@ -281,9 +281,9 @@ export default function AccountSettingsPage() {
               )}
 
               {paymentHistory.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="text-5xl mb-4" style={{ color: '#4B3B8C' }}>✦</div>
-                  <h3 className="text-xl font-bold mb-2" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
+                <div className="text-center py-8 sm:py-12">
+                  <div className="text-4xl sm:text-5xl mb-4" style={{ color: '#4B3B8C' }}>✦</div>
+                  <h3 className="text-lg sm:text-xl font-bold mb-2" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
                     No Payment History
                   </h3>
                   <p className="text-sm mb-4" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
@@ -291,7 +291,7 @@ export default function AccountSettingsPage() {
                   </p>
                   <button
                     onClick={() => router.push('/payment')}
-                    className="inline-flex items-center gap-3 rounded-lg px-6 py-3 text-white font-semibold hover:opacity-90 transition"
+                    className="inline-flex items-center justify-center gap-3 rounded-lg px-5 sm:px-6 py-3 text-white font-semibold hover:opacity-90 transition w-full sm:w-auto"
                     style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                   >
                     Upgrade to Premium <Icon name="arrow-right" size={20} />
@@ -304,13 +304,13 @@ export default function AccountSettingsPage() {
                       key={payment._id}
                       className="rounded-lg border border-[#e5e0dc] bg-white p-4"
                     >
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div className="flex items-center gap-4">
-                          <div className="flex h-12 w-12 items-center justify-center rounded-full text-white" style={{ backgroundColor: '#C4A747' }}>
+                          <div className="flex h-12 w-12 items-center justify-center rounded-full text-white shrink-0" style={{ backgroundColor: '#C4A747' }}>
                             <Icon name="crown" size={24} strokeWidth={1.5} />
                           </div>
-                          <div>
-                            <div className="flex items-center gap-2 mb-1">
+                          <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center gap-2 mb-1">
                               <span className="text-base font-semibold" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                                 Premium Assessment
                               </span>
@@ -324,7 +324,7 @@ export default function AccountSettingsPage() {
                             </div>
                           </div>
                         </div>
-                        <div className="text-right">
+                        <div className="text-right sm:text-left">
                           <div className="text-xl font-bold" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                             {formatAmount(payment.amount)}
                           </div>
@@ -342,11 +342,11 @@ export default function AccountSettingsPage() {
             </section>
 
             {/* Danger Zone */}
-            <section className="mt-6 rounded-[18px] border border-red-200 bg-red-50 p-6">
+            <section className="mt-6 rounded-[18px] border border-red-200 bg-red-50 p-4 sm:p-6">
               <h2 className="text-lg font-bold mb-4" style={{ color: '#dc2626', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 Danger Zone
               </h2>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <h3 className="text-base font-semibold mb-1" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                     Delete Account
@@ -356,7 +356,7 @@ export default function AccountSettingsPage() {
                   </p>
                 </div>
                 <button
-                  className="rounded-lg px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition"
+                  className="rounded-lg px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition w-full sm:w-auto"
                   style={{ backgroundColor: '#dc2626', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                 >
                   Delete Account

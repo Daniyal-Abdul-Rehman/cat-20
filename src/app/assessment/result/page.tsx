@@ -5,68 +5,93 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAssessmentStore } from '@/store/assessmentStore';
 import { useAuthStore } from '@/store/authStore';
 import { ScoringResult, getAssessmentResultPublic } from '@/lib/api/scoring';
+import AccountHeader from '@/components/AccountHeader';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
+import { CLUSTER_DISPLAY_NAMES, CLUSTER_CODES, CLUSTER_COLORS, ARCHETYPE_NAMES } from '@/lib/clusterColors';
 
-const CLUSTER_DISPLAY_NAMES: Record<string, string> = {
-  thinker: 'Thinker',
-  seeker: 'Seeker',
-  builder: 'Builder',
-  nurturer: 'Nurturer',
-  spark: 'Spark',
-  wanderer: 'Wanderer',
-};
-
-const CLUSTER_CODES: Record<string, string> = {
-  thinker: 'T',
-  seeker: 'S',
-  builder: 'B',
-  nurturer: 'N',
-  spark: 'K',
-  wanderer: 'W',
-};
+function SectionHeading({ icon, title, primaryColor }: { icon?: string; title: string; primaryColor?: string }) {
+  return (
+    <h2 className="mb-4 flex items-center gap-3 font-serif text-xl text-[#17164d]">
+      {icon && <span className="text-2xl" style={{ color: primaryColor || '#4f3394' }}>{icon}</span>}
+      {title}
+    </h2>
+  );
+}
 
 export default function AssessmentResult() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { scoringResult, assessmentId, isComplete } = useAssessmentStore();
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, refreshUserData, checkAuth } = useAuthStore();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [publicResult, setPublicResult] = useState<ScoringResult | null>(null);
-  
-  // Check if user has premium access
-  const hasPremiumAccess = isAuthenticated && user?.subscriptionTier === 'premium';
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   useEffect(() => {
-    // Check if assessment ID is provided in URL for public access
-    const urlAssessmentId = searchParams.get('assessmentId');
-    
-    if (urlAssessmentId && urlAssessmentId !== 'null') {
-      // Public access - fetch result using public endpoint
-      setIsLoading(true);
-      getAssessmentResultPublic(urlAssessmentId)
-        .then((result) => {
-          setPublicResult(result);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.error('Failed to fetch public result:', err);
-          setError(err instanceof Error ? err.message : 'Failed to load results');
-          setIsLoading(false);
-        });
-    } else if (isAuthenticated && user?.assessmentResults) {
-      // User is authenticated and has assessment results - redirect to account page
-      console.log('User is authenticated with assessment results, redirecting to account');
-      router.push('/account');
-    } else if (isComplete && scoringResult) {
-      // Use the store result if assessment is complete
-      console.log('Using store result for completed assessment');
-      setIsLoading(false);
-    } else {
-      // If assessment is not complete and no valid public ID, redirect to assessment page
-      console.log('No valid assessment data, redirecting to assessment');
-      router.push('/assessment');
-    }
-  }, [isComplete, scoringResult, router, searchParams, isAuthenticated, user?.assessmentResults]);
+    if (hasLoaded) return;
+
+    const loadPage = async () => {
+      setHasLoaded(true);
+
+      // Refresh user data if authenticated to get latest subscription status
+      if (isAuthenticated) {
+        try {
+          await refreshUserData();
+
+          // Check if there's a guest assessment to assign
+          const guestAssessmentId = localStorage.getItem('guest_assessment_id');
+          if (guestAssessmentId) {
+            try {
+              const { assessmentApi } = await import('@/lib/api');
+              await assessmentApi.assignAssessmentToUser(guestAssessmentId);
+              console.log('Guest assessment assigned to user');
+              localStorage.removeItem('guest_assessment_id');
+            } catch (err) {
+              console.error('Failed to assign guest assessment:', err);
+            }
+          }
+        } catch (err) {
+          console.error('Failed to refresh user data:', err);
+        }
+      } else {
+        checkAuth();
+      }
+
+      // Check if assessment ID is provided in URL for public access
+      const urlAssessmentId = searchParams.get('assessmentId');
+
+      if (urlAssessmentId && urlAssessmentId !== 'null') {
+        // Public access - fetch result using public endpoint
+        getAssessmentResultPublic(urlAssessmentId)
+          .then((result) => {
+            setPublicResult(result);
+            setIsLoading(false);
+          })
+          .catch((err) => {
+            console.error('Failed to fetch public result:', err);
+            setError(err instanceof Error ? err.message : 'Failed to load results');
+            setIsLoading(false);
+          });
+      } else if (isComplete && scoringResult) {
+        // Use the store result if assessment is complete
+        console.log('Using store result for completed assessment');
+        setIsLoading(false);
+      } else if (isAuthenticated && user?.assessmentResults) {
+        // User is authenticated and has assessment results - redirect to account page
+        // Only do this if no URL assessmentId was provided
+        console.log('User is authenticated with assessment results, redirecting to account');
+        router.push('/account');
+      } else {
+        // If assessment is not complete and no valid public ID, redirect to assessment page
+        console.log('No valid assessment data, redirecting to assessment');
+        router.push('/assessment');
+      }
+    };
+
+    loadPage();
+  }, []); // Empty dependency array - only run once on mount
 
   if (isLoading) {
     return (
@@ -84,7 +109,7 @@ export default function AssessmentResult() {
       <div className="min-h-screen bg-[#faf7f0] flex items-center justify-center text-[#171b4f]">
         <div className="text-center max-w-md">
           <p className="text-red-600 mb-4">{error}</p>
-          <button 
+          <button
             onClick={() => router.push('/assessment')}
             className="rounded-lg bg-[#4f2696] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#3d1d78]"
           >
@@ -96,13 +121,30 @@ export default function AssessmentResult() {
   }
 
   const result = publicResult || scoringResult;
-  
+
+  // Check if user has purchased this specific assessment
+  const currentAssessmentId = result?.assessmentId || assessmentId || searchParams.get('assessmentId') || '';
+  const hasPurchasedThisAssessment = isAuthenticated && currentAssessmentId && user?.purchasedAssessments?.includes(currentAssessmentId);
+  const hasPremiumAccess = hasPurchasedThisAssessment || (isAuthenticated && user?.subscriptionTier === 'premium');
+
+  console.log('Premium access check:', {
+    isAuthenticated,
+    currentAssessmentId,
+    storeAssessmentId: assessmentId,
+    urlAssessmentId: searchParams.get('assessmentId'),
+    resultAssessmentId: result?.assessmentId,
+    purchasedAssessments: user?.purchasedAssessments,
+    hasPurchasedThisAssessment,
+    subscriptionTier: user?.subscriptionTier,
+    hasPremiumAccess,
+  });
+
   if (!result) {
     return (
       <div className="min-h-screen bg-[#faf7f0] flex items-center justify-center text-[#171b4f]">
         <div className="text-center">
           <p>No results found. Please complete the assessment first.</p>
-          <button 
+          <button
             onClick={() => router.push('/assessment')}
             className="mt-4 rounded-lg bg-[#4f2696] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#3d1d78]"
           >
@@ -114,346 +156,152 @@ export default function AssessmentResult() {
   }
 
   const { primaryRoles, secondaryRoles, influenceRoles, percentages, rawScores } = result;
+
+  // Generate profile code based on Primary + Secondary only (two-letter type)
+  // Take first primary and first secondary if multiple exist
+  const primaryCluster = primaryRoles[0];
+  const secondaryCluster = secondaryRoles[0] || primaryRoles[1] || null;
   
-  // Generate profile code based on roles
-  const primaryCode = primaryRoles.map((role: string) => CLUSTER_CODES[role]).join('');
-  const secondaryCode = secondaryRoles.length > 0 ? secondaryRoles.map((role: string) => CLUSTER_CODES[role]).join('') : '';
-  const profileCode = `${primaryCode}${secondaryCode}`;
-  
+  const primaryCode = CLUSTER_CODES[primaryCluster];
+  const secondaryCode = secondaryCluster ? CLUSTER_CODES[secondaryCluster] : '';
+  const profileCode = secondaryCluster ? `${primaryCode}${secondaryCode}` : primaryCode;
+
+  // Get archetype name from mapping
+  const archetypeName = ARCHETYPE_NAMES[profileCode] || 'Your Pattern';
+
+  // Get colors for primary and secondary clusters
+  const primaryColor = CLUSTER_COLORS[primaryCluster];
+  const secondaryColor = secondaryCluster ? CLUSTER_COLORS[secondaryCluster] : primaryColor;
+
   // Get display names
   const primaryNames = primaryRoles.map((role: string) => CLUSTER_DISPLAY_NAMES[role]);
   const secondaryNames = secondaryRoles.map((role: string) => CLUSTER_DISPLAY_NAMES[role]);
-  
-  // Generate traits based on primary roles
-  const traits = generateTraits(primaryRoles as string[], secondaryRoles as string[]);
-  const people = generatePeopleTraits(primaryRoles as string[], secondaryRoles as string[]);
+
+  // Generate dynamic content based on primary/secondary colors
+  const traits = generateTraits(primaryRoles as string[], secondaryRoles as string[], primaryColor, secondaryColor);
+  const people = generatePeopleTraits(primaryRoles as string[], secondaryRoles as string[], primaryColor, secondaryColor);
   const naturalItems = generateNaturalItems(primaryRoles as string[]);
   const shadowItems = generateShadowItems(primaryRoles as string[]);
 
   return (
-    <main className="min-h-screen bg-[#faf7f0] px-4 py-6 text-[#171b4f] sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-[910px]">
-        {/* Hero Section */}
-        <section className="grid min-h-[390px] items-center gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-          <div>
-            <div className="mb-6 flex items-center gap-3 text-xs font-bold tracking-wide text-[#252361]">
-              <span className="grid h-9 w-9 place-items-center rounded-full border-2 border-[#51408f] text-2xl">
-                ♧
-              </span>
-              <span>YOUR COGNITIVE ARCHETYPE</span>
-            </div>
-
-            <h1 className="font-serif text-[58px] font-bold leading-[0.83] tracking-[-0.08em] text-[#11174d] sm:text-[78px]">
-              The {primaryNames.join(' + ')}{" "}
-              <span className="font-sans text-xl tracking-normal sm:text-2xl">
-                ({profileCode})
-              </span>
-            </h1>
-
-            {secondaryNames.length > 0 && (
-              <div className="my-5 flex items-center gap-3 font-serif text-2xl sm:text-[28px]">
-                {primaryNames.map((name, i) => (
-                  <span key={i} className={i === 0 ? '' : '×'}>{name}</span>
-                ))}
-                {secondaryNames.map((name, i) => (
-                  <strong key={i} className="font-normal text-[#c7652e]">{name}</strong>
-                ))}
-              </div>
-            )}
-
-            <p className="max-w-[510px] text-sm leading-6 text-[#3b3a50] sm:text-[15px]">
-              Your cognitive pattern combines {primaryNames.join(' and ')}{secondaryNames.length > 0 ? ` with ${secondaryNames.join(' and ')}` : ''}. 
-              This unique combination shapes how you process information, make decisions, and interact with the world around you.
-            </p>
-          </div>
-
-          {/* Character Illustration */}
-          <div className="relative flex min-h-[330px] items-center justify-center">
-            <div className="relative mt-[-30px] h-[270px] w-[125px] rounded-[48%_48%_12px_12px] border-4 border-dashed border-[#3c236d] bg-[#9b72bf] shadow-[inset_0_0_0_5px_rgba(64,29,110,0.13)]">
-              <div className="absolute -top-3 left-1 h-[54px] w-[37px] -rotate-12 rounded-t-full border-4 border-b-0 border-dashed border-[#3c236d] bg-[#9b72bf]" />
-              <div className="absolute -top-3 right-1 h-[54px] w-[37px] rotate-12 rounded-t-full border-4 border-b-0 border-dashed border-[#3c236d] bg-[#9b72bf]" />
-
-              <div className="absolute left-[22px] top-[77px] h-[42px] w-[33px] rounded-full border-2 border-[#2d1a67] bg-white">
-                <span className="absolute right-1 top-3 h-[17px] w-3 rounded-full bg-[#15205b]" />
-              </div>
-
-              <div className="absolute right-[21px] top-[77px] h-[42px] w-[33px] rounded-full border-2 border-[#2d1a67] bg-white">
-                <span className="absolute left-1 top-3 h-[17px] w-3 rounded-full bg-[#15205b]" />
-              </div>
-
-              <div className="absolute left-[59px] top-[123px] rotate-12 text-3xl text-[#302062]">
-                ⌣
-              </div>
-
-              <div className="absolute -left-[59px] top-[142px] h-[26px] w-[73px] rotate-[57deg] rounded-b-full border-4 border-b-0 border-[#2a2369]" />
-              <div className="absolute -right-[59px] top-[142px] h-[26px] w-[73px] -rotate-[57deg] rounded-b-full border-4 border-b-0 border-[#2a2369]" />
-
-              <div className="absolute -bottom-[70px] left-[37px] h-[76px] w-[5px] rotate-1 rounded-full bg-[#25246b] after:absolute after:-bottom-0.5 after:-left-5 after:h-[11px] after:w-[31px] after:-rotate-8 after:rounded-full after:bg-[#25246b] after:content-['']" />
-              <div className="absolute -bottom-[70px] right-[32px] h-[76px] w-[5px] -rotate-1 rounded-full bg-[#25246b] after:absolute after:-bottom-0.5 after:-right-5 after:rotate-8 after:rounded-full after:bg-[#25246b] after:content-['']" />
-            </div>
-
-            <div className="absolute right-0 top-[105px] rotate-[-5deg] font-serif text-[17px] italic leading-5 text-[#75618e] sm:right-5">
-              Unique combination.
-              Deeper understanding.
-              <span className="mt-4 block pl-3 text-2xl">—</span>
-            </div>
-          </div>
+    <div className="min-h-screen bg-[#FAF6EF] text-[#1a1a1a]" style={{ fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+      {isAuthenticated ? <AccountHeader /> : <Navigation />}
+      <main className="px-4 py-4 sm:px-12 sm:py-5">
+        <div className="mx-auto max-w-[1200px]">
+          <section className="relative border-b border-[#cbc3c0] py-4 sm:py-6">
+          {/* Primary color dominates - taller left line */}
+          <div className="absolute left-[-10px] top-5 h-48 w-px" style={{ backgroundColor: primaryColor }} />
+          {/* Secondary color supports - shorter right line */}
+          <div className="absolute right-[-10px] top-32 h-16 w-px" style={{ backgroundColor: secondaryColor }} />
+          <p className="mb-4 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em]"><span className="text-[17px]" style={{ color: primaryColor }}>✧</span>Your CAT-20 archetype</p>
+          <h1 className="max-w-[720px] font-serif text-[58px] font-bold leading-[0.77] tracking-[-0.09em] text-[#17164d] sm:text-[93px]">The<br />{archetypeName} <span className="font-sans text-xl tracking-normal text-[#17164d] sm:text-[30px]">({profileCode})</span></h1>
+          <div className="mt-5 flex flex-wrap items-center gap-2 font-serif text-[34px] italic leading-none sm:text-[41px]"><span style={{ color: primaryColor }}>{primaryNames[0]}</span><span className="not-italic text-[#17164d]">×</span><span style={{ color: secondaryColor }}>{secondaryNames[0] || primaryNames[1] || ''}</span></div>
+          <div className="mt-3 h-px w-14" style={{ backgroundColor: primaryColor }} />
+          <p className="mt-5 max-w-[900px] text-[14px] leading-[1.45] text-[#383653] sm:text-[16px]">You have a hard time leaving something at “good enough” when you know there&apos;s more to understand. Even after something starts making sense, your mind often keeps turning it over—looking at it from another angle, noticing what still doesn&apos;t fit, or wondering what else might be there.</p>
         </section>
 
-        {/* Pattern Snapshot Section */}
-        <section className="mt-4 rounded-xl border border-[#e4ded4] bg-white/20 px-5 py-4 shadow-sm">
-          <h2 className="mb-4 flex items-center gap-3 font-serif text-xl">
-            <span className="text-2xl text-[#4d319b]">✦</span>
-            Pattern Snapshot
-          </h2>
+        <section className="border-b border-[#cbc3c0] py-4 sm:py-6"><SectionHeading icon="✦" title="Pattern Snapshot" primaryColor={primaryColor} /><div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-[#d8d1cd]">{traits.map((trait, i) => <div key={trait.title} className="flex min-h-[50px] sm:min-h-[65px] flex-col items-center justify-center gap-1 sm:gap-2 text-center"><span className="text-[16px] sm:text-[20px]" style={{ color: trait.color }}>{trait.icon}</span><b className="font-serif text-[13px] sm:text-[16px]">{trait.title}</b></div>)}</div></section>
 
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-8">
-            {traits.map((trait) => (
-              <div
-                key={trait.title}
-                className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-3 text-sm font-semibold ${trait.color}`}
-              >
-                <span>{trait.icon}</span>
-                {trait.title}
-              </div>
-            ))}
-          </div>
-        </section>
+        <section className="border-b border-[#cbc3c0] px-2 py-6 sm:px-3 sm:py-12 text-center"><div className="mx-auto h-8 w-px" style={{ backgroundColor: primaryColor }} /><span className="block" style={{ color: primaryColor }}>·</span><h2 className="mt-3 sm:mt-4 font-serif text-[24px] sm:text-[31px] font-bold leading-[0.9] tracking-[-0.05em] text-[#17164d]">Beneath<br />the Surface</h2><p className="mx-auto mt-3 sm:mt-5 max-w-[500px] sm:max-w-[600px] text-[11px] sm:text-[15px] leading-4 text-[#514d70]">The first half described what this pattern looks like in everyday life.<br />The second half explores the mental pull that naturally creates<br />those experiences.</p><span className="mt-3 sm:mt-4 block" style={{ color: primaryColor }}>·</span><div className="mt-8 sm:mt-12 text-left"><h3 className="font-serif text-[14px] sm:text-[15px] font-bold uppercase tracking-[0.11em] text-[#17164d]">Your Inner Tug-of-War</h3><div className="mt-2 h-px w-8" style={{ backgroundColor: primaryColor }} /><div className="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-2 text-center gap-4 sm:gap-0"><div className="px-2 sm:px-4 sm:border-r" style={{ borderColor: primaryColor }}><h4 className="font-serif text-[20px] sm:text-[27px]" style={{ color: primaryColor }}>{primaryNames[0] || 'Thinker'}</h4><p className="mx-auto mt-2 sm:mt-3 max-w-[100px] sm:max-w-[130px] text-[13px] sm:text-[16px] leading-4 text-[#625e7a]">Naturally wants things<br />to make sense.</p></div><div className="px-2 sm:px-4"><h4 className="font-serif text-[20px] sm:text-[27px]" style={{ color: secondaryColor }}>{secondaryNames[0] || primaryNames[1] || ''}</h4><p className="mx-auto mt-2 sm:mt-3 max-w-[100px] sm:max-w-[130px] text-[13px] sm:text-[16px] leading-4 text-[#625e7a]">Naturally keeps exploring<br />what might still be missing.</p></div></div><div className="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3"><span className="h-px" style={{ backgroundColor: primaryColor }} /><span className="h-px" style={{ backgroundColor: secondaryColor }} /></div><p className="mx-auto mt-4 sm:mt-5 max-w-[240px] sm:max-w-[270px] text-[14px] sm:text-[16px] leading-4 text-[#55516e]">Together, they create a mind that rarely feels finished after the first answer.</p></div></section>
 
-        {/* Score Breakdown */}
-        <section className="mt-4 rounded-xl border border-[#e4ded4] bg-white/20 px-5 py-4 shadow-sm">
-          <h2 className="mb-4 flex items-center gap-3 font-serif text-xl">
-            <span className="text-2xl text-[#4d319b]">📊</span>
-            Your Score Breakdown
-          </h2>
+        <section className="border-b border-[#cbc3c0] py-8 sm:py-12"><div className="flex gap-4"><div className="w-px" style={{ backgroundColor: primaryColor }} /><div><h2 className="font-serif text-[20px] sm:text-[27px] font-bold leading-[0.9] tracking-[-0.04em]">When Your Mind<br />Gets Hooked</h2><div className="mt-3 h-px w-8" style={{ backgroundColor: primaryColor }} /><p className="mt-3 text-[13px] sm:text-[16px] text-[#514d70]">Your attention naturally sticks to things like:</p><div className="mt-4 space-y-3 sm:space-y-4 text-[13px] sm:text-[16px] leading-4 text-[#514d70]"><p className="ml-4 sm:ml-5 border-l pl-2 sm:pl-3" style={{ borderColor: primaryColor }}>A contradiction you can&apos;t ignore.</p><p className="ml-12 sm:ml-16 border-l pl-2 sm:pl-3" style={{ borderColor: secondaryColor }}>Realizing two things you thought were unrelated might actually connect.</p><p className="ml-8 sm:ml-10 border-l pl-2 sm:pl-3" style={{ borderColor: primaryColor }}>Someone giving a confident explanation that doesn&apos;t quite add up to you.</p><p className="ml-16 sm:ml-20 border-l pl-2 sm:pl-3" style={{ borderColor: secondaryColor }}>Hearing a completely different take on something you thought you already understood.</p></div><h2 className="mt-8 sm:mt-12 font-serif text-[20px] sm:text-[26px] font-bold leading-[0.9] tracking-[-0.04em]">What Makes Your<br />Pattern Unique</h2><div className="mt-3 h-px w-8" style={{ backgroundColor: primaryColor }} /><p className="mt-3 max-w-[600px] sm:max-w-[700px] text-[13px] sm:text-[16px] leading-4 text-[#514d70]">Your mind rarely stops after finding an answer. It naturally starts testing whether that answer actually explains everything.</p><p className="mt-3 text-[13px] sm:text-[16px] text-[#514d70]">You often find yourself asking:</p><div className="mt-3 space-y-3 font-serif text-[14px] sm:text-[16px] italic text-[#514d70]"><p className="ml-6 sm:ml-8 border-l pl-3 sm:pl-4" style={{ borderColor: primaryColor }}>What am I still missing?</p><p className="ml-10 sm:ml-14 border-l pl-3 sm:pl-4" style={{ borderColor: secondaryColor }}>Does this explanation actually fit?</p><p className="ml-6 sm:ml-8 border-l pl-3 sm:pl-4" style={{ borderColor: primaryColor }}>What doesn&apos;t make sense yet?</p></div></div></div></section>
 
-          <div className="space-y-3">
-            {Object.entries(percentages).map(([cluster, percentage]) => (
-              <div key={cluster} className="flex items-center gap-4">
-                <div className="w-24 text-sm font-semibold text-[#414052]">
-                  {CLUSTER_DISPLAY_NAMES[cluster]}
-                </div>
-                <div className="flex-1 h-3 rounded-full bg-[#e4ded4] overflow-hidden">
-                  <div 
-                    className="h-full bg-[#4f2696] transition-all duration-500"
-                    style={{ width: `${percentage}%` }}
-                  />
-                </div>
-                <div className="w-16 text-right text-sm font-bold text-[#414052]">
-                  {percentage.toFixed(1)}%
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+        <section className="border-b border-[#cbc3c0] py-7"><div className="mt-7 grid gap-8 border-t border-[#cbc3c0] pt-7 grid-cols-1 sm:grid-cols-[1.1fr_0.9fr]"><div><h2 className="font-serif text-[20px] font-bold leading-[0.9] text-[#17164d]">What You&apos;re Like<br />Around People</h2><div className="mt-3 h-px w-8" style={{ backgroundColor: primaryColor }} /><div className="mt-5 space-y-4">{people.map(item => <div key={item.number} className="flex gap-4"><span className="font-serif text-[21px]" style={{ color: item.color }}>{item.number}</span><p className="border-l border-[#d4cdd1] pl-3 text-[13px] leading-4 text-[#514d70]">{item.text}</p></div>)}</div></div><div className="border-t border-[#cbc3c0] pt-7 sm:border-l sm:border-t-0 sm:pl-8"><h3 className="font-serif text-[14px] font-bold uppercase text-[#17164d]">If someone had to<br />describe you...</h3><blockquote className="mt-8 font-serif text-[17px] italic leading-5">“{generateQuote(primaryRoles, secondaryRoles)}”</blockquote></div></div><div className="mt-8 grid gap-8 border-t border-[#cbc3c0] pt-7 grid-cols-1 sm:grid-cols-2"><InfoCard icon="" title="What Comes Naturally" items={naturalItems} bulletColor={primaryColor} /><InfoCard icon="" title="Shadow Side" items={shadowItems} bulletColor={secondaryColor} /></div><div className="mt-7 border-t border-[#cbc3c0] pt-7"><SectionHeading title="How You Connect" primaryColor={primaryColor} /><p className="mt-4 max-w-[900px] text-[14px] leading-5 text-[#514d70]">{generateConnectionText(primaryRoles, secondaryRoles)}</p></div></section>
 
-        {/* Around People Section */}
-        <section className="mt-4 rounded-xl border border-[#e4ded4] bg-white/20 px-5 py-4 shadow-sm">
-          <h2 className="mb-4 flex items-center gap-3 font-serif text-xl">
-            <span className="text-2xl text-[#4f3394]">♧</span>
-            What You&apos;re Like Around People
-          </h2>
+        <section className="border-b border-[#cbc3c0] py-10">
+          <div className="flex gap-4">
+            <div className="w-px" style={{ backgroundColor: primaryColor }} />
+            <div>
+              {hasPremiumAccess ? (
+                <div className="p-6">
+                  <h3 className="mb-3 font-serif text-base font-bold leading-5">
+                    Your Premium Insights
+                  </h3>
 
-          <div className="grid gap-0 sm:grid-cols-3">
-            {people.map((item, index) => (
-              <article
-                key={item.number}
-                className={`py-3 sm:px-5 sm:py-0 ${
-                  index !== 2
-                    ? "border-b border-[#e2ddd8] sm:border-b-0 sm:border-r"
-                    : ""
-                }`}
-              >
-                <div className={`mb-2 text-[22px] ${item.color}`}>
-                  {item.number}
-                </div>
-                <p className="text-sm leading-5 text-[#414052]">
-                  {item.text}
-                </p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        {/* Quote Section */}
-        <section className="mt-4 rounded-xl border border-[#e4ded4] bg-[#f4edf8] px-5 py-4">
-          <h2 className="mb-2 flex items-center gap-3 font-serif text-xl">
-            <span className="text-2xl text-[#4f3394]">☏</span>
-            If Someone Had To Describe You...
-          </h2>
-
-          <blockquote className="font-serif text-2xl italic leading-tight text-[#14194d] sm:ml-11 sm:text-3xl">
-            "{generateQuote(primaryRoles, secondaryRoles)}"
-          </blockquote>
-        </section>
-
-        {/* Natural and Shadow Sections */}
-        <section className="mt-4 grid gap-4 sm:grid-cols-2">
-          <InfoCard
-            icon="⚙"
-            title="What Comes Naturally"
-            items={naturalItems}
-            bulletColor="bg-[#56309a]"
-          />
-
-          <InfoCard
-            icon="☾"
-            title="Shadow Side"
-            items={shadowItems}
-            bulletColor="bg-[#d77617]"
-          />
-        </section>
-
-        {/* Connection Section */}
-        <section className="mt-4 rounded-xl border border-[#e4ded4] bg-white/20 px-5 py-4 shadow-sm">
-          <h2 className="mb-3 flex items-center gap-3 font-serif text-xl">
-            <span className="text-3xl text-[#4f3394]">♡</span>
-            How You Connect
-          </h2>
-
-          <p className="text-sm leading-5 text-[#414052] sm:ml-11">
-            {generateConnectionText(primaryRoles, secondaryRoles)}
-          </p>
-        </section>
-
-        {/* Beneath the Surface Section */}
-        <section className="mt-4 grid overflow-hidden rounded-xl border border-[#e4ded4] bg-[#f2ebf7] sm:grid-cols-[1.15fr_0.85fr]">
-          <div className="border-b border-[#d3c7db] p-6 sm:border-b-0 sm:border-r">
-            <h2 className="mb-4 flex items-center gap-3 font-serif text-xl">
-              <span className="text-2xl text-[#4f3394]">♙</span>
-              Beneath the Surface
-            </h2>
-
-            <p className="text-sm leading-5 text-[#414052]">
-              The first half described what this pattern looks like in everyday life.
-              The second half explores the mental pull that naturally creates those experiences.
-            </p>
-          </div>
-
-          {hasPremiumAccess ? (
-            <div className="p-6">
-              <h3 className="mb-3 font-serif text-base font-bold leading-5">
-                Your Premium Insights
-              </h3>
-
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl text-[#cd775d]">♡</span>
-                  <div>
-                    <h4 className="font-semibold mb-1" style={{ color: '#1a1a1a' }}>Love & Relationships</h4>
-                    <p className="text-sm text-gray-600">
-                      {generateLoveRelationshipsText(primaryRoles, secondaryRoles)}
-                    </p>
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <span className="text-2xl text-[#cd775d]">♡</span>
+                      <div>
+                        <h4 className="font-semibold mb-1" style={{ color: '#1a1a1a' }}>Love & Relationships</h4>
+                        <p className="text-sm text-gray-600">
+                          {generateLoveRelationshipsText(primaryRoles, secondaryRoles)}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="text-2xl text-[#cd775d]">▣</span>
+                      <div>
+                        <h4 className="font-semibold mb-1" style={{ color: '#1a1a1a' }}>Career & Direction</h4>
+                        <p className="text-sm text-gray-600">
+                          {generateCareerDirectionText(primaryRoles, secondaryRoles)}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="text-2xl text-[#cd775d]">♧</span>
+                      <div>
+                        <h4 className="font-semibold mb-1" style={{ color: '#1a1a1a' }}>Social & Communication</h4>
+                        <p className="text-sm text-gray-600">
+                          {generateSocialCommunicationText(primaryRoles, secondaryRoles)}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl text-[#cd775d]">▣</span>
-                  <div>
-                    <h4 className="font-semibold mb-1" style={{ color: '#1a1a1a' }}>Career & Direction</h4>
-                    <p className="text-sm text-gray-600">
-                      {generateCareerDirectionText(primaryRoles, secondaryRoles)}
-                    </p>
-                  </div>
+              ) : (
+                <div className="p-6">
+                  <h3 className="mb-3 font-serif text-base font-bold leading-5">
+                    You know your drivers.
+                    Now see what&apos;s underneath.
+                  </h3>
+
+                  <p className="mb-2 text-xs text-[#414052]">
+                    Unlock the rest of your profile, including:
+                  </p>
+
+                  <ul className="mb-3 space-y-1 text-sm text-[#3d3b4f]">
+                    <li>
+                      <span className="mr-2 text-lg text-[#cd775d]">♡</span>
+                      Love &amp; Relationships
+                    </li>
+                    <li>
+                      <span className="mr-2 text-lg text-[#cd775d]">▣</span>
+                      Career &amp; Direction
+                    </li>
+                    <li>
+                      <span className="mr-2 text-lg text-[#cd775d]">♧</span>
+                      Social &amp; Communication
+                    </li>
+                  </ul>
+
+                  <button
+                    onClick={() => {
+                      const currentAssessmentId = result.assessmentId || assessmentId || '';
+                      if (isAuthenticated) {
+                        // User is already authenticated, go directly to payment
+                        router.push(`/payment?assessmentId=${currentAssessmentId}`);
+                      } else {
+                        // User needs to sign in first - mark as guest assessment
+                        router.push(`/auth/signin?redirect=/payment&assessmentId=${currentAssessmentId}&isGuest=true`);
+                      }
+                    }}
+                    className="w-full rounded-lg bg-[#4f2696] px-3 py-3 text-xs font-bold text-white transition hover:bg-[#3d1d78]"
+                  >
+                    Unlock Full Profile — $10 <span className="ml-2 text-base">→</span>
+                  </button>
                 </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl text-[#cd775d]">♧</span>
-                  <div>
-                    <h4 className="font-semibold mb-1" style={{ color: '#1a1a1a' }}>Social & Communication</h4>
-                    <p className="text-sm text-gray-600">
-                      {generateSocialCommunicationText(primaryRoles, secondaryRoles)}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
-          ) : (
-            <div className="p-6">
-              <h3 className="mb-3 font-serif text-base font-bold leading-5">
-                You know your drivers.
-                Now see what&apos;s underneath.
-              </h3>
-
-              <p className="mb-2 text-xs text-[#414052]">
-                Unlock the rest of your profile, including:
-              </p>
-
-              <ul className="mb-3 space-y-1 text-sm text-[#3d3b4f]">
-                <li>
-                  <span className="mr-2 text-lg text-[#cd775d]">♡</span>
-                  Love &amp; Relationships
-                </li>
-                <li>
-                  <span className="mr-2 text-lg text-[#cd775d]">▣</span>
-                  Career &amp; Direction
-                </li>
-                <li>
-                  <span className="mr-2 text-lg text-[#cd775d]">♧</span>
-                  Social &amp; Communication
-                </li>
-              </ul>
-
-              <button 
-                onClick={() => {
-                  const currentAssessmentId = result.assessmentId || assessmentId || '';
-                  if (isAuthenticated) {
-                    // User is already authenticated, go directly to payment
-                    router.push(`/payment?assessmentId=${currentAssessmentId}`);
-                  } else {
-                    // User needs to sign in first
-                    router.push(`/auth/signin?redirect=/payment&assessmentId=${currentAssessmentId}`);
-                  }
-                }}
-                className="w-full rounded-lg bg-[#4f2696] px-3 py-3 text-xs font-bold text-white transition hover:bg-[#3d1d78]"
-              >
-                Unlock Full Profile — $10 <span className="ml-2 text-base">→</span>
-              </button>
-            </div>
-          )}
+          </div>
         </section>
 
-        {/* Footer Actions */}
-        <footer className="flex flex-col gap-4 px-2 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={() => {
-                useAssessmentStore.getState().resetAssessment();
-                router.push('/assessment');
-              }}
-              className="rounded-full border border-[#6855a0] px-4 py-3 text-xs font-bold text-[#503e90] transition hover:bg-[#eee8f7] sm:px-6"
-            >
-              <span className="mr-2 text-base">←</span>
-              Retake Test
-            </button>
+        <section className="border-b border-[#cbc3c0] py-10"><div className="flex gap-4"><div className="w-px" style={{ backgroundColor: primaryColor }} /><div><p className="font-serif text-[11px] font-bold uppercase tracking-[0.2em] text-[#17164d]">People Often</p><h2 className="mt-3 font-serif text-[29px] font-bold leading-[0.88] text-[#17164d]">Misread You As...</h2><div className="mt-3 h-px w-8" style={{ backgroundColor: primaryColor }} /><p className="mt-4 max-w-[450px] text-[14px] leading-4 text-[#514d70]">They believe they are simply being thoughtful...<br />but others may view them as:</p><div className="mt-7 grid grid-cols-2 sm:grid-cols-4 divide-x divide-[#d8d1cd] text-center font-serif text-[13px] font-bold"><span className="px-2">distant</span><span className="px-2">overthinking</span><span className="px-2">hard to read</span><span className="px-2">slow to respond</span></div><div className="mt-10 flex items-center gap-3 text-[13px] font-bold uppercase tracking-[0.2em]"><span className="text-lg" style={{ color: primaryColor }}>✦</span>Future message<span className="h-px flex-1" style={{ backgroundColor: primaryColor }} /></div><h2 className="mt-7 font-serif text-[33px] font-bold leading-[0.9] text-[#17164d]">Not every question that<br />pops into your head<br /><em className="font-normal" style={{ color: secondaryColor }}>needs an answer.</em></h2><div className="mt-5 h-px w-10" style={{ backgroundColor: primaryColor }} /><p className="mt-4 max-w-[540px] text-[14px] leading-4 text-[#514d70]">Some things are worth digging into, and others are just interesting enough to keep you thinking. Learning which is which can save you a lot of time without making you any less curious.</p></div></div></section>
 
-            <button 
-              onClick={() => router.push('/account')}
-              className="rounded-lg bg-[#4f2696] px-4 py-3 text-xs font-bold text-white transition hover:bg-[#3d1d78] sm:px-6"
-            >
-              Go to Dashboard <span className="ml-2 text-base">→</span>
-            </button>
-          </div>
-
-          <button 
-            onClick={() => {
-              // Store result data for share card builder
-              localStorage.setItem('shareCardData', JSON.stringify({
-                primaryRoles,
-                secondaryRoles,
-                profileCode,
-                primaryNames,
-                secondaryNames,
-                result: result
-              }));
-              router.push('/share-card');
-            }}
-            className="rounded-lg border-2 border-[#cd775d] bg-[#fef9f0] px-4 py-3 text-xs font-bold text-[#cd775d] transition hover:bg-[#fef6e8] sm:px-6"
-          >
-            <span className="mr-2 text-lg">✦</span>
-            Create Your Share Card
-          </button>
-        </footer>
-      </div>
-    </main>
+        <footer className="flex flex-wrap items-center justify-between gap-2 sm:gap-3 py-4 sm:py-6"><span className="text-[7px] sm:text-[8px] uppercase tracking-[0.2em]">CAT-20</span><div className="flex gap-2"><button onClick={() => { useAssessmentStore.getState().resetAssessment(); router.push('/assessment'); }} className="border border-[#6855a0] px-3 py-2 text-[11px] sm:text-[15px] font-bold text-[#503e90]">← Retake Test</button>{isAuthenticated && <button onClick={() => router.push('/account')} className="bg-[#4f2696] px-3 py-2 text-[11px] sm:text-[15px] font-bold text-white">Dashboard →</button>}</div><button onClick={() => { localStorage.setItem('shareCardData', JSON.stringify({ primaryRoles, secondaryRoles, profileCode, primaryNames, secondaryNames, result })); router.push('/share-card'); }} className="border border-[#cd775d] px-3 py-2 text-[11px] sm:text-[15px] font-bold text-[#cd775d]">✦ Share Card</button></footer>
+        </div>
+      </main>
+      <Footer />
+    </div>
   );
 }
 
@@ -470,8 +318,8 @@ function InfoCard({
 }) {
   return (
     <section className="rounded-xl border border-[#e4ded4] bg-white/20 px-5 py-4 shadow-sm">
-      <h2 className="mb-4 flex items-center gap-3 font-serif text-xl">
-        <span className="text-2xl text-[#4f3394]">{icon}</span>
+      <h2 className="mb-4 flex items-center gap-3 font-serif text-xl text-[#17164d]">
+        <span className="text-2xl" style={{ color: bulletColor }}>{icon}</span>
         {title}
       </h2>
 
@@ -482,7 +330,8 @@ function InfoCard({
             className="relative pl-5 text-sm leading-5 text-[#414052]"
           >
             <span
-              className={`absolute left-0 top-1.5 h-2.5 w-2.5 rounded-full ${bulletColor}`}
+              className="absolute left-0 top-1.5 h-2.5 w-2.5 rounded-full"
+              style={{ backgroundColor: bulletColor }}
             />
             {item}
           </li>
@@ -493,50 +342,61 @@ function InfoCard({
 }
 
 // Helper functions to generate content based on roles
-function generateTraits(primaryRoles: string[], secondaryRoles: string[]): Array<{ icon: string; title: string; color: string }> {
+function generateTraits(primaryRoles: string[], secondaryRoles: string[], primaryColor: string, secondaryColor: string): Array<{ icon: string; title: string; color: string }> {
   const allRoles = [...primaryRoles, ...secondaryRoles];
-  const traitMap: Record<string, Array<{ icon: string; title: string; color: string }>> = {
+  const traitMap: Record<string, Array<{ icon: string; title: string }>> = {
     thinker: [
-      { icon: "✎", title: "Analytical", color: "bg-[#f0ebf7] text-[#50348e]" },
-      { icon: "◉", title: "Deep", color: "bg-[#fbf1e2] text-[#b66a2d]" },
+      { icon: "✎", title: "Analytical" },
+      { icon: "◉", title: "Deep" },
     ],
     seeker: [
-      { icon: "♡", title: "Curious", color: "bg-[#f0ebf7] text-[#50348e]" },
-      { icon: "♨", title: "Exploratory", color: "bg-[#fbf1e2] text-[#b66a2d]" },
+      { icon: "♡", title: "Curious" },
+      { icon: "♨", title: "Exploratory" },
     ],
     builder: [
-      { icon: "⚒", title: "Practical", color: "bg-[#f0ebf7] text-[#50348e]" },
-      { icon: "◉", title: "Constructive", color: "bg-[#fbf1e2] text-[#b66a2d]" },
+      { icon: "⚒", title: "Practical" },
+      { icon: "◉", title: "Constructive" },
     ],
     nurturer: [
-      { icon: "♡", title: "Empathetic", color: "bg-[#f0ebf7] text-[#50348e]" },
-      { icon: "☾", title: "Supportive", color: "bg-[#fbf1e2] text-[#b66a2d]" },
+      { icon: "♡", title: "Empathetic" },
+      { icon: "☾", title: "Supportive" },
     ],
     spark: [
-      { icon: "✨", title: "Creative", color: "bg-[#f0ebf7] text-[#50348e]" },
-      { icon: "♨", title: "Inspiring", color: "bg-[#fbf1e2] text-[#b66a2d]" },
+      { icon: "✨", title: "Creative" },
+      { icon: "♨", title: "Inspiring" },
     ],
     wanderer: [
-      { icon: "♧", title: "Independent", color: "bg-[#f0ebf7] text-[#50348e]" },
-      { icon: "◉", title: "Adaptable", color: "bg-[#fbf1e2] text-[#b66a2d]" },
+      { icon: "♧", title: "Independent" },
+      { icon: "◉", title: "Adaptable" },
     ],
   };
 
   const traits: Array<{ icon: string; title: string; color: string }> = [];
-  allRoles.forEach((role: string) => {
+  allRoles.forEach((role: string, index: number) => {
     if (traitMap[role]) {
-      traits.push(...traitMap[role].slice(0, 2));
+      traitMap[role].forEach((trait) => {
+        if (traits.length < 4) {
+          // Primary color dominates: first 3 traits use primary, last uses secondary
+          // This ensures visual hierarchy where primary is clearly dominant
+          const usePrimary = traits.length < 3;
+          traits.push({
+            ...trait,
+            color: usePrimary ? primaryColor : secondaryColor,
+          });
+        }
+      });
     }
   });
 
   // Ensure we have exactly 4 traits
   while (traits.length < 4) {
-    traits.push({ icon: "✦", title: "Unique", color: "bg-[#f0ebf7] text-[#50348e]" });
+    // Always use primary for fallback to maintain dominance
+    traits.push({ icon: "✦", title: "Unique", color: primaryColor });
   }
   return traits.slice(0, 4);
 }
 
-function generatePeopleTraits(primaryRoles: string[], secondaryRoles: string[]): Array<{ number: string; text: string; color: string }> {
+function generatePeopleTraits(primaryRoles: string[], secondaryRoles: string[], primaryColor: string, secondaryColor: string): Array<{ number: string; text: string; color: string }> {
   const allRoles = [...primaryRoles, ...secondaryRoles];
   const peopleMap: Record<string, string[]> = {
     thinker: [
@@ -572,16 +432,17 @@ function generatePeopleTraits(primaryRoles: string[], secondaryRoles: string[]):
   };
 
   const people: Array<{ number: string; text: string; color: string }> = [];
-  const colors = ['text-[#8064cf]', 'text-[#cf8966]', 'text-[#8064cf]'];
-  
+
   allRoles.forEach((role: string, index: number) => {
     if (peopleMap[role]) {
       peopleMap[role].forEach((text: string, i: number) => {
         if (people.length < 3) {
+          // Primary color dominates: first 2 items use primary, last uses secondary
+          const usePrimary = people.length < 2;
           people.push({
             number: String(people.length + 1).padStart(2, '0'),
             text,
-            color: colors[people.length % colors.length],
+            color: usePrimary ? primaryColor : secondaryColor,
           });
         }
       });
@@ -590,10 +451,11 @@ function generatePeopleTraits(primaryRoles: string[], secondaryRoles: string[]):
 
   // Ensure we have exactly 3 people traits
   while (people.length < 3) {
+    // Always use primary for fallback to maintain dominance
     people.push({
       number: String(people.length + 1).padStart(2, '0'),
       text: "You bring a unique perspective to every situation.",
-      color: colors[people.length % colors.length],
+      color: primaryColor,
     });
   }
   return people.slice(0, 3);

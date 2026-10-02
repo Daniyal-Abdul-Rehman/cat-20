@@ -659,3 +659,61 @@ export async function getActiveQuestions(): Promise<Question[]> {
 
   return response.json();
 }
+
+/**
+ * Get user's assessment history (authenticated)
+ */
+export async function getUserAssessmentHistory(): Promise<ScoringResult[]> {
+  const authStorage = localStorage.getItem('auth-storage');
+  let token = null;
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.tokens?.access?.token;
+    } catch (error) {
+      console.error('Failed to parse auth storage:', error);
+    }
+  }
+
+  const response = await fetch(`${API_BASE_URL}/assessments/user/history`, {
+    headers: {
+      ...(token && { 'Authorization': `Bearer ${token}` }),
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to get assessment history: ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Get user's latest assessment result (authenticated)
+ */
+export async function getLatestAssessment(): Promise<ScoringResult> {
+  const authStorage = localStorage.getItem('auth-storage');
+  let token = null;
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.tokens?.access?.token;
+    } catch (error) {
+      console.error('Failed to parse auth storage:', error);
+    }
+  }
+
+  const response = await fetch(`${API_BASE_URL}/assessments/user/latest`, {
+    headers: {
+      ...(token && { 'Authorization': `Bearer ${token}` }),
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to get latest assessment: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  // Return null if no assessment found (backend returns null with 200 status)
+  return data;
+}

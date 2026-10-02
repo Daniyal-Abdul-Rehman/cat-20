@@ -65,10 +65,17 @@ function VerifyEmailContent() {
       await verifyEmail(token);
       setIsVerified(true);
       addToast('success', 'Email verified successfully!');
-      
-      // Redirect to account page after 2 seconds
+
+      // Check if there's a guest assessment to assign
+      const guestAssessmentId = localStorage.getItem('guest_assessment_id');
+
+      // Redirect after 2 seconds
       setTimeout(() => {
-        router.push('/account');
+        if (guestAssessmentId) {
+          router.push(`/assessment/result?assessmentId=${guestAssessmentId}`);
+        } else {
+          router.push('/account');
+        }
       }, 2000);
     } catch (error) {
       console.error('Verification error:', error);

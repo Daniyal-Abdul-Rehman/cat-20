@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { useThemeStore } from './themeStore';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
 
@@ -42,6 +43,8 @@ export interface User {
   updatedAt?: string;
   __v?: number;
   subscriptionTier?: string;
+  subscriptionExpiry?: string;
+  purchasedAssessments?: string[];
   assessmentResults?: {
     completedAt: string;
     pattern: string;
@@ -139,6 +142,8 @@ export const useAuthStore = create<AuthStore>()(
             isEmailVerified: data.user.isEmailVerified,
             role: data.user.role,
             subscriptionTier: data.user.subscriptionTier,
+            subscriptionExpiry: data.user.subscriptionExpiry,
+            purchasedAssessments: data.user.purchasedAssessments,
             assessmentResults: data.user.assessmentResults,
             createdAt: data.user.createdAt,
             updatedAt: data.user.updatedAt,
@@ -150,6 +155,11 @@ export const useAuthStore = create<AuthStore>()(
         };
         set(authState);
         localStorage.setItem('auth-storage', JSON.stringify({ state: authState }));
+
+        // Update theme based on assessment results
+        if (data.user.assessmentResults?.pattern) {
+          useThemeStore.getState().setPattern(data.user.assessmentResults.pattern);
+        }
       } catch (error) {
         set({
           error: parseErrorMessage(error),
@@ -186,6 +196,8 @@ export const useAuthStore = create<AuthStore>()(
             isEmailVerified: data.user.isEmailVerified,
             role: data.user.role,
             subscriptionTier: data.user.subscriptionTier,
+            subscriptionExpiry: data.user.subscriptionExpiry,
+            purchasedAssessments: data.user.purchasedAssessments,
             assessmentResults: data.user.assessmentResults,
             createdAt: data.user.createdAt,
             updatedAt: data.user.updatedAt,
@@ -199,6 +211,12 @@ export const useAuthStore = create<AuthStore>()(
         set(authState);
         localStorage.setItem('auth-storage', JSON.stringify({ state: authState }));
         console.log('Auth state saved to localStorage');
+
+        // Update theme based on assessment results
+        if (data.user.assessmentResults?.pattern) {
+          useThemeStore.getState().setPattern(data.user.assessmentResults.pattern);
+        }
+
         return data;
       } catch (error) {
         console.error('Login error:', error);
@@ -213,7 +231,7 @@ export const useAuthStore = create<AuthStore>()(
     logout: async () => {
       const { tokens } = get();
       set({ isLoading: true, error: null });
-      
+
       try {
         if (tokens?.refresh.token) {
           await fetch(`${API_BASE_URL}/auth/logout`, {
@@ -235,6 +253,8 @@ export const useAuthStore = create<AuthStore>()(
           error: null,
         });
         localStorage.removeItem('auth-storage');
+        // Reset theme to default
+        useThemeStore.getState().resetTheme();
       }
     },
 
@@ -421,7 +441,7 @@ export const useAuthStore = create<AuthStore>()(
         // Update user verification status
         const { user } = get();
         if (user) {
-          set({ user: { ...user, isEmailVerified: true, assessmentResults: user.assessmentResults }, isLoading: false });
+          set({ user: { ...user, isEmailVerified: true, purchasedAssessments: user.purchasedAssessments, assessmentResults: user.assessmentResults }, isLoading: false });
         } else {
           set({ isLoading: false });
         }
@@ -522,7 +542,56 @@ export const useAuthStore = create<AuthStore>()(
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch user data');
+          // If 401 or 403, try to refresh tokens first
+          if (response.status === 401 || response.status === 403) {
+            console.log('Token expired, attempting refresh...');
+            try {
+              await get().refreshTokens();
+              // Retry with new token
+              const newTokens = get().tokens;
+              if (!newTokens?.access.token) {
+                throw new Error('Failed to refresh token');
+              }
+              const retryResponse = await fetch(`${API_BASE_URL}/auth/me`, {
+                method: 'GET',
+                headers: {
+                  'Authorization': `Bearer ${newTokens.access.token}`,
+                },
+              });
+              if (!retryResponse.ok) {
+                throw new Error('Failed to fetch user data after token refresh');
+              }
+              const data = await retryResponse.json();
+              set({
+                user: {
+                  _id: data._id,
+                  name: data.name,
+                  email: data.email,
+                  username: data.username,
+                  isEmailVerified: data.isEmailVerified,
+                  role: data.role,
+                  subscriptionTier: data.subscriptionTier,
+                  subscriptionExpiry: data.subscriptionExpiry,
+                  purchasedAssessments: data.purchasedAssessments,
+                  assessmentResults: data.assessmentResults,
+                  createdAt: data.createdAt,
+                  updatedAt: data.updatedAt,
+                  __v: data.__v,
+                },
+                isLoading: false,
+              });
+              const currentState = get();
+              localStorage.setItem('auth-storage', JSON.stringify({ state: currentState }));
+              return;
+            } catch (refreshError) {
+              console.error('Token refresh failed:', refreshError);
+              // If refresh fails, logout
+              await get().logout();
+              throw new Error('Session expired. Please login again.');
+            }
+          }
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || 'Failed to fetch user data');
         }
 
         const data = await response.json();
@@ -535,6 +604,8 @@ export const useAuthStore = create<AuthStore>()(
             isEmailVerified: data.isEmailVerified,
             role: data.role,
             subscriptionTier: data.subscriptionTier,
+            subscriptionExpiry: data.subscriptionExpiry,
+            purchasedAssessments: data.purchasedAssessments,
             assessmentResults: data.assessmentResults,
             createdAt: data.createdAt,
             updatedAt: data.updatedAt,
@@ -542,10 +613,15 @@ export const useAuthStore = create<AuthStore>()(
           },
           isLoading: false,
         });
-        
+
         // Update localStorage
         const currentState = get();
         localStorage.setItem('auth-storage', JSON.stringify({ state: currentState }));
+
+        // Update theme based on assessment results
+        if (data.assessmentResults?.pattern) {
+          useThemeStore.getState().setPattern(data.assessmentResults.pattern);
+        }
       } catch (error) {
         console.error('Failed to refresh user data:', error);
         set({

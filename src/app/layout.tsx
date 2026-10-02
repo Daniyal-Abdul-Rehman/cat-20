@@ -4,6 +4,7 @@ import { Playfair_Display } from "next/font/google";
 import { Lugrasimo } from "next/font/google";
 import "./globals.css";
 import ToastContainer from "@/components/ToastContainer";
+import ThemeProvider from "@/components/ThemeProvider";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -39,8 +40,10 @@ export default function RootLayout({
       className={`${montserrat.variable} ${playfair.variable} ${lugrasimo.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
-        {children}
-        <ToastContainer />
+        <ThemeProvider>
+          {children}
+          <ToastContainer />
+        </ThemeProvider>
       </body>
     </html>
   );

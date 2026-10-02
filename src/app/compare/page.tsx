@@ -84,12 +84,27 @@ function Icon({ name, size = 24, strokeWidth = 1.8 }: { name: IconName; size?: n
 }
 
 const patternColors: Record<string, string> = {
-  Thinker: '#4B3B8C',
-  Seeker: '#C4A747',
-  Nurturer: '#8862c7',
-  Builder: '#1b5dc9',
-  Spark: '#efad10',
-  Wanderer: '#11978c',
+  Thinker: '#3712E8',
+  Seeker: '#F59A00',
+  Nurturer: '#E90A82',
+  Builder: '#1498E8',
+  Spark: '#FF3038',
+  Wanderer: '#10A8A3',
+};
+
+const patternDisplayNames: Record<string, string> = {
+  thinker: 'THINKER',
+  seeker: 'SEEKER',
+  nurturer: 'NURTURER',
+  builder: 'BUILDER',
+  spark: 'SPARK',
+  wanderer: 'WANDERER',
+  Thinker: 'THINKER',
+  Seeker: 'SEEKER',
+  Nurturer: 'NURTURER',
+  Builder: 'BUILDER',
+  Spark: 'SPARK',
+  Wanderer: 'WANDERER',
 };
 
 const patternIcons: Record<string, IconName> = {
@@ -224,19 +239,19 @@ export default function ComparePage() {
         <div className="flex">
           <AccountSidebar />
           
-          <main className="flex-1 lg:ml-[272px] p-6 lg:p-8">
+          <main className="flex-1 md:ml-[272px] p-4 sm:p-6 lg:p-8">
             <div className="max-w-5xl mx-auto">
-              <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-12 text-center shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
-                <div className="text-6xl mb-4" style={{ color: '#4B3B8C' }}>✦</div>
-                <h2 className="text-2xl font-bold mb-2" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
+              <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-8 sm:p-12 text-center shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
+                <div className="text-5xl sm:text-6xl mb-4" style={{ color: '#4B3B8C' }}>✦</div>
+                <h2 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
                   Need More Assessments
                 </h2>
-                <p className="text-lg mb-6" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                <p className="text-base sm:text-lg mb-6" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                   You need at least 2 completed assessments to compare your patterns.
                 </p>
                 <button
                   onClick={() => router.push('/assessment')}
-                  className="inline-flex items-center gap-3 rounded-lg px-6 py-3 text-white font-semibold hover:opacity-90 transition"
+                  className="inline-flex items-center gap-3 rounded-lg px-5 sm:px-6 py-3 text-white font-semibold hover:opacity-90 transition"
                   style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                 >
                   Take Another Assessment <Icon name="arrow-right" size={20} />
@@ -258,26 +273,26 @@ export default function ComparePage() {
       
       <div className="flex">
         <AccountSidebar />
-        
-        <main className="flex-1 lg:ml-[272px] p-6 lg:p-8">
+
+        <main className="flex-1 md:ml-[272px] p-4 sm:p-6 lg:p-8">
           <div className="max-w-6xl mx-auto">
             {/* Header */}
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold mb-2" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
+            <div className="mb-6 sm:mb-8">
+              <h1 className="text-3xl sm:text-4xl font-bold mb-2" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
                 Compare Patterns
               </h1>
-              <p className="text-lg" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              <p className="text-base sm:text-lg" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 See how your cognitive pattern has evolved over time
               </p>
             </div>
 
             {/* Selection */}
-            <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-6 mb-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
-              <h2 className="text-xl font-bold mb-4" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto' }}>
+            <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-4 sm:p-6 mb-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
+              <h2 className="text-lg sm:text-xl font-bold mb-4" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto' }}>
                 Select Assessments to Compare
               </h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 {/* Assessment 1 */}
                 <div>
                   <label className="block text-sm font-semibold mb-2" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
@@ -343,7 +358,7 @@ export default function ComparePage() {
                   {/* Assessment 1 Card */}
                   <section className="rounded-[18px] border border-[#e5e0dc] bg-[#fdfbf8] p-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
                     <div className="flex items-center gap-4 mb-4">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-full text-white" style={{ backgroundColor: patternColors[getPrimaryPattern(assessment1)] || '#4B3B8C' }}>
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full text-white" style={{ backgroundColor: patternColors[getPrimaryPattern(assessment1)] || '#3712E8' }}>
                         <Icon name={patternIcons[getPrimaryPattern(assessment1)] || 'brain'} size={28} strokeWidth={1.5} />
                       </div>
                       <div>
@@ -364,7 +379,7 @@ export default function ComparePage() {
                   {/* Assessment 2 Card */}
                   <section className="rounded-[18px] border border-[#e5e0dc] bg-[#fdfbf8] p-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
                     <div className="flex items-center gap-4 mb-4">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-full text-white" style={{ backgroundColor: patternColors[getPrimaryPattern(assessment2)] || '#4B3B8C' }}>
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full text-white" style={{ backgroundColor: patternColors[getPrimaryPattern(assessment2)] || '#3712E8' }}>
                         <Icon name={patternIcons[getPrimaryPattern(assessment2)] || 'brain'} size={28} strokeWidth={1.5} />
                       </div>
                       <div>
@@ -393,6 +408,7 @@ export default function ComparePage() {
                     {Object.keys(patternColors).map((pattern) => {
                       const color = patternColors[pattern];
                       const icon = patternIcons[pattern];
+                      const displayPattern = patternDisplayNames[pattern] || pattern?.toUpperCase() || pattern;
                       const scores1 = getPercentages(assessment1);
                       const scores2 = getPercentages(assessment2);
                       const value1 = (scores1[pattern] || 0) * 100;
@@ -408,7 +424,7 @@ export default function ComparePage() {
                             </div>
                             <div className="flex-1">
                               <div className="flex items-center justify-between">
-                                <span className="text-base font-semibold" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>{pattern}</span>
+                                <span className="text-base font-semibold uppercase" style={{ color: color, fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>{displayPattern}</span>
                                 <div className="flex items-center gap-4">
                                   <span className="text-lg font-bold" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                                     {Math.round(value1)}%

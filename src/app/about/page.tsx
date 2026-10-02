@@ -4,9 +4,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { Users, Globe, Map } from 'lucide-react';
+import { Users, Globe, Map, Sparkles } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import Head from 'next/head';
 
 export default function About() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -16,6 +17,7 @@ export default function About() {
   const section2Ref = useRef<HTMLDivElement>(null);
   const section3Ref = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
+  const ceoSectionRef = useRef<HTMLDivElement>(null);
   const finalSectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -102,6 +104,12 @@ export default function About() {
               { opacity: 1, y: 0, duration: 0.6, stagger: 0.15, ease: "power2.out" }
             );
           }
+          if (entry.target === ceoSectionRef.current) {
+            gsap.fromTo(ceoSectionRef.current,
+              { opacity: 0, y: 30 },
+              { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }
+            );
+          }
           if (entry.target === finalSectionRef.current) {
             gsap.fromTo(finalSectionRef.current.children,
               { opacity: 0, y: 30 },
@@ -117,13 +125,46 @@ export default function About() {
     if (section2Ref.current) observer.observe(section2Ref.current!);
     if (section3Ref.current) observer.observe(section3Ref.current!);
     if (cardsRef.current) observer.observe(cardsRef.current!);
+    if (ceoSectionRef.current) observer.observe(ceoSectionRef.current!);
     if (finalSectionRef.current) observer.observe(finalSectionRef.current!);
 
     return () => observer.disconnect();
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF6EF]" style={{ color: '#1a1a1a' }}>
+    <>
+      <Head>
+        <title>About CAT-20 - Chris Dixon, CEO | Cognitive Archetype Framework</title>
+        <meta name="description" content="Learn about CAT-20, a cognitive framework founded by Chris Dixon. Discover the six core archetypes and 30 directional profiles that help you understand your unique cognitive patterns." />
+        <meta name="keywords" content="CAT-20, Chris Dixon, CEO, cognitive framework, personality assessment, cognitive archetypes, self-discovery, psychological patterns" />
+        <meta name="author" content="Chris Dixon" />
+        <meta property="og:title" content="About CAT-20 - Chris Dixon, CEO" />
+        <meta property="og:description" content="Discover CAT-20, a cognitive framework founded by Chris Dixon. Understand your unique cognitive patterns and build deeper connections." />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="About CAT-20 - Chris Dixon, CEO" />
+        <meta name="twitter:description" content="Learn about CAT-20's cognitive framework and founder Chris Dixon's vision for self-discovery." />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "CAT-20",
+              "description": "CAT-20 is a cognitive framework built around six core archetypes and 30 directional profiles to help people understand their unique cognitive patterns.",
+              "url": "https://cat-20.com/about",
+              "founder": {
+                "@type": "Person",
+                "name": "Chris Dixon",
+                "jobTitle": "CEO",
+                "description": "Founder and CEO of CAT-20, leading the vision for cognitive pattern discovery and self-understanding."
+              },
+              "sameAs": []
+            })
+          }}
+        />
+      </Head>
+      <div className="min-h-screen flex flex-col bg-[#FAF6EF]" style={{ color: '#1a1a1a' }}>
       <Navigation />
 
       <main className="flex-1">
@@ -360,6 +401,70 @@ export default function About() {
           </div>
         </div>
 
+        {/* CEO Section */}
+        <div ref={ceoSectionRef} className="py-16 lg:py-24 max-w-9xl mx-auto">
+          <div className="px-6 lg:px-8">
+            <div className="rounded-2xl overflow-hidden shadow-2xl bg-white">
+              <div className="grid lg:grid-cols-2">
+                {/* Left - CEO Info */}
+                <div className="p-8 lg:p-12 flex flex-col justify-center">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Sparkles className="w-5 h-5" style={{ color: "#C4A747" }} />
+                    <p className="text-xs uppercase tracking-widest font-semibold" style={{ color: "#C4A747" }}>
+                      LEADERSHIP
+                    </p>
+                  </div>
+
+                  <h2 className="text-4xl lg:text-5xl font-bold mb-4" style={{ color: "#1a1a1a", fontFamily: "'Playfair Display', 'Georgia', serif" }}>
+                    Chris Dixon
+                  </h2>
+
+                  <div className="w-20 h-0.5 mb-6" style={{ backgroundColor: "#C4A747" }} />
+
+                  <p className="text-xl font-semibold mb-4" style={{ color: "#4B3B8C" }}>
+                    CEO, CAT-20
+                  </p>
+
+                  <p className="text-base leading-relaxed mb-6" style={{ color: "#444444" }}>
+                    "Understanding how people think and process information is the key to building better connections. CAT-20 isn't just a test — it's a tool for self-discovery and meaningful communication."
+                  </p>
+
+                  <div className="flex items-center gap-4 mt-4">
+                    <div className="flex -space-x-2">
+                      <div className="w-10 h-10 rounded-full bg-[#4B3B8C] flex items-center justify-center text-white font-bold text-sm">
+                        CD
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold" style={{ color: "#1a1a1a" }}>
+                        Chris Dixon
+                      </p>
+                      <p className="text-xs" style={{ color: "#666666" }}>
+                        Founder & CEO
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right - Visual Element */}
+                <div className="relative bg-gradient-to-br from-[#4B3B8C] to-[#4B3B8C]/80 flex items-center justify-center p-8 lg:p-12">
+                  <div className="text-center">
+                    <div className="w-32 h-32 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center mx-auto mb-6 border-2 border-white/20">
+                      <span className="text-5xl" style={{ color: "#C4A747" }}>✦</span>
+                    </div>
+                    <p className="text-2xl font-bold text-white mb-2" style={{ fontFamily: "'Playfair Display', 'Georgia', serif" }}>
+                      Vision
+                    </p>
+                    <p className="text-sm text-white/80 max-w-xs mx-auto">
+                      To help everyone understand their unique cognitive pattern and use that knowledge to build deeper, more authentic connections.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Final Section */}
         <div ref={finalSectionRef} className="py-12 lg:py-6 max-w-9xl mx-auto">
           <div className=" mx-auto pl-6 lg:pl-8">
@@ -422,5 +527,6 @@ export default function About() {
       </main>
       <Footer />
     </div>
+    </>
   );
 }

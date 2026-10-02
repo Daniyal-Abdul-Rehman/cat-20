@@ -5,9 +5,11 @@ import Link from 'next/link';
 import { Users, CreditCard, TrendingUp, Activity, RefreshCw, FileText, Plus, ArrowRight } from 'lucide-react';
 import { useAdminStore } from '@/store/adminStore';
 import { useAuthStore } from '@/store/authStore';
+import { useToastStore } from '@/store/toastStore';
 
 export default function AdminDashboard() {
   const { isAuthenticated, tokens } = useAuthStore();
+  const { addToast } = useToastStore();
   const {
     dashboardStats,
     dashboardLoading,
@@ -17,6 +19,15 @@ export default function AdminDashboard() {
     questions,
     fetchQuestions,
   } = useAdminStore();
+
+  // Show login success toast if user just signed in
+  useEffect(() => {
+    const loginSuccess = localStorage.getItem('login_success');
+    if (loginSuccess === 'true') {
+      addToast('success', 'Login successful!');
+      localStorage.removeItem('login_success');
+    }
+  }, [addToast]);
 
   useEffect(() => {
     // Only fetch data when authenticated and token is available

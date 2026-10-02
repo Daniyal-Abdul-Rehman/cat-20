@@ -18,7 +18,11 @@ function SignInContent() {
   const { addToast } = useToastStore();
   
   const redirectPath = searchParams.get('redirect') || '/account';
-  console.log('Redirect path:', redirectPath);
+  const isPremiumRedirect = redirectPath === '/payment';
+  const assessmentId = searchParams.get('assessmentId');
+  const isGuestParam = searchParams.get('isGuest') === 'true';
+  const isGuestAssessment = (assessmentId && !isPremiumRedirect) || isGuestParam;
+  console.log('Redirect path:', redirectPath, 'isGuestAssessment:', isGuestAssessment, 'isGuestParam:', isGuestParam);
 
   // Show error toast when error state changes
   useEffect(() => {
@@ -31,7 +35,7 @@ function SignInContent() {
   useEffect(() => {
     if (success) {
       console.log('Login successful, showing toast');
-      addToast('success', success);
+      // Don't show toast here - let it show on the destination page
       clearSuccess();
     }
   }, [success, addToast, clearSuccess]);
@@ -39,15 +43,34 @@ function SignInContent() {
   const onSubmit = async (data: { email: string; password: string }) => {
     try {
       clearError();
+
+      // Store assessment ID for guest users before login
+      if (isGuestAssessment && assessmentId) {
+        localStorage.setItem('guest_assessment_id', assessmentId);
+      }
+
       const loginResult = await login(data.email, data.password);
+
       // Check if user is admin and redirect accordingly
-      const adminRedirect = loginResult?.user?.role === 'admin' ? '/admin/dashboard' : redirectPath;
+      let adminRedirect = loginResult?.user?.role === 'admin' ? '/admin/dashboard' : redirectPath;
+
+      // If this is a premium redirect, include the assessment ID
+      if (isPremiumRedirect && assessmentId) {
+        adminRedirect = `${redirectPath}?assessmentId=${assessmentId}`;
+        // Also store in localStorage as backup
+        localStorage.setItem('pending_assessment_id', assessmentId);
+      }
+
+      // If this is a guest assessment, redirect to result page with assessment ID
+      if (isGuestAssessment && assessmentId) {
+        adminRedirect = `/assessment/result?assessmentId=${assessmentId}`;
+      }
+
       console.log('Login completed, redirecting to:', adminRedirect);
-      setTimeout(() => {
-        console.log('Executing redirect to:', adminRedirect);
-        // Use window.location.href for a full page refresh to ensure auth state is loaded
-        window.location.href = adminRedirect;
-      }, 1000);
+      // Show success toast on destination page by storing it
+      localStorage.setItem('login_success', 'true');
+      // Redirect immediately without delay
+      window.location.href = adminRedirect;
     } catch (error) {
       console.error('Sign in error:', error);
     }
@@ -135,6 +158,14 @@ function SignInContent() {
                       Sign In to CAT-20
                     </p>
                   </div>
+
+                  {isPremiumRedirect && !isGuestAssessment && (
+                    <div className="mb-6 p-4 bg-[#FFF9E6] border border-[#C4A747] rounded-lg">
+                      <p className="text-sm" style={{ color: '#1a1a1a' }}>
+                        <span className="font-semibold">For your security, please sign in again to continue with your Premium purchase.</span>
+                      </p>
+                    </div>
+                  )}
 
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     {/* Email Field */}

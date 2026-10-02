@@ -92,12 +92,12 @@ export default function AccountSidebar() {
   };
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 hidden w-[272px] flex-col border-r border-[#e7e1dc] bg-[#FAF6EF] lg:flex">
-      <div className="px-7 pb-8 pt-7">
-        <div className="text-[60px] font-bold leading-[.82] tracking-[-.07em]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
-          CAT<span className='text-[40px]' style={{ color: '#4B3B8C', fontFamily: 'var(--font-playfair), serif' }}>-20</span>
+    <aside className="fixed inset-y-0 left-0 z-30 hidden w-[272px] flex-col border-r border-[#e7e1dc] bg-[#FAF6EF] md:flex">
+      <div className="px-5 sm:px-7 pb-6 sm:pb-8 pt-5 sm:pt-7">
+        <div className="text-[50px] sm:text-[60px] font-bold leading-[.82] tracking-[-.07em]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
+          CAT<span className='text-[35px] sm:text-[40px]' style={{ color: '#4B3B8C', fontFamily: 'var(--font-playfair), serif' }}>-20</span>
         </div>
-        <div className="mt-3 text-[11px] font-semibold tracking-[-.01em]" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+        <div className="mt-2 sm:mt-3 text-[10px] sm:text-[11px] font-semibold tracking-[-.01em]" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
           COGNITIVE ARCHETYPE TAXONOMY
         </div>
       </div>

@@ -84,12 +84,27 @@ function Icon({ name, size = 24, strokeWidth = 1.8 }: { name: IconName; size?: n
 }
 
 const patternColors: Record<string, string> = {
-  Thinker: '#4B3B8C',
-  Seeker: '#C4A747',
-  Nurturer: '#8862c7',
-  Builder: '#1b5dc9',
-  Spark: '#efad10',
-  Wanderer: '#11978c',
+  Thinker: '#3712E8',
+  Seeker: '#F59A00',
+  Nurturer: '#E90A82',
+  Builder: '#1498E8',
+  Spark: '#FF3038',
+  Wanderer: '#10A8A3',
+};
+
+const patternDisplayNames: Record<string, string> = {
+  thinker: 'THINKER',
+  seeker: 'SEEKER',
+  nurturer: 'NURTURER',
+  builder: 'BUILDER',
+  spark: 'SPARK',
+  wanderer: 'WANDERER',
+  Thinker: 'THINKER',
+  Seeker: 'SEEKER',
+  Nurturer: 'NURTURER',
+  Builder: 'BUILDER',
+  Spark: 'SPARK',
+  Wanderer: 'WANDERER',
 };
 
 const patternIcons: Record<string, IconName> = {
@@ -183,15 +198,15 @@ export default function HistoryPage() {
       
       <div className="flex">
         <AccountSidebar />
-        
-        <main className="flex-1 lg:ml-[272px] p-6 lg:p-8">
+
+        <main className="flex-1 lg:ml-[272px] p-4 sm:p-6 lg:p-8">
           <div className="max-w-5xl mx-auto">
             {/* Header */}
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold mb-2" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
+            <div className="mb-6 sm:mb-8">
+              <h1 className="text-3xl sm:text-4xl font-bold mb-2" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
                 Test History
               </h1>
-              <p className="text-lg" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              <p className="text-base sm:text-lg" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 View all your completed CAT-20 assessments
               </p>
             </div>
@@ -203,17 +218,17 @@ export default function HistoryPage() {
             )}
 
             {history.length === 0 ? (
-              <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-12 text-center shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
-                <div className="text-6xl mb-4" style={{ color: '#4B3B8C' }}>✦</div>
-                <h2 className="text-2xl font-bold mb-2" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
+              <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-8 sm:p-12 text-center shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
+                <div className="text-5xl sm:text-6xl mb-4" style={{ color: '#4B3B8C' }}>✦</div>
+                <h2 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
                   No Assessments Yet
                 </h2>
-                <p className="text-lg mb-6" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                <p className="text-base sm:text-lg mb-6" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                   You haven't completed any CAT-20 assessments yet.
                 </p>
                 <button
                   onClick={() => router.push('/assessment')}
-                  className="inline-flex items-center gap-3 rounded-lg px-6 py-3 text-white font-semibold hover:opacity-90 transition"
+                  className="inline-flex items-center gap-3 rounded-lg px-5 sm:px-6 py-3 text-white font-semibold hover:opacity-90 transition"
                   style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                 >
                   Take Your First Assessment <Icon name="arrow-right" size={20} />
@@ -224,51 +239,52 @@ export default function HistoryPage() {
                 {history.map((assessment, index) => {
                   const primaryPattern = getPrimaryPattern(assessment);
                   const archetype = getArchetype(assessment);
-                  const color = patternColors[primaryPattern] || '#4B3B8C';
+                  const color = patternColors[primaryPattern] || '#3712E8';
                   const icon = patternIcons[primaryPattern] || 'brain';
+                  const displayPattern = patternDisplayNames[primaryPattern] || primaryPattern?.toUpperCase() || primaryPattern;
                   const isLatest = index === 0;
 
                   return (
                     <section
                       key={assessment.assessmentId || assessment.id || index}
-                      className={`rounded-[18px] border p-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)] transition hover:shadow-md ${
+                      className={`rounded-[18px] border p-4 sm:p-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)] transition hover:shadow-md ${
                         isLatest ? 'border-[#C4A747] bg-[#fef9e7]' : 'border-[#e5e0dc] bg-[#fdfbf8]'
                       }`}
                     >
-                      <div className="flex items-center gap-6">
-                        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full text-white" style={{ backgroundColor: color }}>
-                          <Icon name={icon} size={32} strokeWidth={1.5} />
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <div className="flex h-14 w-14 sm:h-16 sm:w-16 shrink-0 items-center justify-center rounded-full text-white" style={{ backgroundColor: color }}>
+                          <Icon name={icon} size={30} strokeWidth={1.5} />
                         </div>
-                        
+
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-3 mb-2">
+                          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
                             {isLatest && (
-                              <span className="inline-flex items-center gap-1 rounded-full bg-[#C4A747] px-3 py-1 text-xs font-semibold text-white">
+                              <span className="inline-flex items-center gap-1 rounded-full bg-[#C4A747] px-2 sm:px-3 py-1 text-xs font-semibold text-white">
                                 <Icon name="star" size={12} />
                                 Latest
                               </span>
                             )}
-                            <div className="flex items-center gap-2 text-sm" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-                              <Icon name="calendar" size={16} />
-                              {formatDate(assessment.completedAt || assessment.createdAt || new Date().toISOString())}
+                            <div className="flex items-center gap-2 text-xs sm:text-sm" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                              <Icon name="calendar" size={15} />
+                              {formatDate(assessment.calculatedAt || assessment.completedAt || assessment.createdAt || new Date().toISOString())}
                             </div>
                           </div>
-                          
-                          <h3 className="text-xl font-bold mb-1" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+
+                          <h3 className="text-lg sm:text-xl font-bold mb-1" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                             {archetype}
                           </h3>
-                          
+
                           <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold" style={{ color: color, fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-                              Primary: {primaryPattern}
+                            <span className="text-xs sm:text-sm font-semibold uppercase" style={{ color: color, fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                              Primary: {displayPattern}
                             </span>
                           </div>
                         </div>
 
-                        <div className="flex gap-3">
+                        <div className="flex gap-3 w-full sm:w-auto">
                           <button
-                            onClick={() => router.push(`/results?id=${assessment.assessmentId || assessment.id}`)}
-                            className="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition"
+                            onClick={() => router.push(`/assessment/result?assessmentId=${assessment.assessmentId || assessment.id}`)}
+                            className="inline-flex items-center justify-center gap-2 rounded-lg px-4 sm:px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition w-full sm:w-auto"
                             style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                           >
                             View Results <Icon name="arrow-right" size={18} />
@@ -283,14 +299,14 @@ export default function HistoryPage() {
 
             {/* Compare CTA */}
             {history.length >= 2 && (
-              <section className="mt-8 rounded-[18px] border border-[#e5dfe7] bg-[#f3eff6] p-6">
-                <div className="flex items-center justify-between gap-6">
+              <section className="mt-8 rounded-[18px] border border-[#e5dfe7] bg-[#f3eff6] p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6">
                   <div className="flex items-center gap-4">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-full text-white" style={{ backgroundColor: '#C4A747' }}>
-                      <Icon name="users" size={28} strokeWidth={1.5} />
+                    <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full text-white shrink-0" style={{ backgroundColor: '#C4A747' }}>
+                      <Icon name="users" size={26} strokeWidth={1.5} />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold mb-1" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                      <h3 className="text-base sm:text-lg font-bold mb-1" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                         Compare Your Results
                       </h3>
                       <p className="text-sm" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
@@ -300,7 +316,7 @@ export default function HistoryPage() {
                   </div>
                   <button
                     onClick={() => router.push('/compare')}
-                    className="inline-flex items-center gap-3 rounded-lg px-6 py-3 text-white font-semibold hover:opacity-90 transition"
+                    className="inline-flex items-center justify-center gap-3 rounded-lg px-5 sm:px-6 py-3 text-white font-semibold hover:opacity-90 transition w-full sm:w-auto"
                     style={{ backgroundColor: '#C4A747', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                   >
                     Compare Patterns <Icon name="arrow-right" size={20} />

@@ -3,9 +3,11 @@
 :root {
   --background: #FFFFFF;
   --foreground: #1a1a1a;
-  --primary: #4B3B8C;
+  --theme-primary: #4B3B8C; /* Dynamic - set by ThemeProvider */
+  --theme-secondary: #C4A747; /* Dynamic - set by ThemeProvider */
+  --primary: var(--theme-primary);
   --primary-foreground: #FFFFFF;
-  --accent: #C4A747;
+  --accent: var(--theme-secondary);
   --accent-secondary: #D4A574;
   --muted: #F5F5F5;
   --muted-foreground: #666666;

@@ -10,10 +10,23 @@ export default function PaymentCancelled() {
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [assessmentId, setAssessmentId] = useState<string | null>(null);
 
   useEffect(() => {
     const session = searchParams.get('session_id');
+    const urlAssessmentId = searchParams.get('assessmentId');
     setSessionId(session);
+    
+    // Try to get assessment ID from URL first, then from localStorage
+    if (urlAssessmentId) {
+      setAssessmentId(urlAssessmentId);
+    } else {
+      const storedAssessmentId = localStorage.getItem('pending_assessment_id');
+      if (storedAssessmentId) {
+        setAssessmentId(storedAssessmentId);
+      }
+    }
+    
     setIsLoading(false);
   }, [searchParams]);
 
@@ -48,7 +61,13 @@ export default function PaymentCancelled() {
 
           <div className="space-y-4">
             <button
-              onClick={() => router.back()}
+              onClick={() => {
+                if (assessmentId) {
+                  router.push(`/payment?assessmentId=${assessmentId}`);
+                } else {
+                  router.back();
+                }
+              }}
               className="block w-full py-4 rounded-lg font-semibold text-white transition-transform hover:scale-105"
               style={{ backgroundColor: '#4B3B8C' }}
             >
@@ -57,7 +76,7 @@ export default function PaymentCancelled() {
             </button>
 
             <Link
-              href={`/assessment/result?assessmentId=${searchParams.get('assessmentId')}`}
+              href={assessmentId ? `/assessment/result?assessmentId=${assessmentId}` : '/assessment/result'}
               className="block w-full py-4 rounded-lg font-semibold border-2 transition-colors hover:bg-gray-50"
               style={{ color: '#4B3B8C', borderColor: '#4B3B8C' }}
             >

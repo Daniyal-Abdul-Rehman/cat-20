@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
+import { useToastStore } from '@/store/toastStore';
 import { Lock, CreditCard, ShieldCheck, Sparkles, Loader2, CheckCircle } from 'lucide-react';
 import Navbar from '@/components/Navigation';
 import Footer from '@/components/Footer';
@@ -11,10 +12,20 @@ export default function Payment() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, isAuthenticated, checkAuth, tokens } = useAuthStore();
+  const { addToast } = useToastStore();
   const [isLoading, setIsLoading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [assessmentId, setAssessmentId] = useState<string | null>(null);
+
+  // Show login success toast if user just signed in
+  useEffect(() => {
+    const loginSuccess = localStorage.getItem('login_success');
+    if (loginSuccess === 'true') {
+      addToast('success', 'Login successful!');
+      localStorage.removeItem('login_success');
+    }
+  }, [addToast]);
 
   useEffect(() => {
     checkAuth();

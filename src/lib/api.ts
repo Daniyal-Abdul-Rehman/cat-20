@@ -114,16 +114,20 @@ export const authApi = {
 
 // Assessment/Scoring API
 export const assessmentApi = {
-  getUserHistory: () => 
+  getUserHistory: () =>
     apiRequest<any[]>('/assessments/user/history', { method: 'GET' }),
-  getLatestAssessment: () => 
+  getLatestAssessment: () =>
     apiRequest<any>('/assessments/user/latest', { method: 'GET' }),
-  getAssessmentResult: (id: string) => 
+  getAssessmentResult: (id: string) =>
     apiRequest<any>(`/assessments/${id}/result`, { method: 'GET' }),
-  compareAssessments: (assessmentId1: string, assessmentId2: string) => 
-    apiRequest<any>('/assessments/compare', { 
-      method: 'POST', 
-      body: { assessmentId1, assessmentId2 } 
+  compareAssessments: (assessmentId1: string, assessmentId2: string) =>
+    apiRequest<any>('/assessments/compare', {
+      method: 'POST',
+      body: { assessmentId1, assessmentId2 }
+    }),
+  assignAssessmentToUser: (assessmentId: string) =>
+    apiRequest<{ success: boolean; message: string }>(`/assessments/${assessmentId}/assign`, {
+      method: 'POST'
     }),
 };
 

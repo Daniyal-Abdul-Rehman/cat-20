@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Navbar from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Mail, Lock, User, ArrowRight, Sparkles } from 'lucide-react';
@@ -12,9 +12,16 @@ import { useEffect } from 'react';
 
 export default function SignUp() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { register, handleSubmit, errors, isSubmitting, validation, confirmPasswordValidation } = useSignUpForm();
   const { register: registerUser, error, isLoading, clearError, success, clearSuccess } = useAuthStore();
   const { addToast } = useToastStore();
+
+  const redirectPath = searchParams.get('redirect') || '/account';
+  const isPremiumRedirect = redirectPath === '/payment';
+  const assessmentId = searchParams.get('assessmentId');
+  const isGuestParam = searchParams.get('isGuest') === 'true';
+  const isGuestAssessment = (assessmentId && !isPremiumRedirect) || isGuestParam;
 
   // Show error toast when error state changes
   useEffect(() => {
@@ -34,8 +41,21 @@ export default function SignUp() {
   const onSubmit = async (data: { name: string; email: string; password: string; confirmPassword: string }) => {
     try {
       clearError();
+
+      // Store assessment ID for guest users before signup
+      if (isGuestAssessment && assessmentId) {
+        localStorage.setItem('guest_assessment_id', assessmentId);
+      }
+
       await registerUser(data.name, data.email, data.password);
       addToast('success', 'Account created successfully! Please check your email to verify.');
+
+      // If this is a premium redirect, store the assessment ID and redirect info
+      if (isPremiumRedirect && assessmentId) {
+        localStorage.setItem('pending_assessment_id', assessmentId);
+        localStorage.setItem('premium_redirect', 'true');
+      }
+
       router.push('/auth/verify-email');
     } catch (error) {
       console.error('Sign up error:', error);
@@ -124,6 +144,14 @@ export default function SignUp() {
                       Join CAT-20
                     </p>
                   </div>
+
+                  {isPremiumRedirect && !isGuestAssessment && (
+                    <div className="mb-6 p-4 bg-[#FFF9E6] border border-[#C4A747] rounded-lg">
+                      <p className="text-sm" style={{ color: '#1a1a1a' }}>
+                        <span className="font-semibold">Create an account to unlock your Premium profile. Your assessment results will be preserved.</span>
+                      </p>
+                    </div>
+                  )}
 
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     {/* Name Field */}

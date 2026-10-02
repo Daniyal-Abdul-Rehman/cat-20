@@ -55,13 +55,6 @@ export default function Navigation() {
               Archetypes
             </Link>
             <Link
-              href="/profiles"
-              className={`font-medium text-sm px-4 py-2 transition-colors ${isActive('/profiles') ? 'border-b-2' : ''}`}
-              style={{ color: isActive('/profiles') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
-            >
-              Profiles
-            </Link>
-            <Link
               href="/faq"
               className={`font-medium text-sm px-4 py-2 transition-colors ${isActive('/faq') ? 'border-b-2' : ''}`}
               style={{ color: isActive('/faq') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
@@ -155,13 +148,6 @@ export default function Navigation() {
               style={{ color: isActive('/archetypes') || pathname.startsWith('/archetypes/') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
             >
               Archetypes
-            </Link>
-            <Link
-              href="/profiles"
-              className={`block px-3 py-2 rounded-md font-medium text-sm transition-colors ${isActive('/profiles') ? 'border-l-2' : ''}`}
-              style={{ color: isActive('/profiles') ? '#C4A747' : '#1a1a1a', borderColor: '#C4A747' }}
-            >
-              Profiles
             </Link>
             <Link
               href="/faq"

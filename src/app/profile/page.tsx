@@ -84,12 +84,27 @@ function Icon({ name, size = 24, strokeWidth = 1.8 }: { name: IconName; size?: n
 }
 
 const patternColors: Record<string, string> = {
-  Thinker: '#4B3B8C',
-  Seeker: '#C4A747',
-  Nurturer: '#8862c7',
-  Builder: '#1b5dc9',
-  Spark: '#efad10',
-  Wanderer: '#11978c',
+  Thinker: '#3712E8',
+  Seeker: '#F59A00',
+  Nurturer: '#E90A82',
+  Builder: '#1498E8',
+  Spark: '#FF3038',
+  Wanderer: '#10A8A3',
+};
+
+const patternDisplayNames: Record<string, string> = {
+  thinker: 'THINKER',
+  seeker: 'SEEKER',
+  nurturer: 'NURTURER',
+  builder: 'BUILDER',
+  spark: 'SPARK',
+  wanderer: 'WANDERER',
+  Thinker: 'THINKER',
+  Seeker: 'SEEKER',
+  Nurturer: 'NURTURER',
+  Builder: 'BUILDER',
+  Spark: 'SPARK',
+  Wanderer: 'WANDERER',
 };
 
 const patternIcons: Record<string, IconName> = {
@@ -154,6 +169,9 @@ export default function ProfilePage() {
   const userScores = latestAssessment?.percentages || user?.assessmentResults?.scores || {};
   const userArchetype = latestAssessment?.primaryRoles?.join(' × ') || user?.assessmentResults?.archetype || 'Unknown';
 
+  // Convert pattern to uppercase display name
+  const userPatternDisplay = patternDisplayNames[userPattern] || userPattern?.toUpperCase() || 'UNKNOWN';
+
   const patternEntries = Object.entries(userScores).sort(([, a], [, b]) => (b as number) - (a as number));
 
   const hasAssessmentData = latestAssessment || (user?.assessmentResults?.pattern && Object.keys(user?.assessmentResults?.scores || {}).length > 0);
@@ -165,32 +183,32 @@ export default function ProfilePage() {
       <div className="flex">
         <AccountSidebar />
         
-        <main className="flex-1 lg:ml-[272px] p-6 lg:p-8">
+        <main className="flex-1 md:ml-[272px] p-4 sm:p-6 lg:p-8">
           <div className="max-w-5xl mx-auto">
             {/* Header */}
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold mb-2" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
+            <div className="mb-6 sm:mb-8">
+              <h1 className="text-3xl sm:text-4xl font-bold mb-2" style={{ color: '#1a1a1a', fontFamily: 'var(--font-playfair), serif' }}>
                 My Profile
               </h1>
-              <p className="text-lg" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              <p className="text-base sm:text-lg" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 Your cognitive archetype and assessment insights
               </p>
             </div>
 
             {/* User Info Card */}
-            <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-6 mb-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
-              <div className="flex items-center gap-6">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full text-white text-3xl font-bold" style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-playfair), serif' }}>
+            <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-4 sm:p-6 mb-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
+              <div className="flex items-center gap-4 sm:gap-6">
+                <div className="flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full text-white text-2xl sm:text-3xl font-bold shrink-0" style={{ backgroundColor: '#4B3B8C', fontFamily: 'var(--font-playfair), serif' }}>
                   {user?.name?.charAt(0).toUpperCase() || 'U'}
                 </div>
-                <div className="flex-1">
-                  <h2 className="text-2xl font-bold mb-1" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-xl sm:text-2xl font-bold mb-1" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                     {user?.name || 'User'}
                   </h2>
-                  <p className="text-sm" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                  <p className="text-sm truncate" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                     {user?.email || ''}
                   </p>
-                  <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-[#efebf2] px-4 py-1.5 text-sm font-semibold" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                  <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-[#efebf2] px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-semibold" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                     <Icon name="crown" size={16} />
                     {user?.subscriptionTier || 'Free'} Plan
                   </div>
@@ -199,12 +217,12 @@ export default function ProfilePage() {
             </section>
 
             {/* Pattern Breakdown */}
-            <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-6 mb-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
-              <div className="flex items-center justify-between gap-4 mb-6">
-                <h2 className="text-xl font-bold" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto' }}>
+            <section className="rounded-[20px] border border-[#e5e0dc] bg-[#fdfbf8] p-4 sm:p-6 mb-6 shadow-[0_2px_8px_rgba(24,22,55,0.02)]">
+              <div className="flex items-center justify-between gap-4 mb-4 sm:mb-6">
+                <h2 className="text-lg sm:text-xl font-bold" style={{ color: '#4B3B8C', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto' }}>
                   YOUR CAT-20 PATTERN BREAKDOWN
                 </h2>
-                <div className="text-3xl" style={{ color: '#C4A747' }}>✦</div>
+                <div className="text-2xl sm:text-3xl" style={{ color: '#C4A747' }}>✦</div>
               </div>
 
               {!hasAssessmentData ? (
@@ -231,33 +249,34 @@ export default function ProfilePage() {
                       <div className="text-sm font-semibold uppercase tracking-wider mb-2" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                         Primary Archetype
                       </div>
-                      <div className="text-3xl font-bold mb-1" style={{ color: '#4B3B8C', fontFamily: 'var(--font-playfair), serif' }}>
+                      <div className="text-3xl uppercase font-bold mb-1" style={{ color: '#3712E8', fontFamily: 'var(--font-playfair), serif' }}>
                         {userArchetype}
                       </div>
-                      <div className="text-sm" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-                        {userPattern}
+                      <div className="text-sm uppercase" style={{ color: '#666666', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                        {userPatternDisplay}
                       </div>
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {patternEntries.map(([pattern, value]) => {
-                      const color = patternColors[pattern] || '#4B3B8C';
+                      const color = patternColors[pattern] || '#3712E8';
                       const icon = patternIcons[pattern] || 'brain';
                       // The API returns percentages as 0-100, so just round them
                       const percentage = Math.round(value as number);
-                      
+                      const displayPattern = patternDisplayNames[pattern] || pattern?.toUpperCase() || pattern;
+
                       return (
-                        <div key={pattern} className="flex items-center gap-4">
-                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-white" style={{ backgroundColor: color }}>
-                            <Icon name={icon} size={24} strokeWidth={1.6} />
+                        <div key={pattern} className="flex items-center gap-3 sm:gap-4">
+                          <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-full text-white" style={{ backgroundColor: color }}>
+                            <Icon name={icon} size={22} strokeWidth={1.6} />
                           </div>
                           <div className="min-w-0 flex-1">
-                            <div className="flex items-center justify-between gap-3">
-                              <span className="text-base font-semibold" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>{pattern}</span>
-                              <span className="text-2xl font-bold tracking-[-.04em]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>{percentage}%</span>
+                            <div className="flex items-center justify-between gap-2 sm:gap-3">
+                              <span className="text-sm sm:text-base font-semibold uppercase" style={{ color: color, fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>{displayPattern}</span>
+                              <span className="text-xl sm:text-2xl font-bold tracking-[-.04em]" style={{ color: '#1a1a1a', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>{percentage}%</span>
                             </div>
-                            <div className="mt-1.5 h-[7px] overflow-hidden rounded-full bg-[#e8e5e5]">
+                            <div className="mt-1.5 h-[6px] sm:h-[7px] overflow-hidden rounded-full bg-[#e8e5e5]">
                               <div className="h-full rounded-full transition-all duration-500" style={{ width: `${percentage}%`, backgroundColor: color }} />
                             </div>
                           </div>
